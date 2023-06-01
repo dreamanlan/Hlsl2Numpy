@@ -4,7 +4,7 @@ set workdir=%~dp0
 cd %workdir%
 cd ..
 
-Hlsl2Numpy -shadertoy -gl -torch -gendsl -vectorizebranch -vectorization %workdir%test.glsl
+Hlsl2Numpy -gl -torch -gendsl %workdir%test.glsl
 
 cd %workdir%
 

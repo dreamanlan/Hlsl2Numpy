@@ -3539,15 +3539,15 @@ def h_ai_defval(num):
 def h_t_b_defval(writable):
     global vec_broadcast_count
     if writable:
-        return torch.tile(gpu_zero_tensor, vec_broadcast_count).bool()
+        return torch.tile(gpu_zero_tensor, [vec_broadcast_count]).bool()
     else:
-        return torch.broadcast_to(gpu_zero_tensor, vec_broadcast_count).bool()
+        return torch.broadcast_to(gpu_zero_tensor, [vec_broadcast_count]).bool()
 def h_t_i_defval(writable):
     global vec_broadcast_count
     if writable:
-        return torch.tile(gpu_zero_tensor, vec_broadcast_count).int()
+        return torch.tile(gpu_zero_tensor, [vec_broadcast_count]).int()
     else:
-        return torch.broadcast_to(gpu_zero_tensor, vec_broadcast_count).int()
+        return torch.broadcast_to(gpu_zero_tensor, [vec_broadcast_count]).int()
 def h_t_f_defval(writable):
     global vec_broadcast_count
     if writable:

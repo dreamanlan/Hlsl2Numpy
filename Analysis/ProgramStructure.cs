@@ -30,8 +30,6 @@ namespace Hlsl2Numpy
         internal int OwnerBasicBlockIndex = -1;
         internal int OwnerStatementIndex = -1;
 
-        internal ComputeGraphVarNode? ComputeGraphVarNode = null;
-
         internal string? CompileTimeConst = null;
         internal string GetCompileTimeConstDesc()
         {

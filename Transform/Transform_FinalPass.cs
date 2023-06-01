@@ -758,10 +758,18 @@ namespace Hlsl2Numpy
             string mname = string.Empty;
             var objBuilder = NewStringBuilder();
             var objSi = new SemanticInfo(semanticInfo.NeedComputeGraph && contextInfo.Usage != SyntaxUsage.TypeName);
+            bool isObjInAssignLHS = contextInfo.IsObjInAssignLHS;
+            ParseContextInfo pci;
+            if (isObjInAssignLHS) {
+                pci = new ParseContextInfo { IsObjInAssignLHS = true };
+            }
+            else {
+                pci = new ParseContextInfo();
+            }
             if (func.IsHighOrder)
-                TransformSyntax(func.LowerOrderFunction, objBuilder, 0, ref objSi);
+                TransformSyntax(func.LowerOrderFunction, objBuilder, pci, 0, ref objSi);
             else
-                TransformSyntax(func.Name, objBuilder, 0, ref objSi);
+                TransformSyntax(func.Name, objBuilder, pci, 0, ref objSi);
             string objType = objSi.ResultType;
             var memberBuilder = NewStringBuilder();
             var memberSi = new SemanticInfo(semanticInfo.NeedComputeGraph && contextInfo.Usage != SyntaxUsage.TypeName);
@@ -1066,13 +1074,21 @@ namespace Hlsl2Numpy
                 RecycleStringBuilder(argBuilder);
             }
             else {
+                bool isObjInAssignLHS = contextInfo.IsObjInAssignLHS;
+                ParseContextInfo pci;
+                if (isObjInAssignLHS) {
+                    pci = new ParseContextInfo { IsObjInAssignLHS = true };
+                }
+                else {
+                    pci = new ParseContextInfo();
+                }
                 var objBuilder = NewStringBuilder();
                 var argBuilder = NewStringBuilder();
                 var objSi = new SemanticInfo(semanticInfo.NeedComputeGraph);
                 if (func.IsHighOrder)
-                    TransformSyntax(func.LowerOrderFunction, objBuilder, 0, ref objSi);
+                    TransformSyntax(func.LowerOrderFunction, objBuilder, pci, 0, ref objSi);
                 else
-                    TransformSyntax(func.Name, objBuilder, 0, ref objSi);
+                    TransformSyntax(func.Name, objBuilder, pci, 0, ref objSi);
                 string objType = objSi.ResultType;
                 var argSi = new SemanticInfo(semanticInfo.NeedComputeGraph);
                 TransformSyntax(func.GetParam(0), argBuilder, 0, ref argSi);
