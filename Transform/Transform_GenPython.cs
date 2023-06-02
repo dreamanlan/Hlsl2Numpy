@@ -794,12 +794,13 @@ namespace Hlsl2Numpy
                     bool copy = false;
                     if (null != funcInfo) {
                         var param = funcInfo.Params[ix];
+                        bool needCopy = argIsVarRef && funcInfo.ModifiedParams.Contains(param.Name);
                         if (param.Type != argType) {
                             cast = true;
                             string ptype = param.Type;
-                            GenCastBegin(sb, ptype, argType, "False", func);
+                            GenCastBegin(sb, ptype, argType, needCopy ? "True" : "False", func);
                         }
-                        else if (argIsVarRef && funcInfo.ModifiedParams.Contains(param.Name)) {
+                        else if (needCopy) {
                             copy = GenVecCopyBegin(sb, argType, func);
                         }
                     }

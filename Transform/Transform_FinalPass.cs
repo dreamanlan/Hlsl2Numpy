@@ -80,6 +80,7 @@ namespace Hlsl2Numpy
                     }
                     PopBlock();
                     funcInfo.Transformed = true;
+                    funcInfo.VarRenamed = true;
                     funcInfo.BlockInfoConstructed = true;
                 }
             }
@@ -2656,7 +2657,13 @@ namespace Hlsl2Numpy
             if (forConds.GetParamNum() > 0) {
                 var argBuilder = NewStringBuilder();
                 var argSi = new SemanticInfo(true);
-                TransformSyntax(forConds.GetParam(0), argBuilder, 0, ref argSi);
+                var condExp = forConds.GetParam(0);
+                var curFunc = CurFuncInfo();
+                if (null != curFunc)
+                    blockInfo.SetOrAddCurStatement(condExp, curFunc.LastAttribute);
+                else
+                    blockInfo.SetOrAddCurStatement(condExp);
+                TransformSyntax(condExp, argBuilder, 0, ref argSi);
                 if (null != argSi.GraphNode)
                     AddComputeGraphRootNode(argSi.GraphNode);
                 blockInfo.SetOrAddCurStatement(forConds);
@@ -2798,10 +2805,10 @@ namespace Hlsl2Numpy
         private static void TransformStatement(Dsl.ISyntaxComponent info, StringBuilder sb, int indent)
         {
             bool needVectorize = false;
-            var curFunc = CurFuncInfo();
             if (s_IsVectorizing) {
                 needVectorize = true;
             }
+            var curFunc = CurFuncInfo();
             var blockInfo = CurBlockInfo();
             Debug.Assert(null != blockInfo);
             if (null != curFunc)
@@ -2885,7 +2892,7 @@ namespace Hlsl2Numpy
                 if (funcCall != null) {
                     TransformOtherStatement(funcCall, sb, indent);
                 }
-                else {
+                else if(info.IsValid()) {
                     Console.WriteLine("unknown statement '{0}', line: {1}, class: {2} !", id, info.GetLine(), info.GetType());
                 }
             }

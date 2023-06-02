@@ -1270,6 +1270,8 @@ def h_where_n_m_m(b, y, n):
     return y if b else n
 def h_where_n_t_an_t_an(b, y, n):
     return y if b else n
+def h_where_n_an_an(b, y, n):
+    return y if b else n
 def h_where_n_t_an_an(b, y, n):
     m1 = len(n)
     m2 = len(y[0])
@@ -1295,6 +1297,8 @@ def h_where_t_n_t_av_t_av(b, y, n):
     b = torch.broadcast_to(b, (m1, m2, ct)).transpose(2, 1)
     return torch.where(b, y, n)
 def h_where_n_t_av_t_av(b, y, n):
+    return y if b else n
+def h_where_n_av_av(b, y, n):
     return y if b else n
 def h_where_v_v_v(b, y, n):
     return torch.where(b, y, n)
@@ -3839,6 +3843,8 @@ def TextureCube__float4_T_Sample_n_t_v(tex, sampler, coord):
     return TextureCube_Sample_n_t_v(tex, sampler, coord)
 def TextureCube__float4_T_SampleLevel_n_t_v_n(tex, sampler, coord, level):
     return TextureCube_SampleLevel_n_t_v_n(tex, sampler, coord, level)
+def Texture3D__float4_T_Sample_n_v(tex, sampler, coord):
+    return Texture3D_Sample_n_v(tex, sampler, coord)
 def Texture3D__float4_T_Sample_n_t_v(tex, sampler, coord):
     return Texture3D_Sample_n_t_v(tex, sampler, coord)
 

@@ -1270,6 +1270,8 @@ def h_where_n_m_m(b, y, n):
     return y if b else n
 def h_where_n_t_an_t_an(b, y, n):
     return y if b else n
+def h_where_n_an_an(b, y, n):
+    return y if b else n
 def h_where_n_t_an_an(b, y, n):
     m1 = len(n)
     m2 = len(y[0])
@@ -1295,6 +1297,8 @@ def h_where_t_n_t_av_t_av(b, y, n):
     b = torch.broadcast_to(b, (m1, m2, ct)).transpose(2, 1)
     return torch.where(b, y, n)
 def h_where_n_t_av_t_av(b, y, n):
+    return y if b else n
+def h_where_n_av_av(b, y, n):
     return y if b else n
 def h_where_v_v_v(b, y, n):
     return torch.where(b, y, n)
@@ -1460,16 +1464,16 @@ def array_get_t_an4_n(arr, ix):
     r = arr[ix]
     return r
 def array_set_an_t_n(arr, ix, v):
-    arr[ix] = v
+    arr[ix.long()] = v
     return v
 def array_get_an_t_n(arr, ix):
-    r = arr[ix]
+    r = arr[ix.long()]
     return r
 def array_set_an2_t_n(arr, ix, v):
-    arr[ix] = v
+    arr[ix.long()] = v
     return v
 def array_get_an2_t_n(arr, ix):
-    r = arr[ix]
+    r = arr[ix.long()]
     return r
 def array_set_an3_t_n(arr, ix, v):
     arr[ix.long()] = v
@@ -1478,10 +1482,10 @@ def array_get_an3_t_n(arr, ix):
     r = arr[ix.long()]
     return r
 def array_set_an4_t_n(arr, ix, v):
-    arr[ix] = v
+    arr[ix.long()] = v
     return v
 def array_get_an4_t_n(arr, ix):
-    r = arr[ix]
+    r = arr[ix.long()]
     return r
 def array_set_t_an_t_n(arr, ix, v):
     arr = get_gpu_value(arr)
@@ -1490,14 +1494,14 @@ def array_set_t_an_t_n(arr, ix, v):
     arr, v = change_to_same_f64(arr, v)
     n = len(ix)
     nix = poolGetN(n)
-    arr[ix, nix] = v
+    arr[ix.long(), nix] = v
     return v
 def array_get_t_an_t_n(arr, ix):
     arr = get_gpu_value(arr)
     ix = get_gpu_value(ix)
     n = len(ix)
     nix = poolGetN(n)
-    r = arr[ix, nix]
+    r = arr[ix.long(), nix]
     return r
 def array_set_t_an2_t_n(arr, ix, v):
     arr = get_gpu_value(arr)
@@ -1506,14 +1510,14 @@ def array_set_t_an2_t_n(arr, ix, v):
     arr, v = change_to_same_f64(arr, v)
     n = len(ix)
     nix = poolGetN(n)
-    arr[ix, nix] = v
+    arr[ix.long(), nix] = v
     return v
 def array_get_t_an2_t_n(arr, ix):
     arr = get_gpu_value(arr)
     ix = get_gpu_value(ix)
     n = len(ix)
     nix = poolGetN(n)
-    r = arr[ix, nix]
+    r = arr[ix.long(), nix]
     return r
 def array_set_t_an3_t_n(arr, ix, v):
     arr = get_gpu_value(arr)
@@ -1522,14 +1526,14 @@ def array_set_t_an3_t_n(arr, ix, v):
     arr, v = change_to_same_f64(arr, v)
     n = len(ix)
     nix = poolGetN(n)
-    arr[ix, nix] = v
+    arr[ix.long(), nix] = v
     return v
 def array_get_t_an3_t_n(arr, ix):
     arr = get_gpu_value(arr)
     ix = get_gpu_value(ix)
     n = len(ix)
     nix = poolGetN(n)
-    r = arr[ix, nix]
+    r = arr[ix.long(), nix]
     return r
 def array_set_t_an4_t_n(arr, ix, v):
     arr = get_gpu_value(arr)
@@ -1538,14 +1542,14 @@ def array_set_t_an4_t_n(arr, ix, v):
     arr, v = change_to_same_f64(arr, v)
     n = len(ix)
     nix = poolGetN(n)
-    arr[ix, nix] = v
+    arr[ix.long(), nix] = v
     return v
 def array_get_t_an4_t_n(arr, ix):
     arr = get_gpu_value(arr)
     ix = get_gpu_value(ix)
     n = len(ix)
     nix = poolGetN(n)
-    r = arr[ix, nix]
+    r = arr[ix.long(), nix]
     return r
 def array_set_n2_n(arr, ix, v):
     arr[ix] = v

@@ -16,6 +16,7 @@ namespace Hlsl2Numpy
 
         internal bool ParseAndPruned = false;
         internal bool Transformed = false;
+        internal bool VarRenamed = false;
         internal bool BlockInfoConstructed = false;
         internal bool CodeGenerateEnabled = false;
 
@@ -38,6 +39,7 @@ namespace Hlsl2Numpy
 
         internal void ClearBlockInfo()
         {
+            VarRenamed = false;
             BlockInfoConstructed = false;
             ToplevelBlock.ClearChildren();
             FuncComputeGraph.Reset(this);

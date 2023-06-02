@@ -195,15 +195,9 @@ def update(frame, ax, fc, fcd):
     minv = -abs(V).max()
     V = torch.stack(torch.tensor_split(V, iResolution[1]))
     V = get_cpu_value(V)
+	
     ax.clear()
-    cameraz = 0.0
-    if hasattr(sys.modules[__name__], "get_camera_z"):
-        cameraz = get_camera_z()
-    elif hasattr(sys.modules[__name__], "get_camera_pos"):
-        cameraz = get_camera_pos()[2]
-    else:
-        cameraz = 0.0
-    info = "time:{0:.3f} frame time:{1:.3f} camera z:{2:.2f}".format(iTime, iTimeDelta, cameraz)
+    info = "time:{0:.3f} frame time:{1:.3f} avg frame time:{2:.3f} iter:{3}".format(iTime, iTimeDelta, iTime/iFrame, iFrame)
     fig = plt.gcf()
     fig.canvas.manager.set_window_title(info)
     ax.text(0.0, 1.0, info)
@@ -283,7 +277,8 @@ def main_entry():
             img = img.cpu().numpy()
             img = img[::-1, :, :] # Flip vertically.
             img = np.clip(np.rint(img * 255), 0, 255).astype(np.uint8) # Quantize to np.uint8
-            wtitle = "time:{0:.3f} frame time:{1:.3f} iter:{2}".format(iTime, iTimeDelta, ct)
+			
+            wtitle = "time:{0:.3f} frame time:{1:.3f} avg frame time:{2:.3f} iter:{3}".format(iTime, iTimeDelta, iTime/iFrame, ct)
             display_image(img, g_win_zoom, g_win_size, wtitle)
             tensor_pools.RecycleAll()
             time.sleep(0.033)

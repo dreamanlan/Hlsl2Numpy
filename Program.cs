@@ -523,10 +523,10 @@ namespace Hlsl2Numpy
                         foreach (var varInfo in ProgramTransform.s_DeclGlobals) {
                             string name = varInfo.Name;
                             if (name == "inCoord" || name == "outColor") {
-                                ProgramTransform.GenDeclVar(globalSb, 0, varInfo, true, Dsl.NullSyntax.Instance);
+                                ProgramTransform.GenDeclVar(globalSb, 0, varInfo, true, Dsl.AbstractSyntaxComponent.NullSyntax);
                             }
                             else {
-                                ProgramTransform.GenDeclVar(globalSb, 0, varInfo, false, Dsl.NullSyntax.Instance);
+                                ProgramTransform.GenDeclVar(globalSb, 0, varInfo, false, Dsl.AbstractSyntaxComponent.NullSyntax);
                             }
                         }
                         globalSb.AppendLine();
@@ -560,8 +560,6 @@ namespace Hlsl2Numpy
                                 ProgramTransform.TransformFunc(info);
                             }
                         }
-
-                        ProgramTransform.s_VarRenamed = true;
 
                         if (printBlocks) {
                             Console.WriteLine("===[Blocks:]===");

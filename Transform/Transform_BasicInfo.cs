@@ -239,7 +239,7 @@ namespace Hlsl2Numpy
                     isNew = true;
                     funcInfo.UniqueLocalVarInfos.Add(varInfo.Name, varInfo);
                 }
-                if (!s_VarRenamed) {
+                if (!funcInfo.VarRenamed) {
                     var infos = funcInfo.LocalVarInfos;
                     if (!infos.TryGetValue(varInfo.OriName, out var varInfos)) {
                         varInfos = new Dictionary<int, VarInfo>();
@@ -330,10 +330,10 @@ namespace Hlsl2Numpy
         }
         private static void PushBlock(BlockInfo blockInfo)
         {
-            ++s_LastBlockId;
-            blockInfo.BlockId = s_LastBlockId;
             blockInfo.ResetCurBasicBlock(0);
             if (!CurFuncBlockInfoConstructed()) {
+                ++s_LastBlockId;
+                blockInfo.BlockId = s_LastBlockId;
                 if (s_LexicalScopeStack.Count > 0) {
                     var parent = s_LexicalScopeStack.Peek();
                     blockInfo.Parent = parent;
@@ -417,25 +417,23 @@ namespace Hlsl2Numpy
         internal static bool TryRenameVar(VarInfo varInfo)
         {
             bool ret = false;
-            if (!s_VarRenamed) {
-                var funcInfo = CurFuncInfo();
-                if (null != funcInfo) {
-                    var infos = funcInfo.LocalVarInfos;
-                    if (infos.TryGetValue(varInfo.Name, out var varInfos) && varInfos.Count > 0) {
-                        int curBlockId = CurBlockId();
-                        if (!varInfos.TryGetValue(curBlockId, out var vinfo)) {
-                            varInfo.OriName = varInfo.Name;
-                            varInfo.Name = varInfo.Name + "_" + CurBlockId();
-                            ret = true;
-                        }
-                    }
-                    else {
+            var funcInfo = CurFuncInfo();
+            if (null != funcInfo && !funcInfo.VarRenamed) {
+                var infos = funcInfo.LocalVarInfos;
+                if (infos.TryGetValue(varInfo.Name, out var varInfos) && varInfos.Count > 0) {
+                    int curBlockId = CurBlockId();
+                    if (!varInfos.TryGetValue(curBlockId, out var vinfo)) {
                         varInfo.OriName = varInfo.Name;
+                        varInfo.Name = varInfo.Name + "_" + CurBlockId();
+                        ret = true;
                     }
                 }
                 else {
                     varInfo.OriName = varInfo.Name;
                 }
+            }
+            else {
+                varInfo.OriName = varInfo.Name;
             }
             return ret;
         }
@@ -445,7 +443,7 @@ namespace Hlsl2Numpy
             bool hasLocalVar = false;
             var funcInfo = CurFuncInfo();
             if (null != funcInfo) {
-                if (!s_VarRenamed && funcInfo.LocalVarInfos.TryGetValue(name, out var varInfos)) {
+                if (!funcInfo.VarRenamed && funcInfo.LocalVarInfos.TryGetValue(name, out var varInfos)) {
                     hasLocalVar = true;
                     foreach (var blockInfo in s_LexicalScopeStack) {
                         int blockId = blockInfo.BlockId;
