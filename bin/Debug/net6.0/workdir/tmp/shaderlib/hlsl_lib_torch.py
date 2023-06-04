@@ -3843,6 +3843,8 @@ def TextureCube__float4_T_Sample_n_t_v(tex, sampler, coord):
     return TextureCube_Sample_n_t_v(tex, sampler, coord)
 def TextureCube__float4_T_SampleLevel_n_t_v_n(tex, sampler, coord, level):
     return TextureCube_SampleLevel_n_t_v_n(tex, sampler, coord, level)
+def Texture3D__float4_T_Sample_n_v(tex, sampler, coord):
+    return Texture3D_Sample_n_v(tex, sampler, coord)
 def Texture3D__float4_T_Sample_n_t_v(tex, sampler, coord):
     return Texture3D_Sample_n_t_v(tex, sampler, coord)
 

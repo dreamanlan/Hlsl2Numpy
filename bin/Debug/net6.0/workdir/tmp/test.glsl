@@ -22,160 +22,138 @@ layout (binding = 0) uniform sampler2D iChannel3;
 
 
 
-vec3 glv;
-float tt;
 
-float bx(vec3 p,vec3 s)
-{
-    vec3 q=abs(p)-s;
-    return min(max(q.x,max(q.y,q.z)),0.)+length(max(q,0.));
-}
-float cy(vec3 p, vec2 s)
-{
-    p.y+=s.x/2.;
-    p.y-=clamp(p.y,0.,s.x);
-    return length(p)-s.y;
+float focalDistance=1.0,aperture=0.01,shadowCone=0.3;
+
+float Rect(in vec3 z, vec3 r){return max(abs(z.x)-r.x,max(abs(z.y)-r.y,abs(z.z)-r.z));}
+
+void Kaleido(inout vec2 v,float power){float a=floor(.5+atan(v.x,-v.y)*power/6.283)*6.283/power;v=cos(a)*v+sin(a)*vec2(v.y,-v.x);}
+
+
+float hash(float n) {return fract(sin(n) * 4378.54533);}
+float noyz(vec3 x) {
+ vec3 p=floor(x),j=fract(x);
+ const float tw=7.0,tx=13.0;
+ float n=p.x+p.y*tw+p.z*tx;
+ float a=hash(n),b=hash(n+1.0),c=hash(n+tw),d=hash(n+tw+1.0);
+ float e=hash(n+tx),f=hash(n+1.0+tx),g=hash(n+tw+tx),h=hash(n+1.0+tw+tx);
+ vec3 u=j*j*(3.0-2.0*j);
+ return mix(a+(b-a)*u.x+(c-a)*u.y+(a-b-c+d)*u.x*u.y,e+(f-e)*u.x+(g-e)*u.y+(e-f-g+h)*u.x*u.y,u.z);
 }
 
-float shatter(vec3 p, float d, float n, float a, float s)
-{
- for(float i=0.;i<n;i++) {
-  p.xy*=mat2(cos(a),sin(a),-sin(a),cos(a));
-        p.xz*=mat2(cos(a*0.5),sin(a*0.5),-sin(a*0.5),cos(a*0.5));
-        p.yz*=mat2(cos(a+a),sin(a+a),-sin(a+a),cos(a+a));
-  float c=mod(i,3.)==0.?p.x:mod(i,3.)==1.?p.y:p.z;
-  c=abs(c)-s;
-        d=max(d,-c);
+float fbm(vec3 p) {
+ float h=noyz(p);
+ h+=0.5*noyz(p*=2.3);
+ return h+0.25*noyz(p*2.3);
+}
+
+const float scl=0.08;
+
+float DE(vec3 z0, inout vec4 mcol){
+ float dW=100.0,dD=100.0;
+ float dC=fbm(z0*0.25+vec3(100.0))*0.5+sin(z0.y)*0.1+sin(z0.z*0.4)*0.1+min(z0.y*0.04+0.1,0.1);
+ vec2 v=floor(vec2(z0.x,abs(z0.z))*0.5+0.5);
+ z0.xz=clamp(z0.xz,-2.0,2.0)*2.0-z0.xz;
+ float r=length(z0.xz);
+ float dS=r-0.6;
+ if(r<1.0){
+  float shape=0.285-v.x*0.02;
+  z0.y+=v.y*0.2;
+  vec3 z=z0*10.0;
+  dS=max(z0.y-2.5,r-max(0.11-z0.y*0.1,0.01));
+  float y2=max(abs(abs(mod(z.y+0.5,2.0)-1.0)-0.5)-0.05,abs(z.y-7.1)-8.3);
+  float y=sin(clamp(floor(z.y)*shape,-0.4,3.4))*40.0;
+  Kaleido(z.xz,8.0+floor(y));
+  dW=Rect(z,vec3(0.9+y*0.1,22.0,0.9+y*0.1))*scl;
+  dD=max(z0.y-1.37,max(y2,r*10.0-1.75-sin(clamp((z.y-0.5)*shape,-0.05,3.49))*4.0))*scl;
+  dS=min(dS,min(dW,dD));
  }
- return d;
+ dS=min(dS,dC);
+ if(dS==dW)mcol+=vec4(0.8,0.9,0.9,1.0);
+ else if(dS==dD)mcol+=vec4(0.6,0.4,0.3,0.0);
+ else if(dS==dC)mcol+=vec4(1.0,1.0,1.0,-1.0);
+ else mcol+=vec4(0.7+sin(z0.y*100.0)*0.3,1.0,0.8,0.0);
+ return dS;
 }
 
-vec3 lattice(vec3 p, int iter)
-{
-    for(int i = 0; i < iter; i++) {
-        p.xy *= mat2(cos(45.*0.01745329),sin(45.*0.01745329),-sin(45.*0.01745329),cos(45.*0.01745329));
-        p.xz *= mat2(cos(45.*0.01745329),sin(45.*0.01745329),-sin(45.*0.01745329),cos(45.*0.01745329));
-        p=abs(p)-1.;
+float pixelSize;
+float CircleOfConfusion(float t){
+ return max(abs(focalDistance-t)*aperture,pixelSize*(1.0+t));
+}
+mat3 lookat(vec3 fw,vec3 up){
+ fw=normalize(fw);vec3 rt=normalize(cross(fw,normalize(up)));return mat3(rt,cross(rt,fw),fw);
+}
+float linstep(float a, float b, float t){return clamp((t-a)/(b-a),0.,1.);}
 
-        p.xy *= mat2(cos(-45.*0.01745329),sin(-45.*0.01745329),-sin(-45.*0.01745329),cos(-45.*0.01745329));
-        p.xz *= mat2(cos(-45.*0.01745329),sin(-45.*0.01745329),-sin(-45.*0.01745329),cos(-45.*0.01745329));
+float randStep(inout float randSeed){
+ ++randSeed;
+ return (0.8+0.2*fract(sin(randSeed)*4375.54531));
+}
+
+float FuzzyShadow(vec3 ro, vec3 rd, float coneGrad, float rCoC, inout vec4 mcol, inout float randSeed){
+ float t=rCoC*2.0,d=1.0,s=1.0;
+ for(int i=0;i<6;i++){
+  if(s<0.1)continue;
+  float r=rCoC+t*coneGrad;
+  d=DE(ro+rd*t, mcol)+r*0.4;
+  s*=linstep(-r,r,d);
+  t+=abs(d)*randStep(randSeed);
+ }
+ return clamp(s*0.75+0.25,0.0,1.0);
+}
+
+void mainImage(out vec4 O, in vec2 U) {
+ vec4 mcol=vec4(0.0);
+ float randSeed;
+ randSeed=fract(sin(iTime+dot(U,vec2(9.123,13.431)))*473.719245);
+ pixelSize=2.0/iResolution.y;
+ float tim=iTime*0.25;
+ vec3 ro=vec3(cos(tim),sin(tim*0.7)*0.5+0.3,sin(tim))*(1.8+.5*sin(tim*.41));
+ vec3 rd=lookat(vec3(0.0,0.6,sin(tim*2.3))-ro,vec3(0.1,1.0,0.0))*normalize(vec3((2.0*U.xy-iResolution.xy)/iResolution.y,2.0));
+ vec3 L=normalize(vec3(0.5,0.75,-0.5));
+ vec4 col=vec4(0.0);
+ float t=DE(ro, mcol)*randSeed*.8;
+ ro+=rd*t;
+ for(int i=0;i<72;i++){
+  if(col.w>0.9 || t>20.0)continue;
+  float rCoC=CircleOfConfusion(t);
+  float d=DE(ro, mcol);
+  float fClouds=max(0.0,-mcol.a);
+  if(d<max(rCoC,fClouds*0.5)){
+   vec3 p=ro;
+   if(fClouds<0.1)p-=rd*abs(d-rCoC);
+   vec2 v=vec2(rCoC*0.333,0.0);
+   vec3 N=normalize(vec3(-DE(p-v.xyy, mcol)+DE(p+v.xyy, mcol),-DE(p-v.yxy, mcol)+DE(p+v.yxy, mcol),-DE(p-v.yyx, mcol)+DE(p+v.yyx, mcol)));
+
+   mcol*=0.143;
+   vec3 scol;
+   float alpha;
+   if(fClouds>0.1){
+    float dn=clamp(0.5-d,0.0,1.0);dn=dn*2.0;dn*=dn;
+    alpha=(1.0-col.w)*dn;
+    scol=vec3(1.0)*(0.6+dn*dot(N,L)*0.4);
+    scol+=dn*max(0.0,dot(reflect(rd,N),L))*vec3(1.0,0.5,0.0);
+
+   }else{
+    scol=mcol.rgb*(0.2+0.4*(1.0+dot(N,L)));
+    scol+=0.5*pow(max(0.0,dot(reflect(rd,N),L)),32.0)*vec3(1.0,0.5,0.0);
+    if(d<rCoC*0.25 && mcol.a>0.9){
+     rd=reflect(rd,N);d=-rCoC*0.25;ro=p;t+=1.0;
     }
-    return p;
-}
+    scol*=FuzzyShadow(p,L,shadowCone,rCoC,mcol,randSeed);
+    alpha=(1.0-col.w)*linstep(-rCoC,rCoC,-d-0.5*rCoC);
+   }
+   col+=vec4(scol*alpha,alpha);
+  }
+  mcol=vec4(0.0);
+  d=abs(d+0.33*rCoC)*randStep(randSeed);
+  ro+=d*rd;
+  t+=d;
+ }
+ vec3 scol=vec3(0.4,0.5,0.6)+rd*0.05+pow(max(0.0,dot(rd,L)),100.0)*vec3(1.0,0.75,0.5);
+ col.rgb+=scol*(1.0-clamp(col.w,0.0,1.0));
 
-float mp(vec3 p, inout vec3 oc, inout float oa, inout float io, inout vec3 ss, inout vec3 vb, inout int ec)
-{
-
-    if(iMouse.z>0.) {
-        p.yz*=mat2(cos(2.0*(iMouse.y/iResolution.y-0.5)),sin(2.0*(iMouse.y/iResolution.y-0.5)),-sin(2.0*(iMouse.y/iResolution.y-0.5)),cos(2.0*(iMouse.y/iResolution.y-0.5)));
-        p.zx*=mat2(cos(-7.0*(iMouse.x/iResolution.x-0.5)),sin(-7.0*(iMouse.x/iResolution.x-0.5)),-sin(-7.0*(iMouse.x/iResolution.x-0.5)),cos(-7.0*(iMouse.x/iResolution.x-0.5)));
-    }
-    vec3 pp = p;
-
-    p.xz*=mat2(cos(tt*0.2),sin(tt*0.2),-sin(tt*0.2),cos(tt*0.2));
-    p.xy*=mat2(cos(tt*0.2),sin(tt*0.2),-sin(tt*0.2),cos(tt*0.2));
-
-    p = lattice(p, 3);
-
-    float sd = cy(p,vec2(1.)) - 0.05;
-
-    sd = shatter(p,sd, 1.,sin(tt*0.1),0.2);
-
-    sd = min(sd, bx(p,vec3(0.1,2.1,8.)) - 0.3);
-
-    sd = mix(sd, cy(p, vec2(4,1)), cos(tt*0.5)*0.5+0.5);
-
-    sd = abs(sd)-0.001;
-    if(sd<0.001) {
-        oc=mix(vec3(1.,0.1,0.6), vec3(0.,0.6,1.), pow(length(pp)*0.18,1.5));
-        io=1.1;
-        oa=0.05 + 1.-length(pp)*0.2;
-        ss=vec3(0.);
-        vb=vec3(0.,2.5,2.5);
-        ec=2;
-    }
-    return sd;
-}
-
-void tr(vec3 ro, vec3 rd, inout vec3 oc, inout float oa, inout float cd, inout float td, inout float io, inout vec3 ss, inout vec3 vb, inout int ec)
-{
-    vb.x=0.;
-    cd=0.;
-    for(float i=0.;i<64.;i++) {
-        float sd = mp(ro+rd*cd, oc, oa, io, ss, vb, ec);
-        cd+=sd;
-        td+=sd;
-        if(sd<0.0001 || cd>128.)
-            break;
-    }
-}
-vec3 nm(vec3 cp, inout vec3 oc, inout float oa, inout float io, inout vec3 ss, inout vec3 vb, inout int ec)
-{
-    mat3 k=mat3(cp,cp,cp)-mat3(.001);
-    return normalize(mp(cp, oc, oa, io, ss, vb, ec)-vec3(mp(k[0], oc, oa, io, ss, vb, ec),mp(k[1], oc, oa, io, ss, vb, ec),mp(k[2], oc, oa, io, ss, vb, ec)));
-}
-
-vec3 px(vec3 rd, vec3 cp, vec3 cr, vec3 cn, float cd, inout vec3 oc, inout float oa, inout float io, inout vec3 ss, inout vec3 vb, inout int ec)
-{
-    vec3 cc=vec3(0.7,0.4,0.6)+length(pow(abs(rd+vec3(0,0.5,0)),vec3(3)))*0.3+glv;
-    if(cd>128.) {
-        oa=1.;
-        return cc;
-    }
-    vec3 l=vec3(0.4,0.7,0.8);
-    float df=clamp(length(cn*l),0.,1.);
-    vec3 fr=pow(1.-df,3.)*mix(cc,vec3(0.4),0.5);
-    float sp=(1.-length(cross(cr,cn*l)))*0.2;
-    float ao=min(mp(cp+cn*0.3, oc, oa, io, ss, vb, ec)-0.3,0.3)*0.5;
-    cc=mix((oc*(df+fr+ss)+fr+sp+ao+glv),oc,vb.x);
-    return cc;
-}
-
-vec4 render(vec2 frag, vec2 res, float time)
-{
-    vec2 uv;
-    vec3 cp,cr,ro,rd;
-    vec4 fc = vec4(0.1);
-    vec3 oc, ss, vb;
-    float oa, io, cd, td;
-    int es=0,ec;
-    tt=mod(time, 260.);
-    uv=vec2(frag.x/res.x,frag.y/res.y);
-    uv-=0.5;
-    uv/=vec2(res.y/res.x,1);
-    ro=vec3(0,0,-15);
-    rd=normalize(vec3(uv,1));
-
-    for(int i=0;i<64;i++)
-    {
-        tr(ro, rd, oc, oa, cd, td, io, ss, vb, ec);
-        cp=ro+rd*cd;
-        vec3 cn = nm(cp, oc, oa, io, ss, vb, ec);
-        ro=cp-cn*0.01;
-        cr=refract(rd,cn,i%2==0?1./io:io);
-        if(length(cr)==0.&&es<=0) {
-            cr=reflect(rd,cn);
-            es=ec;
-        }
-        if(max(es,0) % 3 == 0 && cd < 128.)
-            rd=cr;
-        es--;
-        if(vb.x > 0. && i%2 == 1)
-            oa=pow(clamp(cd/vb.y,0.,1.),vb.z);
-        vec3 cc = px(rd, cp, cr, cn, cd, oc, oa, io, ss, vb, ec);
-        fc=fc+vec4(cc*oa,oa)*(1.-fc.a);
-        if((fc.a>=1. || cd>128.))
-            break;
-    }
-    vec4 col = fc/clamp(fc.a, 0.01, 1.0);
-    return col;
-}
-
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    vec2 coord = fragCoord.xy;
-
-    fragColor = render(coord,iResolution.xy,iTime);
+ O = vec4(clamp(col.rgb,0.0,1.0),1.0);
 }
 
 void main()

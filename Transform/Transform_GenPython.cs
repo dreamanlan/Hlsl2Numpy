@@ -794,7 +794,7 @@ namespace Hlsl2Numpy
                     bool copy = false;
                     if (null != funcInfo) {
                         var param = funcInfo.Params[ix];
-                        bool needCopy = argIsVarRef && !param.IsInOut && !param.IsOut && funcInfo.ModifiedParams.Contains(param.Name);
+                        bool needCopy = argIsVarRef && funcInfo.ModifiedParams.Contains(param.Name);
                         if (param.Type != argType) {
                             cast = true;
                             string ptype = param.Type;
