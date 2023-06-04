@@ -42,4 +42,5 @@
 	- 可能是实现bug
 
 ## 一些技术细节
-	[https://zhuanlan.zhihu.com/p/634485306/edit](https://zhuanlan.zhihu.com/p/634485306/edit "Hlsl2Numpy实现笔记")
+
+[Hlsl2Numpy实现笔记](https://zhuanlan.zhihu.com/p/634485306/edit "Hlsl2Numpy实现笔记")
