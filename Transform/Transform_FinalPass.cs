@@ -175,8 +175,8 @@ namespace Hlsl2Numpy
                         var lhsBuilder = NewStringBuilder();
                         var argBuilder = NewStringBuilder();
                         var argSi = new SemanticInfo(false);
-                        TransformSyntax(p0, lhsBuilder, contextInfo with { IsInAssignLHS = true }, 0, ref semanticInfo);
                         TransformSyntax(p0, argBuilder, contextInfo with { Usage = SyntaxUsage.Operator }, 0, ref argSi);
+                        TransformSyntax(p0, lhsBuilder, contextInfo with { IsInAssignLHS = true }, 0, ref semanticInfo);
                         var vname = semanticInfo.NameOrConst;
                         string opd = argSi.ResultType;
                         bool constGenerated = false;
@@ -234,8 +234,8 @@ namespace Hlsl2Numpy
                         var lhsBuilder = NewStringBuilder();
                         var argBuilder = NewStringBuilder();
                         var argSi = new SemanticInfo(false);
-                        TransformSyntax(p0, lhsBuilder, contextInfo with { IsInAssignLHS = true }, 0, ref semanticInfo);
                         TransformSyntax(p0, argBuilder, contextInfo with { Usage = SyntaxUsage.Operator }, 0, ref argSi);
+                        TransformSyntax(p0, lhsBuilder, contextInfo with { IsInAssignLHS = true }, 0, ref semanticInfo);
                         var vname = semanticInfo.NameOrConst;
                         string opd = argSi.ResultType;
                         bool constGenerated = false;
@@ -323,9 +323,9 @@ namespace Hlsl2Numpy
                         var arg2Builder = NewStringBuilder();
                         var arg1Si = new SemanticInfo(false);
                         var arg2Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
-                        TransformSyntax(lhs, lhsBuilder, contextInfo with { IsInAssignLHS = true }, indent, ref semanticInfo);
                         TransformSyntax(lhs, arg1Builder, contextInfo with { Usage = SyntaxUsage.Operator }, 0, ref arg1Si);
                         TransformSyntax(rhs, arg2Builder, contextInfo with { Usage = SyntaxUsage.Operator }, 0, ref arg2Si);
+                        TransformSyntax(lhs, lhsBuilder, contextInfo with { IsInAssignLHS = true }, indent, ref semanticInfo);
                         var vname = semanticInfo.NameOrConst;
                         string opd1 = arg1Si.ResultType;
                         string opd2 = arg2Si.ResultType;
@@ -539,6 +539,15 @@ namespace Hlsl2Numpy
         private static void TransformMemberCompoundSet(bool isStatement, string op, Dsl.FunctionData lhs, Dsl.ISyntaxComponent rhs, StringBuilder sb, int indent, ref SemanticInfo semanticInfo)
         {
             semanticInfo.NameOrConst = string.Empty;
+            var arg1Builder = NewStringBuilder();
+            var arg2Builder = NewStringBuilder();
+            var arg1Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
+            var arg2Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
+            TransformSyntax(lhs, arg1Builder, new ParseContextInfo() { Usage = SyntaxUsage.Operator }, 0, ref arg1Si);
+            TransformSyntax(rhs, arg2Builder, new ParseContextInfo() { Usage = SyntaxUsage.Operator }, 0, ref arg2Si);
+            string opd1 = arg1Si.ResultType;
+            string opd2 = arg2Si.ResultType;
+
             var objBuilder = NewStringBuilder();
             var objSi = new SemanticInfo(semanticInfo.NeedComputeGraph);
             if (lhs.IsHighOrder)
@@ -549,14 +558,7 @@ namespace Hlsl2Numpy
             var memberBuilder = NewStringBuilder();
             var memberSi = new SemanticInfo(semanticInfo.NeedComputeGraph);
             TransformSyntax(lhs.GetParam(0), memberBuilder, new ParseContextInfo() { Usage = SyntaxUsage.MemberName }, 0, ref memberSi);
-            var arg1Builder = NewStringBuilder();
-            var arg2Builder = NewStringBuilder();
-            var arg1Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
-            var arg2Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
-            TransformSyntax(lhs, arg1Builder, new ParseContextInfo() { Usage = SyntaxUsage.Operator }, 0, ref arg1Si);
-            TransformSyntax(rhs, arg2Builder, new ParseContextInfo() { Usage = SyntaxUsage.Operator }, 0, ref arg2Si);
-            string opd1 = arg1Si.ResultType;
-            string opd2 = arg2Si.ResultType;
+
             string mname = lhs.GetParamId(0);
             string mtype = MemberTypeInference(".", objType, string.Empty, mname);
             string restype = OperatorTypeInference(op, opd1, opd2);
@@ -826,6 +828,16 @@ namespace Hlsl2Numpy
         {
             semanticInfo.NameOrConst = string.Empty;
             Debug.Assert(null != lhs);
+
+            var arg1Builder = NewStringBuilder();
+            var arg2Builder = NewStringBuilder();
+            var arg1Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
+            var arg2Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
+            TransformSyntax(lhs, arg1Builder, new ParseContextInfo { Usage = SyntaxUsage.Operator }, 0, ref arg1Si);
+            TransformSyntax(rhs, arg2Builder, new ParseContextInfo { Usage = SyntaxUsage.Operator }, 0, ref arg2Si);
+            string opd1 = arg1Si.ResultType;
+            string opd2 = arg2Si.ResultType;
+
             var objBuilder = NewStringBuilder();
             var argBuilder = NewStringBuilder();
             var objSi = new SemanticInfo(semanticInfo.NeedComputeGraph);
@@ -843,15 +855,6 @@ namespace Hlsl2Numpy
             if (string.IsNullOrEmpty(lhsType)) {
                 Console.WriteLine("unknown obj '{0}' or member '{0}[{1}]', line: {2}", objType, argType, lhs.GetLine());
             }
-
-            var arg1Builder = NewStringBuilder();
-            var arg2Builder = NewStringBuilder();
-            var arg1Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
-            var arg2Si = new SemanticInfo(semanticInfo.NeedComputeGraph);
-            TransformSyntax(lhs, arg1Builder, new ParseContextInfo { Usage = SyntaxUsage.Operator }, 0, ref arg1Si);
-            TransformSyntax(rhs, arg2Builder, new ParseContextInfo { Usage = SyntaxUsage.Operator }, 0, ref arg2Si);
-            string opd1 = arg1Si.ResultType;
-            string opd2 = arg2Si.ResultType;
             string restype = OperatorTypeInference(op, opd1, opd2);
 
             bool needBroadcast = false;
@@ -1859,6 +1862,7 @@ namespace Hlsl2Numpy
                 string rhsType = rhsSi.ResultType;
                 var rhsIsVarValRef = rhsSi.IsVarValRef;
                 var cres = rhsSi.NameOrConst;
+
                 if (!string.IsNullOrEmpty(vname) && (!s_IsVectorizing || !IsTypeVec(lhsType))) {
                     var curBlockInfo = CurBlockInfo();
                     var vinfo = GetVarInfo(vname, VarUsage.Find);
@@ -1938,13 +1942,6 @@ namespace Hlsl2Numpy
                 GenAppendLine(sb);
             }
             else {
-                var lhsBuilder = NewStringBuilder();
-                var lhsSi = new SemanticInfo(true);
-                TransformSyntax(lhs, lhsBuilder, new ParseContextInfo { IsInAssignLHS = true }, 0, ref lhsSi);
-                string lhsType = lhsSi.ResultType;
-                var lhsIsVarValRef = lhsSi.IsVarValRef;
-                var vname = lhsSi.NameOrConst;
-
                 var arg1Builder = NewStringBuilder();
                 var arg2Builder = NewStringBuilder();
                 var arg1Si = new SemanticInfo(false);
@@ -1955,6 +1952,14 @@ namespace Hlsl2Numpy
                 string opd2 = arg2Si.ResultType;
                 var rhsIsVarValRef = arg2Si.IsVarValRef;
                 var cres = arg2Si.NameOrConst;
+
+                var lhsBuilder = NewStringBuilder();
+                var lhsSi = new SemanticInfo(true);
+                TransformSyntax(lhs, lhsBuilder, new ParseContextInfo { IsInAssignLHS = true }, 0, ref lhsSi);
+                string lhsType = lhsSi.ResultType;
+                var lhsIsVarValRef = lhsSi.IsVarValRef;
+                var vname = lhsSi.NameOrConst;
+
                 string restype = OperatorTypeInference(op, opd1, opd2);
                 if (!string.IsNullOrEmpty(vname)) {
                     var curBlockInfo = CurBlockInfo();
@@ -2045,14 +2050,16 @@ namespace Hlsl2Numpy
                 GenAppendLine(sb);
             }
             else {
-                var varBuilder = NewStringBuilder();
-                var varSi = new SemanticInfo(true);
-                TransformSyntax(arg, varBuilder, new ParseContextInfo { IsInAssignLHS = true }, 0, ref varSi);
-                var vname = varSi.NameOrConst;
                 var argBuilder = NewStringBuilder();
                 var argSi = new SemanticInfo(false);
                 TransformSyntax(arg, argBuilder, new ParseContextInfo { Usage = SyntaxUsage.Operator }, 0, ref argSi);
                 string opd = argSi.ResultType;
+
+                var varBuilder = NewStringBuilder();
+                var varSi = new SemanticInfo(true);
+                TransformSyntax(arg, varBuilder, new ParseContextInfo { IsInAssignLHS = true }, 0, ref varSi);
+                var vname = varSi.NameOrConst;
+
                 bool constGenerated = false;
                 if (!string.IsNullOrEmpty(vname)) {
                     var blockInfo = CurBlockInfo();
@@ -2117,14 +2124,16 @@ namespace Hlsl2Numpy
                 GenAppendLine(sb);
             }
             else {
-                var varBuilder = NewStringBuilder();
-                var varSi = new SemanticInfo(true);
-                TransformSyntax(arg, varBuilder, new ParseContextInfo { IsInAssignLHS = true }, 0, ref varSi);
-                var vname = varSi.NameOrConst;
                 var argBuilder = NewStringBuilder();
                 var argSi = new SemanticInfo(false);
                 TransformSyntax(arg, argBuilder, new ParseContextInfo { Usage = SyntaxUsage.Operator }, 0, ref argSi);
                 string opd = argSi.ResultType;
+
+                var varBuilder = NewStringBuilder();
+                var varSi = new SemanticInfo(true);
+                TransformSyntax(arg, varBuilder, new ParseContextInfo { IsInAssignLHS = true }, 0, ref varSi);
+                var vname = varSi.NameOrConst;
+
                 bool constGenerated = false;
                 if (!string.IsNullOrEmpty(vname)) {
                     var blockInfo = CurBlockInfo();

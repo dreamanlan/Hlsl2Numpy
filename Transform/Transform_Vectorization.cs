@@ -160,6 +160,7 @@ namespace Hlsl2Numpy
                         //reparse1: construct new block info
                         funcInfo.ClearForReTransform();
                         funcInfo.ClearBlockInfo();
+                        AddFuncParamsToComputeGraph(funcInfo);
                         TransformFunc(syntax);
 
                         //reparse2: gen scalar code
@@ -174,6 +175,7 @@ namespace Hlsl2Numpy
                         //reparse1: construct new block info
                         funcInfo.ClearForReTransform();
                         funcInfo.ClearBlockInfo();
+                        AddFuncParamsToComputeGraph(funcInfo);
                         TransformFunc(syntax);
 
                         //reparse2: gen scalar code

@@ -17,386 +17,498 @@ struct(SPIRV_Cross_Output )
 {
 	field(spec[nothing ], float4, outColor )semantic(SV_Target0 );
 };
-var(spec[static, nothing ], float, focalDistance );
-var(spec[static, nothing ], float, aperture );
-var(spec[static, nothing ], float, shadowCone );
-var(spec[static, nothing ], float, pixelSize );
 var(spec[static, nothing ], float, iTime );
 var(spec[static, nothing ], float3, iResolution );
+var(spec[static, nothing ], float4, iMouse );
 var(spec[static, nothing ], float, iTimeDelta );
 var(spec[static, nothing ], float, iFrameRate );
 var(spec[static, nothing ], int, iFrame );
 var(spec[static, nothing ], float, iChannelTime[4 ] );
 var(spec[static, nothing ], float3, iChannelResolution[4 ] );
-var(spec[static, nothing ], float4, iMouse );
 var(spec[static, nothing ], float4, iDate );
 var(spec[static, nothing ], float, iSampleRate );
-func(spec[nothing ], float, mod )
-params(var(spec[nothing ], float, x ), var(spec[nothing ], float, y ) )
+func(spec[nothing ], float3x3, fromEuler )
+params(var(spec[nothing ], float3, ang ) )
 {
-	return <- x - y * floor(x / y );
-};
-func(spec[nothing ], float2, mod )
-params(var(spec[nothing ], float2, x ), var(spec[nothing ], float2, y ) )
-{
-	return <- x - y * floor(x / y );
-};
-func(spec[nothing ], float3, mod )
-params(var(spec[nothing ], float3, x ), var(spec[nothing ], float3, y ) )
-{
-	return <- x - y * floor(x / y );
-};
-func(spec[nothing ], float4, mod )
-params(var(spec[nothing ], float4, x ), var(spec[nothing ], float4, y ) )
-{
-	return <- x - y * floor(x / y );
-};
-func(spec[nothing ], float3x3, lookat )
-params(var(spec[inout, nothing ], float3, fw ), var(spec[nothing ], float3, up ) )
-{
-	fw = normalize(fw );
-	var(spec[nothing ], float3, rt ) = normalize(cross(fw, normalize(up ) ) );
-	return <- float3x3(float3(rt ), float3(cross(rt, fw ) ), float3(fw ) );
+	var(spec[nothing ], float2, a1 ) = float2(sin(ang.x  ), cos(ang.x  ) );
+	var(spec[nothing ], float2, a2 ) = float2(sin(ang.y  ), cos(ang.y  ) );
+	var(spec[nothing ], float2, a3 ) = float2(sin(ang.z  ), cos(ang.z  ) );
+	var(spec[nothing ], float3x3, m );
+	m[0 ] = float3((a1.y  * a3.y  ) + ((a1.x  * a2.x  ) * a3.x  ), ((a1.y  * a2.x  ) * a3.x  ) + (a3.y  * a1.x  ), (- a2.y  ) * a3.x  );
+	m[1 ] = float3((- a2.y  ) * a1.x , a1.y  * a2.y , a2.x  );
+	m[2 ] = float3(((a3.y  * a1.x  ) * a2.x  ) + (a1.y  * a3.x  ), (a1.x  * a3.x  ) - ((a1.y  * a3.y  ) * a2.x  ), a2.y  * a3.y  );
+	return <- m;
 };
 func(spec[nothing ], float, hash )
-params(var(spec[nothing ], float, n ) )
+params(var(spec[nothing ], float2, p ) )
 {
-	return <- frac(sin(n ) * 4378.54541 );
+	var(spec[nothing ], float, h ) = dot(p, float2(127.099998, 311.700012 ) );
+	return <- frac(sin(h ) * 43758.5469 );
 };
-func(spec[nothing ], float, noyz )
-params(var(spec[nothing ], float3, x ) )
+func(spec[nothing ], float, _noise )
+params(var(spec[nothing ], float2, p ) )
 {
-	var(spec[nothing ], float3, p ) = floor(x );
-	var(spec[nothing ], float3, j ) = frac(x );
-	var(spec[nothing ], float, n ) = (p.x  + (p.y  * 7.0 ) ) + (p.z  * 13.0 );
-	var(spec[nothing ], float, param ) = n;
-	var(spec[nothing ], float, a ) = hash(param );
-	var(spec[nothing ], float, param_1 ) = n + 1.0;
-	var(spec[nothing ], float, b ) = hash(param_1 );
-	var(spec[nothing ], float, param_2 ) = n + 7.0;
-	var(spec[nothing ], float, c ) = hash(param_2 );
-	var(spec[nothing ], float, param_3 ) = (n + 7.0 ) + 1.0;
-	var(spec[nothing ], float, d ) = hash(param_3 );
-	var(spec[nothing ], float, param_4 ) = n + 13.0;
-	var(spec[nothing ], float, e ) = hash(param_4 );
-	var(spec[nothing ], float, param_5 ) = (n + 1.0 ) + 13.0;
-	var(spec[nothing ], float, f ) = hash(param_5 );
-	var(spec[nothing ], float, param_6 ) = (n + 7.0 ) + 13.0;
-	var(spec[nothing ], float, g ) = hash(param_6 );
-	var(spec[nothing ], float, param_7 ) = ((n + 1.0 ) + 7.0 ) + 13.0;
-	var(spec[nothing ], float, h ) = hash(param_7 );
-	var(spec[nothing ], float3, u ) = (j * j ) * (3.0F.xxx  - (j * 2.0 ) );
-	return <- lerp(((a + ((b - a ) * u.x  ) ) + ((c - a ) * u.y  ) ) + (((((a - b ) - c ) + d ) * u.x  ) * u.y  ), ((e + ((f - e ) * u.x  ) ) + ((g - e ) * u.y  ) ) + (((((e - f ) - g ) + h ) * u.x  ) * u.y  ), u.z  );
+	var(spec[nothing ], float2, i ) = floor(p );
+	var(spec[nothing ], float2, f ) = frac(p );
+	var(spec[nothing ], float2, u ) = (f * f ) * (3.0F.xx  - (f * 2.0 ) );
+	var(spec[nothing ], float2, param ) = i + 0.0F.xx ;
+	var(spec[nothing ], float2, param_1 ) = i + float2(1.0, 0.0 );
+	var(spec[nothing ], float2, param_2 ) = i + float2(0.0, 1.0 );
+	var(spec[nothing ], float2, param_3 ) = i + 1.0F.xx ;
+	return <- -1.0 + (2.0 * lerp(lerp(hash(param ), hash(param_1 ), u.x  ), lerp(hash(param_2 ), hash(param_3 ), u.x  ), u.y  ) );
 };
-func(spec[nothing ], float, fbm )
-params(var(spec[inout, nothing ], float3, p ) )
+func(spec[nothing ], float, sea_octave )
+params(var(spec[inout, nothing ], float2, uv ), var(spec[nothing ], float, choppy ) )
 {
-	var(spec[nothing ], float3, param ) = p;
-	var(spec[nothing ], float, h ) = noyz(param );
-	var(spec[nothing ], float3, _285 ) = p;
-	var(spec[nothing ], float3, _286 ) = _285 * 2.29999995;
-	p = _286;
-	var(spec[nothing ], float3, param_1 ) = _286;
-	h += (0.5 * noyz(param_1 ) );
-	var(spec[nothing ], float3, param_2 ) = p * 2.29999995;
-	return <- h + (0.25 * noyz(param_2 ) );
+	var(spec[nothing ], float2, param ) = uv;
+	uv += _noise(param ).xx ;
+	var(spec[nothing ], float2, wv ) = 1.0F.xx  - abs(sin(uv ) );
+	var(spec[nothing ], float2, swv ) = abs(cos(uv ) );
+	wv = lerp(wv, swv, wv );
+	return <- pow(1.0 - pow(wv.x  * wv.y , 0.649999976 ), choppy );
 };
-func(spec[nothing ], void, Kaleido )
-params(var(spec[inout, nothing ], float2, v ), var(spec[nothing ], float, power ) )
+func(spec[nothing ], float, map )
+params(var(spec[nothing ], float3, p ) )
 {
-	var(spec[nothing ], float, a ) = (floor(0.5 + ((atan2(v.x , - v.y  ) * power ) / 6.28299999 ) ) * 6.28299999 ) / power;
-	v = (v * cos(a ) ) + (float2(v.y , - v.x  ) * sin(a ) );
-};
-func(spec[nothing ], float, Rect )
-params(var(spec[nothing ], float3, z ), var(spec[nothing ], float3, r ) )
-{
-	return <- max(abs(z.x  ) - r.x , max(abs(z.y  ) - r.y , abs(z.z  ) - r.z  ) );
-};
-func(spec[nothing ], float, DE )
-params(var(spec[inout, nothing ], float3, z0 ), var(spec[inout, nothing ], float4, mcol ) )
-{
-	var(spec[nothing ], float, dW ) = 100.0;
-	var(spec[nothing ], float, dD ) = 100.0;
-	var(spec[nothing ], float3, param ) = (z0 * 0.25 ) + 100.0F.xxx ;
-	var(spec[nothing ], float, _311 ) = fbm(param );
-	var(spec[nothing ], float, dC ) = (((_311 * 0.5 ) + (sin(z0.y  ) * 0.100000001 ) ) + (sin(z0.z  * 0.400000006 ) * 0.100000001 ) ) + min((z0.y  * 0.0399999991 ) + 0.100000001, 0.100000001 );
-	var(spec[nothing ], float2, v ) = floor((float2(z0.x , abs(z0.z  ) ) * 0.5 ) + 0.5F.xx  );
-	var(spec[nothing ], float3, _344 ) = z0;
-	var(spec[nothing ], float3, _351 ) = z0;
-	var(spec[nothing ], float2, _353 ) = (clamp(_344.xz , (-2.0F ).xx , 2.0F.xx  ) * 2.0 ) - _351.xz ;
-	z0.x  = _353.x ;
-	z0.z  = _353.y ;
-	var(spec[nothing ], float, r ) = length(z0.xz  );
-	var(spec[nothing ], float, dS ) = r - 0.600000024;
-	if(r < 1.0 )
+	var(spec[nothing ], float, freq ) = 0.159999996;
+	var(spec[nothing ], float, amp ) = 0.600000024;
+	var(spec[nothing ], float, choppy ) = 4.0;
+	var(spec[nothing ], float2, uv ) = p.xz ;
+	uv.x  *= 0.75F;
+	var(spec[nothing ], float, h ) = 0.0;
+	block
 	{
-		var(spec[nothing ], float, shape ) = 0.284999996 - (v.x  * 0.0199999996 );
-		z0.y  += (v.y  * 0.200000003 );
-		var(spec[nothing ], float3, z ) = z0 * 10.0;
-		dS = max(z0.y  - 2.5, r - max(0.109999999 - (z0.y  * 0.100000001 ), 0.00999999977 ) );
-		var(spec[nothing ], float, y2 ) = max(abs(abs(mod(z.y  + 0.5, 2.0 ) - 1.0 ) - 0.5 ) - 0.0500000007, abs(z.y  - 7.0999999 ) - 8.30000019 );
-		var(spec[nothing ], float, y ) = sin(clamp(floor(z.y  ) * shape, -0.400000006, 3.4000001 ) ) * 40.0;
-		var(spec[nothing ], float2, param_1 ) = z.xz ;
-		var(spec[nothing ], float, param_2 ) = 8.0 + floor(y );
-		Kaleido(param_1, param_2 );
-		z.x  = param_1.x ;
-		z.z  = param_1.y ;
-		var(spec[nothing ], float3, param_3 ) = z;
-		var(spec[nothing ], float3, param_4 ) = float3(0.899999976 + (y * 0.100000001 ), 22.0, 0.899999976 + (y * 0.100000001 ) );
-		dW = Rect(param_3, param_4 ) * 0.0799999982;
-		dD = max(z0.y  - 1.37, max(y2, ((r * 10.0 ) - 1.75 ) - (sin(clamp((z.y  - 0.5 ) * shape, -0.0500000007, 3.49000001 ) ) * 4.0 ) ) ) * 0.0799999982;
-		dS = min(dS, min(dW, dD ) );
+		var(spec[nothing ], int, i ) = 0;
+		var(spec[nothing ], float2, param ) = (uv + (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.159999996;
+		var(spec[nothing ], float, param_1 ) = 4.0;
+		var(spec[nothing ], float, _399 ) = sea_octave(param, param_1 );
+		var(spec[nothing ], float, d ) = _399;
+		var(spec[nothing ], float2, param_2 ) = (uv - (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.159999996;
+		var(spec[nothing ], float, param_3 ) = 4.0;
+		var(spec[nothing ], float, _411 ) = sea_octave(param_2, param_3 );
+		d += _411;
+		h += (d * 0.600000024 );
+		uv = mul(float2x2(float2(1.60000002, 1.20000005 ), float2(-1.20000005, 1.60000002 ) ), uv );
+		freq *= 1.89999998;
+		amp *= 0.219999999;
+		choppy = lerp(choppy, 1.0, 0.200000003 );
+		i = 1;
+		var(spec[nothing ], float2, param ) = (uv + (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.304;
+		var(spec[nothing ], float, param_1 ) = choppy;
+		var(spec[nothing ], float, _399 ) = sea_octave(param, param_1 );
+		var(spec[nothing ], float, d ) = _399;
+		var(spec[nothing ], float2, param_2 ) = (uv - (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.304;
+		var(spec[nothing ], float, param_3 ) = choppy;
+		var(spec[nothing ], float, _411 ) = sea_octave(param_2, param_3 );
+		d += _411;
+		h += (d * 0.132 );
+		uv = mul(float2x2(float2(1.60000002, 1.20000005 ), float2(-1.20000005, 1.60000002 ) ), uv );
+		freq *= 1.89999998;
+		amp *= 0.219999999;
+		choppy = lerp(choppy, 1.0, 0.200000003 );
+		i = 2;
+		var(spec[nothing ], float2, param ) = (uv + (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.5776;
+		var(spec[nothing ], float, param_1 ) = choppy;
+		var(spec[nothing ], float, _399 ) = sea_octave(param, param_1 );
+		var(spec[nothing ], float, d ) = _399;
+		var(spec[nothing ], float2, param_2 ) = (uv - (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.5776;
+		var(spec[nothing ], float, param_3 ) = choppy;
+		var(spec[nothing ], float, _411 ) = sea_octave(param_2, param_3 );
+		d += _411;
+		h += (d * 0.02904 );
+		uv = mul(float2x2(float2(1.60000002, 1.20000005 ), float2(-1.20000005, 1.60000002 ) ), uv );
+		freq *= 1.89999998;
+		amp *= 0.219999999;
+		choppy = lerp(choppy, 1.0, 0.200000003 );
 	};
-	dS = min(dS, dC );
-	if(dS == dW )
+	return <- p.y  - h;
+};
+func(spec[nothing ], float, heightMapTracing )
+params(var(spec[nothing ], float3, ori ), var(spec[nothing ], float3, dir ), var(spec[inout, nothing ], float3, p ) )
+{
+	var(spec[nothing ], float, _func_ret_val_7 );
+	var(spec[nothing ], bool, _func_ret_flag_7 ) = false;
+	var(spec[nothing ], float, tm ) = 0.0;
+	var(spec[nothing ], float, tx ) = 1000.0;
+	var(spec[nothing ], float3, param ) = ori + (dir * 1000.0 );
+	var(spec[nothing ], float, hx ) = map(param );
+	if(hx > 0.0 )
 	{
-		mcol += float4(0.800000011, 0.899999976, 0.899999976, 1.0 );
-	}
-	else
+		p = ori + (dir * 1000.0 );
+		_func_ret_flag_7 = true;
+		_func_ret_val_7 = 1000.0;
+	};
+	if(! _func_ret_flag_7 )
 	{
-		if(dS == dD )
+		var(spec[nothing ], float3, param_1 ) = ori + (dir * 0.0 );
+		var(spec[nothing ], float, hm ) = map(param_1 );
+		var(spec[nothing ], float, tmid ) = 0.0;
+		block
 		{
-			mcol += float4(0.600000024, 0.400000006, 0.300000012, 0.0 );
-		}
-		else
-		{
-			if(dS == dC )
+			var(spec[nothing ], int, i ) = 0;
+			tmid = lerp(0.0, 1000.0, hm / (hm - hx ) );
+			p = ori + (dir * tmid );
+			var(spec[nothing ], float3, param_2 ) = p;
+			var(spec[nothing ], float, hmid ) = map(param_2 );
+			if(hmid < 0.0 )
 			{
-				mcol += float4(1.0, 1.0, 1.0, -1.0 );
+				tx = tmid;
+				hx = hmid;
 			}
 			else
 			{
-				mcol += float4(0.699999988 + (sin(z0.y  * 100.0 ) * 0.300000012 ), 1.0, 0.800000011, 0.0 );
+				tm = tmid;
+				hm = hmid;
 			};
-		};
-	};
-	return <- dS;
-};
-func(spec[nothing ], float, CircleOfConfusion )
-params(var(spec[nothing ], float, t ) )
-{
-	return <- max(abs(focalDistance - t ) * aperture, pixelSize * (1.0 + t ) );
-};
-func(spec[nothing ], float, linstep )
-params(var(spec[nothing ], float, a ), var(spec[nothing ], float, b ), var(spec[nothing ], float, t ) )
-{
-	return <- clamp((t - a ) / (b - a ), 0.0, 1.0 );
-};
-func(spec[nothing ], float, randStep )
-params(var(spec[inout, nothing ], float, randSeed ) )
-{
-	randSeed += 1.0;
-	return <- 0.800000011 + (0.200000003 * frac(sin(randSeed ) * 4375.54541 ) );
-};
-func(spec[nothing ], float, FuzzyShadow )
-params(var(spec[nothing ], float3, ro ), var(spec[nothing ], float3, rd ), var(spec[nothing ], float, coneGrad ), var(spec[nothing ], float, rCoC ), var(spec[inout, nothing ], float4, mcol ), var(spec[inout, nothing ], float, randSeed ) )
-{
-	var(spec[nothing ], float, t ) = rCoC * 2.0;
-	var(spec[nothing ], float, d ) = 1.0;
-	var(spec[nothing ], float, s ) = 1.0;
-	var(spec[nothing ], bool, _br_flag_16 ) = false;
-	var(spec[nothing ], bool, _cont_flag_16 ) = false;
-	for([var(spec[nothing ], int, i ) = 0 ], [], [i ++  ] )
-	{
-		if(! _br_flag_16 )
-		{
-			_cont_flag_16 = false;
-			if(i < 6 )
+			i = 1;
+			tmid = lerp(tm, tx, hm / (hm - hx ) );
+			p = ori + (dir * tmid );
+			var(spec[nothing ], float3, param_2 ) = p;
+			var(spec[nothing ], float, hmid ) = map(param_2 );
+			if(hmid < 0.0 )
 			{
-				if(s < 0.100000001 )
-				{
-					_cont_flag_16 = true;
-				};
-				if(! _cont_flag_16 )
-				{
-					var(spec[nothing ], float, r ) = rCoC + (t * coneGrad );
-					var(spec[nothing ], float3, param ) = ro + (rd * t );
-					var(spec[nothing ], float4, param_1 ) = mcol;
-					var(spec[nothing ], float, _637 ) = DE(param, param_1 );
-					mcol = param_1;
-					d = _637 + (r * 0.400000006 );
-					var(spec[nothing ], float, param_2 ) = - r;
-					var(spec[nothing ], float, param_3 ) = r;
-					var(spec[nothing ], float, param_4 ) = d;
-					s *= linstep(param_2, param_3, param_4 );
-					var(spec[nothing ], float, param_5 ) = randSeed;
-					var(spec[nothing ], float, _656 ) = randStep(param_5 );
-					randSeed = param_5;
-					t += (abs(d ) * _656 );
-				};
+				tx = tmid;
+				hx = hmid;
 			}
-			else_all_if_false_in_loop
+			else
 			{
-				_br_flag_16 = true;
+				tm = tmid;
+				hm = hmid;
 			};
-		}
-		else_all_if_false_in_loop
-		{
-			break;
+			i = 2;
+			tmid = lerp(tm, tx, hm / (hm - hx ) );
+			p = ori + (dir * tmid );
+			var(spec[nothing ], float3, param_2 ) = p;
+			var(spec[nothing ], float, hmid ) = map(param_2 );
+			if(hmid < 0.0 )
+			{
+				tx = tmid;
+				hx = hmid;
+			}
+			else
+			{
+				tm = tmid;
+				hm = hmid;
+			};
+			i = 3;
+			tmid = lerp(tm, tx, hm / (hm - hx ) );
+			p = ori + (dir * tmid );
+			var(spec[nothing ], float3, param_2 ) = p;
+			var(spec[nothing ], float, hmid ) = map(param_2 );
+			if(hmid < 0.0 )
+			{
+				tx = tmid;
+				hx = hmid;
+			}
+			else
+			{
+				tm = tmid;
+				hm = hmid;
+			};
+			i = 4;
+			tmid = lerp(tm, tx, hm / (hm - hx ) );
+			p = ori + (dir * tmid );
+			var(spec[nothing ], float3, param_2 ) = p;
+			var(spec[nothing ], float, hmid ) = map(param_2 );
+			if(hmid < 0.0 )
+			{
+				tx = tmid;
+				hx = hmid;
+			}
+			else
+			{
+				tm = tmid;
+				hm = hmid;
+			};
+			i = 5;
+			tmid = lerp(tm, tx, hm / (hm - hx ) );
+			p = ori + (dir * tmid );
+			var(spec[nothing ], float3, param_2 ) = p;
+			var(spec[nothing ], float, hmid ) = map(param_2 );
+			if(hmid < 0.0 )
+			{
+				tx = tmid;
+				hx = hmid;
+			}
+			else
+			{
+				tm = tmid;
+				hm = hmid;
+			};
+			i = 6;
+			tmid = lerp(tm, tx, hm / (hm - hx ) );
+			p = ori + (dir * tmid );
+			var(spec[nothing ], float3, param_2 ) = p;
+			var(spec[nothing ], float, hmid ) = map(param_2 );
+			if(hmid < 0.0 )
+			{
+				tx = tmid;
+				hx = hmid;
+			}
+			else
+			{
+				tm = tmid;
+				hm = hmid;
+			};
+			i = 7;
+			tmid = lerp(tm, tx, hm / (hm - hx ) );
+			p = ori + (dir * tmid );
+			var(spec[nothing ], float3, param_2 ) = p;
+			var(spec[nothing ], float, hmid ) = map(param_2 );
+			if(hmid < 0.0 )
+			{
+				tx = tmid;
+				hx = hmid;
+			}
+			else
+			{
+				tm = tmid;
+				hm = hmid;
+			};
 		};
+		_func_ret_flag_7 = true;
+		_func_ret_val_7 = tmid;
 	};
-	return <- clamp((s * 0.75 ) + 0.25, 0.0, 1.0 );
+	return <- _func_ret_val_7;
+};
+func(spec[nothing ], float, map_detailed )
+params(var(spec[nothing ], float3, p ) )
+{
+	var(spec[nothing ], float, freq ) = 0.159999996;
+	var(spec[nothing ], float, amp ) = 0.600000024;
+	var(spec[nothing ], float, choppy ) = 4.0;
+	var(spec[nothing ], float2, uv ) = p.xz ;
+	uv.x  *= 0.75F;
+	var(spec[nothing ], float, h ) = 0.0;
+	block
+	{
+		var(spec[nothing ], int, i ) = 0;
+		var(spec[nothing ], float2, param ) = (uv + (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.159999996;
+		var(spec[nothing ], float, param_1 ) = 4.0;
+		var(spec[nothing ], float, _476 ) = sea_octave(param, param_1 );
+		var(spec[nothing ], float, d ) = _476;
+		var(spec[nothing ], float2, param_2 ) = (uv - (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.159999996;
+		var(spec[nothing ], float, param_3 ) = 4.0;
+		var(spec[nothing ], float, _488 ) = sea_octave(param_2, param_3 );
+		d += _488;
+		h += (d * 0.600000024 );
+		uv = mul(float2x2(float2(1.60000002, 1.20000005 ), float2(-1.20000005, 1.60000002 ) ), uv );
+		freq *= 1.89999998;
+		amp *= 0.219999999;
+		choppy = lerp(choppy, 1.0, 0.200000003 );
+		i = 1;
+		var(spec[nothing ], float2, param ) = (uv + (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.304;
+		var(spec[nothing ], float, param_1 ) = choppy;
+		var(spec[nothing ], float, _476 ) = sea_octave(param, param_1 );
+		var(spec[nothing ], float, d ) = _476;
+		var(spec[nothing ], float2, param_2 ) = (uv - (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.304;
+		var(spec[nothing ], float, param_3 ) = choppy;
+		var(spec[nothing ], float, _488 ) = sea_octave(param_2, param_3 );
+		d += _488;
+		h += (d * 0.132 );
+		uv = mul(float2x2(float2(1.60000002, 1.20000005 ), float2(-1.20000005, 1.60000002 ) ), uv );
+		freq *= 1.89999998;
+		amp *= 0.219999999;
+		choppy = lerp(choppy, 1.0, 0.200000003 );
+		i = 2;
+		var(spec[nothing ], float2, param ) = (uv + (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.5776;
+		var(spec[nothing ], float, param_1 ) = choppy;
+		var(spec[nothing ], float, _476 ) = sea_octave(param, param_1 );
+		var(spec[nothing ], float, d ) = _476;
+		var(spec[nothing ], float2, param_2 ) = (uv - (1.0 + (iTime * 0.800000011 ) ).xx  ) * 0.5776;
+		var(spec[nothing ], float, param_3 ) = choppy;
+		var(spec[nothing ], float, _488 ) = sea_octave(param_2, param_3 );
+		d += _488;
+		h += (d * 0.02904 );
+		uv = mul(float2x2(float2(1.60000002, 1.20000005 ), float2(-1.20000005, 1.60000002 ) ), uv );
+		freq *= 1.89999998;
+		amp *= 0.219999999;
+		choppy = lerp(choppy, 1.0, 0.200000003 );
+		i = 3;
+		var(spec[nothing ], float2, param ) = (uv + (1.0 + (iTime * 0.800000011 ) ).xx  ) * 1.09744;
+		var(spec[nothing ], float, param_1 ) = choppy;
+		var(spec[nothing ], float, _476 ) = sea_octave(param, param_1 );
+		var(spec[nothing ], float, d ) = _476;
+		var(spec[nothing ], float2, param_2 ) = (uv - (1.0 + (iTime * 0.800000011 ) ).xx  ) * 1.09744;
+		var(spec[nothing ], float, param_3 ) = choppy;
+		var(spec[nothing ], float, _488 ) = sea_octave(param_2, param_3 );
+		d += _488;
+		h += (d * 0.0063888 );
+		uv = mul(float2x2(float2(1.60000002, 1.20000005 ), float2(-1.20000005, 1.60000002 ) ), uv );
+		freq *= 1.89999998;
+		amp *= 0.219999999;
+		choppy = lerp(choppy, 1.0, 0.200000003 );
+		i = 4;
+		var(spec[nothing ], float2, param ) = (uv + (1.0 + (iTime * 0.800000011 ) ).xx  ) * 2.085136;
+		var(spec[nothing ], float, param_1 ) = choppy;
+		var(spec[nothing ], float, _476 ) = sea_octave(param, param_1 );
+		var(spec[nothing ], float, d ) = _476;
+		var(spec[nothing ], float2, param_2 ) = (uv - (1.0 + (iTime * 0.800000011 ) ).xx  ) * 2.085136;
+		var(spec[nothing ], float, param_3 ) = choppy;
+		var(spec[nothing ], float, _488 ) = sea_octave(param_2, param_3 );
+		d += _488;
+		h += (d * 0.0014055 );
+		uv = mul(float2x2(float2(1.60000002, 1.20000005 ), float2(-1.20000005, 1.60000002 ) ), uv );
+		freq *= 1.89999998;
+		amp *= 0.219999999;
+		choppy = lerp(choppy, 1.0, 0.200000003 );
+	};
+	return <- p.y  - h;
+};
+func(spec[nothing ], float3, getNormal )
+params(var(spec[nothing ], float3, p ), var(spec[nothing ], float, eps ) )
+{
+	var(spec[nothing ], float3, param ) = p;
+	var(spec[nothing ], float3, n );
+	n.y  = map_detailed(param );
+	var(spec[nothing ], float3, param_1 ) = float3(p.x  + eps, p.y , p.z  );
+	n.x  = map_detailed(param_1 ) - n.y ;
+	var(spec[nothing ], float3, param_2 ) = float3(p.x , p.y , p.z  + eps );
+	n.z  = map_detailed(param_2 ) - n.y ;
+	n.y  = eps;
+	return <- normalize(n );
+};
+func(spec[nothing ], float3, getSkyColor )
+params(var(spec[inout, nothing ], float3, e ) )
+{
+	e.y  = ((max(e.y , 0.0 ) * 0.800000011 ) + 0.200000003 ) * 0.800000011;
+	return <- float3(pow(1.0 - e.y , 2.0 ), 1.0 - e.y , 0.600000024 + ((1.0 - e.y  ) * 0.400000006 ) ) * 1.10000002;
+};
+func(spec[nothing ], float, diffuse )
+params(var(spec[nothing ], float3, n ), var(spec[nothing ], float3, l ), var(spec[nothing ], float, p ) )
+{
+	return <- pow((dot(n, l ) * 0.400000006 ) + 0.600000024, p );
+};
+func(spec[nothing ], float, specular )
+params(var(spec[nothing ], float3, n ), var(spec[nothing ], float3, l ), var(spec[nothing ], float3, e ), var(spec[nothing ], float, s ) )
+{
+	var(spec[nothing ], float, nrm ) = (s + 8.0 ) / 25.1327362;
+	return <- pow(max(dot(reflect(e, n ), l ), 0.0 ), s ) * nrm;
+};
+func(spec[nothing ], float3, getSeaColor )
+params(var(spec[nothing ], float3, p ), var(spec[nothing ], float3, n ), var(spec[nothing ], float3, l ), var(spec[nothing ], float3, eye ), var(spec[nothing ], float3, dist ) )
+{
+	var(spec[nothing ], float, fresnel ) = clamp(1.0 - dot(n, - eye ), 0.0, 1.0 );
+	fresnel = min(pow(fresnel, 3.0 ), 0.5 );
+	var(spec[nothing ], float3, param ) = reflect(eye, n );
+	var(spec[nothing ], float3, _528 ) = getSkyColor(param );
+	var(spec[nothing ], float3, reflected ) = _528;
+	var(spec[nothing ], float3, param_1 ) = n;
+	var(spec[nothing ], float3, param_2 ) = l;
+	var(spec[nothing ], float, param_3 ) = 80.0;
+	var(spec[nothing ], float3, refracted ) = float3(0.0, 0.0900000035, 0.180000007 ) + ((float3(0.479999989, 0.540000021, 0.360000014 ) * diffuse(param_1, param_2, 80.0 ) ) * 0.119999997 );
+	var(spec[nothing ], float3, color ) = lerp(refracted, reflected, fresnel.xxx  );
+	var(spec[nothing ], float, atten ) = max(1.0 - (dot(dist, dist ) * 0.00100000005 ), 0.0 );
+	color += (((float3(0.479999989, 0.540000021, 0.360000014 ) * (p.y  - 0.600000024 ) ) * 0.180000007 ) * atten );
+	var(spec[nothing ], float3, param_4 ) = n;
+	var(spec[nothing ], float3, param_5 ) = l;
+	var(spec[nothing ], float3, param_6 ) = eye;
+	var(spec[nothing ], float, param_7 ) = 60.0;
+	color += specular(param_4, param_5, param_6, 60.0 ).xxx ;
+	return <- color;
+};
+func(spec[nothing ], float3, getPixel )
+params(var(spec[nothing ], float2, coord ), var(spec[nothing ], float, time ) )
+{
+	var(spec[nothing ], float2, uv ) = coord / iResolution.xy ;
+	uv = (uv * 2.0 ) - 1.0F.xx ;
+	uv.x  *= (iResolution.x  / iResolution.y  );
+	var(spec[nothing ], float3, ang ) = float3(sin(time * 3.0 ) * 0.100000001, (sin(time ) * 0.200000003 ) + 0.300000012, time );
+	var(spec[nothing ], float3, ori ) = float3(0.0, 3.5, time * 5.0 );
+	var(spec[nothing ], float3, dir ) = normalize(float3(uv, -2.0 ) );
+	dir.z  += (length(uv ) * 0.140000001 );
+	var(spec[nothing ], float3, param ) = ang;
+	dir = mul(fromEuler(param ), normalize(dir ) );
+	var(spec[nothing ], float3, param_1 ) = ori;
+	var(spec[nothing ], float3, param_2 ) = dir;
+	var(spec[nothing ], float3, param_3 );
+	var(spec[nothing ], float, _764 ) = heightMapTracing(param_1, param_2, param_3 );
+	var(spec[nothing ], float3, p ) = param_3;
+	var(spec[nothing ], float3, dist ) = p - ori;
+	var(spec[nothing ], float3, param_4 ) = p;
+	var(spec[nothing ], float, param_5 ) = dot(dist, dist ) * (0.100000001 / iResolution.x  );
+	var(spec[nothing ], float3, n ) = getNormal(param_4, param_5 );
+	var(spec[nothing ], float3, light ) = float3(0.0, 0.780868828, 0.624695063 );
+	var(spec[nothing ], float3, param_6 ) = dir;
+	var(spec[nothing ], float3, _788 ) = getSkyColor(param_6 );
+	var(spec[nothing ], float3, param_7 ) = p;
+	var(spec[nothing ], float3, param_8 ) = n;
+	var(spec[nothing ], float3, param_9 ) = light;
+	var(spec[nothing ], float3, param_10 ) = dir;
+	var(spec[nothing ], float3, param_11 ) = dist;
+	return <- lerp(_788, getSeaColor(param_7, param_8, param_9, param_10, param_11 ), pow(smoothstep(0.0, -0.0199999996, dir.y  ), 0.200000003 ).xxx  );
 };
 func(spec[nothing ], void, mainImage )
-params(var(spec[inout, nothing ], float4, O ), var(spec[nothing ], float2, U ) )
+params(var(spec[inout, nothing ], float4, fragColor ), var(spec[nothing ], float2, fragCoord ) )
 {
-	var(spec[nothing ], float4, mcol ) = 0.0F.xxxx ;
-	var(spec[nothing ], float, randSeed ) = frac(sin(iTime + dot(U, float2(9.12300014, 13.4309998 ) ) ) * 473.719238 );
-	pixelSize = 2.0 / iResolution.y ;
-	var(spec[nothing ], float, tim ) = iTime * 0.25;
-	var(spec[nothing ], float3, ro ) = float3(cos(tim ), (sin(tim * 0.699999988 ) * 0.5 ) + 0.300000012, sin(tim ) ) * (1.79999995 + (0.5 * sin(tim * 0.409999996 ) ) );
-	var(spec[nothing ], float3, param ) = float3(0.0, 0.600000024, sin(tim * 2.29999995 ) ) - ro;
-	var(spec[nothing ], float3, param_1 ) = float3(0.100000001, 1.0, 0.0 );
-	var(spec[nothing ], float3x3, _723 ) = lookat(param, param_1 );
-	var(spec[nothing ], float3, rd ) = mul(normalize(float3(((U * 2.0 ) - iResolution.xy  ) / iResolution.y .xx , 2.0 ) ), _723 );
-	var(spec[nothing ], float3, L ) = float3(0.485071242, 0.727606893, -0.485071242 );
-	var(spec[nothing ], float4, col ) = 0.0F.xxxx ;
-	var(spec[nothing ], float3, param_2 ) = ro;
-	var(spec[nothing ], float4, param_3 ) = mcol;
-	var(spec[nothing ], float, _749 ) = DE(param_2, param_3 );
-	mcol = param_3;
-	var(spec[nothing ], float, t ) = (_749 * randSeed ) * 0.800000011;
-	ro += (rd * t );
-	var(spec[nothing ], float, alpha );
-	var(spec[nothing ], float3, scol );
-	var(spec[nothing ], bool, _br_flag_18 ) = false;
-	var(spec[nothing ], bool, _cont_flag_18 ) = false;
-	for([var(spec[nothing ], int, i ) = 0 ], [], [i ++  ] )
+	var(spec[nothing ], float, time ) = (iTime * 0.300000012 ) + (iMouse.x  * 0.00999999977 );
+	var(spec[nothing ], float3, color ) = 0.0F.xxx ;
+	block
 	{
-		if(! _br_flag_18 )
+		var(spec[nothing ], int, i ) = -1;
+		block
 		{
-			_cont_flag_18 = false;
-			if(i < 72 )
-			{
-				if((col.w  > 0.899999976 ) || (t > 20.0 ) )
-				{
-					_cont_flag_18 = true;
-				};
-				if(! _cont_flag_18 )
-				{
-					var(spec[nothing ], float, param_4 ) = t;
-					var(spec[nothing ], float, rCoC ) = CircleOfConfusion(param_4 );
-					var(spec[nothing ], float3, param_5 ) = ro;
-					var(spec[nothing ], float4, param_6 ) = mcol;
-					var(spec[nothing ], float, _788 ) = DE(param_5, param_6 );
-					mcol = param_6;
-					var(spec[nothing ], float, d ) = _788;
-					var(spec[nothing ], float, fClouds ) = max(0.0, - mcol.w  );
-					if(d < max(rCoC, fClouds * 0.5 ) )
-					{
-						var(spec[nothing ], float3, p ) = ro;
-						if(fClouds < 0.100000001 )
-						{
-							p -= (rd * abs(d - rCoC ) );
-						};
-						var(spec[nothing ], float2, v ) = float2(rCoC * 0.333000004, 0.0 );
-						var(spec[nothing ], float3, param_7 ) = p - v.xyy ;
-						var(spec[nothing ], float4, param_8 ) = mcol;
-						var(spec[nothing ], float, _830 ) = DE(param_7, param_8 );
-						mcol = param_8;
-						var(spec[nothing ], float3, param_9 ) = p + v.xyy ;
-						var(spec[nothing ], float4, param_10 ) = mcol;
-						var(spec[nothing ], float, _840 ) = DE(param_9, param_10 );
-						mcol = param_10;
-						var(spec[nothing ], float3, param_11 ) = p - v.yxy ;
-						var(spec[nothing ], float4, param_12 ) = mcol;
-						var(spec[nothing ], float, _850 ) = DE(param_11, param_12 );
-						mcol = param_12;
-						var(spec[nothing ], float3, param_13 ) = p + v.yxy ;
-						var(spec[nothing ], float4, param_14 ) = mcol;
-						var(spec[nothing ], float, _860 ) = DE(param_13, param_14 );
-						mcol = param_14;
-						var(spec[nothing ], float3, param_15 ) = p - v.yyx ;
-						var(spec[nothing ], float4, param_16 ) = mcol;
-						var(spec[nothing ], float, _870 ) = DE(param_15, param_16 );
-						mcol = param_16;
-						var(spec[nothing ], float3, param_17 ) = p + v.yyx ;
-						var(spec[nothing ], float4, param_18 ) = mcol;
-						var(spec[nothing ], float, _880 ) = DE(param_17, param_18 );
-						mcol = param_18;
-						var(spec[nothing ], float3, N ) = normalize(float3((- _830 ) + _840, (- _850 ) + _860, (- _870 ) + _880 ) );
-						mcol *= 0.143000007;
-						if(fClouds > 0.100000001 )
-						{
-							var(spec[nothing ], float, dn ) = clamp(0.5 - d, 0.0, 1.0 );
-							dn *= 2.0;
-							dn *= dn;
-							alpha = (1.0 - col.w  ) * dn;
-							scol = 1.0F.xxx  * (0.600000024 + ((dn * dot(N, L ) ) * 0.400000006 ) );
-							scol += (float3(1.0, 0.5, 0.0 ) * (dn * max(0.0, dot(reflect(rd, N ), L ) ) ) );
-						}
-						else
-						{
-							scol = mcol.xyz  * (0.200000003 + (0.400000006 * (1.0 + dot(N, L ) ) ) );
-							scol += (float3(1.0, 0.5, 0.0 ) * (0.5 * pow(max(0.0, dot(reflect(rd, N ), L ) ), 32.0 ) ) );
-							var(spec[nothing ], bool, _954 ) = d < (rCoC * 0.25 );
-							var(spec[nothing ], bool, _960 );
-							if(_954 )
-							{
-								_960 = mcol.w  > 0.899999976;
-							}
-							else
-							{
-								_960 = _954;
-							};
-							if(_960 )
-							{
-								rd = reflect(rd, N );
-								d = (- rCoC ) * 0.25;
-								ro = p;
-								t += 1.0;
-							};
-							var(spec[nothing ], float3, param_19 ) = p;
-							var(spec[nothing ], float3, param_20 ) = L;
-							var(spec[nothing ], float, param_21 ) = shadowCone;
-							var(spec[nothing ], float, param_22 ) = rCoC;
-							var(spec[nothing ], float4, param_23 ) = mcol;
-							var(spec[nothing ], float, param_24 ) = randSeed;
-							var(spec[nothing ], float, _984 ) = FuzzyShadow(param_19, param_20, param_21, param_22, param_23, param_24 );
-							mcol = param_23;
-							randSeed = param_24;
-							scol *= _984;
-							var(spec[nothing ], float, param_25 ) = - rCoC;
-							var(spec[nothing ], float, param_26 ) = rCoC;
-							var(spec[nothing ], float, param_27 ) = (- d ) - (0.5 * rCoC );
-							alpha = (1.0 - col.w  ) * linstep(param_25, param_26, param_27 );
-						};
-						col += float4(scol * alpha, alpha );
-					};
-					mcol = 0.0F.xxxx ;
-					var(spec[nothing ], float, param_28 ) = randSeed;
-					var(spec[nothing ], float, _1023 ) = randStep(param_28 );
-					randSeed = param_28;
-					d = abs(d + (0.330000013 * rCoC ) ) * _1023;
-					ro += (rd * d );
-					t += d;
-				};
-			}
-			else_all_if_false_in_loop
-			{
-				_br_flag_18 = true;
-			};
-		}
-		else_all_if_false_in_loop
+			var(spec[nothing ], int, j ) = -1;
+			var(spec[nothing ], float2, uv ) = fragCoord + (float2(float(-1 ), float(-1 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param ) = uv;
+			var(spec[nothing ], float, param_1 ) = time;
+			color += getPixel(param, param_1 );
+			j = 0;
+			var(spec[nothing ], float2, uv ) = fragCoord + (float2(float(-1 ), float(0 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param ) = uv;
+			var(spec[nothing ], float, param_1 ) = time;
+			color += getPixel(param, param_1 );
+			j = 1;
+			var(spec[nothing ], float2, uv ) = fragCoord + (float2(float(-1 ), float(1 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param ) = uv;
+			var(spec[nothing ], float, param_1 ) = time;
+			color += getPixel(param, param_1 );
+		};
+		i = 0;
+		block
 		{
-			break;
+			var(spec[nothing ], int, j_88 ) = -1;
+			var(spec[nothing ], float2, uv_88 ) = fragCoord + (float2(float(0 ), float(-1 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param_88 ) = uv_88;
+			var(spec[nothing ], float, param_1_88 ) = time;
+			color += getPixel(param_88, param_1_88 );
+			j_88 = 0;
+			var(spec[nothing ], float2, uv ) = fragCoord + (float2(float(0 ), float(0 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param ) = uv_88;
+			var(spec[nothing ], float, param_1 ) = time;
+			color += getPixel(param_88, param_1_88 );
+			j_88 = 1;
+			var(spec[nothing ], float2, uv ) = fragCoord + (float2(float(0 ), float(1 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param ) = uv_88;
+			var(spec[nothing ], float, param_1 ) = time;
+			color += getPixel(param_88, param_1_88 );
+		};
+		i = 1;
+		block
+		{
+			var(spec[nothing ], int, j_89 ) = -1;
+			var(spec[nothing ], float2, uv_89 ) = fragCoord + (float2(float(1 ), float(-1 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param_89 ) = uv_89;
+			var(spec[nothing ], float, param_1_89 ) = time;
+			color += getPixel(param_89, param_1_89 );
+			j_89 = 0;
+			var(spec[nothing ], float2, uv ) = fragCoord + (float2(float(1 ), float(0 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param ) = uv_89;
+			var(spec[nothing ], float, param_1 ) = time;
+			color += getPixel(param_89, param_1_89 );
+			j_89 = 1;
+			var(spec[nothing ], float2, uv ) = fragCoord + (float2(float(1 ), float(1 ) ) / 3.0F.xx  );
+			var(spec[nothing ], float2, param ) = uv_89;
+			var(spec[nothing ], float, param_1 ) = time;
+			color += getPixel(param_89, param_1_89 );
 		};
 	};
-	var(spec[nothing ], float3, scol_1 ) = (float3(0.400000006, 0.5, 0.600000024 ) + (rd * 0.0500000007 ) ) + (float3(1.0, 0.75, 0.5 ) * pow(max(0.0, dot(rd, L ) ), 100.0 ) );
-	var(spec[nothing ], float, _1051 ) = col.w ;
-	var(spec[nothing ], float4, _1055 ) = col;
-	var(spec[nothing ], float3, _1057 ) = _1055.xyz  + (scol_1 * (1.0 - clamp(_1051, 0.0, 1.0 ) ) );
-	col.x  = _1057.x ;
-	col.y  = _1057.y ;
-	col.z  = _1057.z ;
-	O = float4(clamp(col.xyz , 0.0F.xxx , 1.0F.xxx  ), 1.0 );
+	color /= 9.0F.xxx ;
+	fragColor = float4(pow(color, 0.649999976F.xxx  ), 1.0 );
 };
 func(spec[nothing ], void, frag_main )
 params()
 {
-	focalDistance = 1.0;
-	aperture = 0.00999999977;
-	shadowCone = 0.300000012;
 };
 func(spec[nothing ], SPIRV_Cross_Output, main )
 params(var(spec[nothing ], SPIRV_Cross_Input, stage_input ) )

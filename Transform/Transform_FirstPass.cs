@@ -300,15 +300,7 @@ namespace Hlsl2Numpy
                 PushRetBlockInfo(retBlockInfo);
                 if (!funcInfo.ParseAndPruned) {
                     funcInfo.ParseAndPruned = true;
-
-                    foreach (var p in funcInfo.Params) {
-                        var vgn = new ComputeGraphVarNode(funcInfo, p.Type, p.Name);
-                        vgn.IsInOut = p.IsInOut;
-                        vgn.IsOut = p.IsOut;
-                        vgn.IsParam = true;
-
-                        AddComputeGraphVarNode(vgn);
-                    }
+                    AddFuncParamsToComputeGraph(funcInfo);
 
                     if (lastFunc.HaveStatement() && !s_AllFuncDsls.ContainsKey(signature)) {
                         s_AllFuncDsls.Add(signature, stmData);

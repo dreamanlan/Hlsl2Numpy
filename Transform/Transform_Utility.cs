@@ -55,6 +55,25 @@ namespace Hlsl2Numpy
                 curFunc.UsingFuncOrApis.Add(funcName);
             }
         }
+        internal static void AddFuncParamsToComputeGraph(FuncInfo funcInfo)
+        {
+            var graph = funcInfo.FuncComputeGraph;
+            foreach (var p in funcInfo.Params) {
+                var vgn = new ComputeGraphVarNode(funcInfo, p.Type, p.Name);
+                vgn.IsInOut = p.IsInOut;
+                vgn.IsOut = p.IsOut;
+                vgn.IsParam = true;
+
+                if (graph.VarNodes.TryGetValue(vgn.VarName, out var node)) {
+                    node.Type = vgn.Type;
+                    node.IsOut = vgn.IsOut;
+                    node.IsInOut = vgn.IsInOut;
+                }
+                else {
+                    graph.VarNodes.Add(vgn.VarName, vgn);
+                }
+            }
+        }
         internal static void MarkCalledScalarFunc(FuncInfo funcInfo)
         {
             MarkCalledScalarFunc(funcInfo, false);

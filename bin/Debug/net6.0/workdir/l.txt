@@ -1,0 +1,927 @@
+curdir D:\GitHub\Hlsl2Numpy\bin\Debug\net6.0\workdir change to exedir D:\GitHub\Hlsl2Numpy\bin\Debug\net6.0
+
+D:\GitHub\Hlsl2Numpy\bin\Debug\net6.0\workdir\tmp\test.glsl
+
+
+===[Final Blocks:]===
+func:map_f3
+| params:
+| | name:p type:t_float3
+| return:t_float
+| ===block[id:97 index:0]===
+| syntax:func func index:1
+| owner func:map
+| ==BasicBlock[count:1+1] & ChildBlock[count:1]==
+| | ===basic block[index:0]===
+| | decl vars:
+| | | freq:float[at 0]
+| | | amp:float[at 1]
+| | | choppy:float[at 2]
+| | | uv:float2[at 3]
+| | | h:float[at 5]
+| | using vars:
+| | | freq:float[at 0, 0](Decl) = 0.159999996 <- 97[0][0]
+| | | amp:float[at 1, 0](Decl) = 0.600000024 <- 97[0][1]
+| | | choppy:float[at 2, 0](Decl) = 4.0 <- 97[0][2]
+| | | uv:float2[at 3, 0](Decl) = [x] <- 97[0][3]
+| | | p:float3[at 3, 0](Read) = [ ] <- 97[0][-1]
+| | | uv:float2[at 4, 0](Read) = [x] <- 97[0][3]
+| | | uv:float2[at 4, 1](ObjSet) = [ ] <- 97[0][3]
+| | | h:float[at 5, 0](Decl) = 0.0 <- 97[0][5]
+| | ===block[id:59 index:0]===
+| | syntax:block func index:0
+| | owner func:map
+| | | ===basic block[index:0]===
+| | | decl vars:
+| | | | i:int[at 0]
+| | | | param:float2[at 1]
+| | | | param_1:float[at 2]
+| | | | _399:float[at 3]
+| | | | d:float[at 4]
+| | | | param_2:float2[at 5]
+| | | | param_3:float[at 6]
+| | | | _411:float[at 7]
+| | | | param:float2[at 15]
+| | | using vars:
+| | | | i:int[at 0, 0](Decl) = 0 <- 59[0][0]
+| | | | param:float2[at 1, 0](Decl) = [x] <- 59[0][1]
+| | | | uv:float2[at 1, 0](Read) = [x] <- 97[0][3]
+| | | | iTime:float[at 1, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 1, 0](Read) = 0.159999996 <- 97[0][0]
+| | | | param_1:float[at 2, 0](Decl) = [x] <- 59[0][2]
+| | | | choppy:float[at 2, 0](Read) = 4.0 <- 97[0][2]
+| | | | _399:float[at 3, 0](Decl) = [x] <- 59[0][3]
+| | | | param:float2[at 3, 0](Read) = [x] <- 59[0][1]
+| | | | param:float2[at 3, 1](Write) = [x] <- 59[0][1]
+| | | | param_1:float[at 3, 0](Read) = [x] <- 59[0][2]
+| | | | d:float[at 4, 0](Decl) = [x] <- 59[0][4]
+| | | | _399:float[at 4, 0](Read) = [x] <- 59[0][3]
+| | | | param_2:float2[at 5, 0](Decl) = [x] <- 59[0][5]
+| | | | uv:float2[at 5, 0](Read) = [x] <- 97[0][3]
+| | | | iTime:float[at 5, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 5, 0](Read) = 0.159999996 <- 97[0][0]
+| | | | param_3:float[at 6, 0](Decl) = [x] <- 59[0][6]
+| | | | choppy:float[at 6, 0](Read) = 4.0 <- 97[0][2]
+| | | | _411:float[at 7, 0](Decl) = [x] <- 59[0][7]
+| | | | param_2:float2[at 7, 0](Read) = [x] <- 59[0][5]
+| | | | param_2:float2[at 7, 1](Write) = [x] <- 59[0][5]
+| | | | param_3:float[at 7, 0](Read) = [x] <- 59[0][6]
+| | | | d:float[at 8, 0](Read) = [x] <- 59[0][4]
+| | | | d:float[at 8, 1](Write) = [x] <- 59[0][4]
+| | | | _411:float[at 8, 0](Read) = [x] <- 59[0][7]
+| | | | h:float[at 9, 0](Read) = [x] <- 97[0][5]
+| | | | h:float[at 9, 1](Write) = [x] <- 97[0][5]
+| | | | d:float[at 9, 0](Read) = [x] <- 59[0][4]
+| | | | amp:float[at 9, 0](Read) = 0.600000024 <- 97[0][1]
+| | | | uv:float2[at 10, 0](Write) = [x] <- 97[0][3]
+| | | | uv:float2[at 10, 1](Read) = [x] <- 97[0][3]
+| | | | freq:float[at 11, 0](Read) = 0.304 <- 97[0][0]
+| | | | freq:float[at 11, 1](Write) = 0.304 <- 97[0][0]
+| | | | amp:float[at 12, 0](Read) = 0.132 <- 97[0][1]
+| | | | amp:float[at 12, 1](Write) = 0.132 <- 97[0][1]
+| | | | choppy:float[at 13, 0](Write) = [x] <- 97[0][2]
+| | | | choppy:float[at 13, 1](Read) = [x] <- 97[0][2]
+| | | | i:int[at 14, 0](Write) = 1 <- 59[0][0]
+| | | | param:float2[at 15, 0](Decl) = [x] <- 59[0][15]
+| | | | uv:float2[at 15, 0](Read) = [x] <- 97[0][3]
+| | | | iTime:float[at 15, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 15, 0](Read) = 0.304 <- 97[0][0]
+| | | | choppy:float[at 16, 0](Read) = [x] <- 97[0][2]
+| | | | param:float2[at 17, 0](Read) = [x] <- 59[0][1]
+| | | | param:float2[at 17, 1](Write) = [x] <- 59[0][1]
+| | | | param_1:float[at 17, 0](Read) = [x] <- 59[0][2]
+| | | | _399:float[at 18, 0](Read) = [x] <- 59[0][3]
+| | | | uv:float2[at 19, 0](Read) = [x] <- 97[0][3]
+| | | | iTime:float[at 19, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 19, 0](Read) = 0.304 <- 97[0][0]
+| | | | choppy:float[at 20, 0](Read) = [x] <- 97[0][2]
+| | | | param_2:float2[at 21, 0](Read) = [x] <- 59[0][5]
+| | | | param_2:float2[at 21, 1](Write) = [x] <- 59[0][5]
+| | | | param_3:float[at 21, 0](Read) = [x] <- 59[0][6]
+| | | | d:float[at 22, 0](Read) = [x] <- 59[0][4]
+| | | | d:float[at 22, 1](Write) = [x] <- 59[0][4]
+| | | | _411:float[at 22, 0](Read) = [x] <- 59[0][7]
+| | | | h:float[at 23, 0](Read) = [x] <- 97[0][5]
+| | | | h:float[at 23, 1](Write) = [x] <- 97[0][5]
+| | | | d:float[at 23, 0](Read) = [x] <- 59[0][4]
+| | | | amp:float[at 23, 0](Read) = 0.132 <- 97[0][1]
+| | | | uv:float2[at 24, 0](Write) = [x] <- 97[0][3]
+| | | | uv:float2[at 24, 1](Read) = [x] <- 97[0][3]
+| | | | freq:float[at 25, 0](Read) = 0.5776 <- 97[0][0]
+| | | | freq:float[at 25, 1](Write) = 0.5776 <- 97[0][0]
+| | | | amp:float[at 26, 0](Read) = 0.02904 <- 97[0][1]
+| | | | amp:float[at 26, 1](Write) = 0.02904 <- 97[0][1]
+| | | | choppy:float[at 27, 0](Write) = [x] <- 97[0][2]
+| | | | choppy:float[at 27, 1](Read) = [x] <- 97[0][2]
+| | | | i:int[at 28, 0](Write) = 2 <- 59[0][0]
+| | | | uv:float2[at 29, 0](Read) = [x] <- 97[0][3]
+| | | | iTime:float[at 29, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 29, 0](Read) = 0.5776 <- 97[0][0]
+| | | | choppy:float[at 30, 0](Read) = [x] <- 97[0][2]
+| | | | param:float2[at 31, 0](Read) = [x] <- 59[0][1]
+| | | | param:float2[at 31, 1](Write) = [x] <- 59[0][1]
+| | | | param_1:float[at 31, 0](Read) = [x] <- 59[0][2]
+| | | | _399:float[at 32, 0](Read) = [x] <- 59[0][3]
+| | | | uv:float2[at 33, 0](Read) = [x] <- 97[0][3]
+| | | | iTime:float[at 33, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 33, 0](Read) = 0.5776 <- 97[0][0]
+| | | | choppy:float[at 34, 0](Read) = [x] <- 97[0][2]
+| | | | param_2:float2[at 35, 0](Read) = [x] <- 59[0][5]
+| | | | param_2:float2[at 35, 1](Write) = [x] <- 59[0][5]
+| | | | param_3:float[at 35, 0](Read) = [x] <- 59[0][6]
+| | | | d:float[at 36, 0](Read) = [x] <- 59[0][4]
+| | | | d:float[at 36, 1](Write) = [x] <- 59[0][4]
+| | | | _411:float[at 36, 0](Read) = [x] <- 59[0][7]
+| | | | h:float[at 37, 0](Read) = [x] <- 97[0][5]
+| | | | h:float[at 37, 1](Write) = [x] <- 97[0][5]
+| | | | d:float[at 37, 0](Read) = [x] <- 59[0][4]
+| | | | amp:float[at 37, 0](Read) = 0.02904 <- 97[0][1]
+| | | | uv:float2[at 38, 0](Write) = [x] <- 97[0][3]
+| | | | uv:float2[at 38, 1](Read) = [x] <- 97[0][3]
+| | | | freq:float[at 39, 0](Read) = 1.09744 <- 97[0][0]
+| | | | freq:float[at 39, 1](Write) = 1.09744 <- 97[0][0]
+| | | | amp:float[at 40, 0](Read) = 0.0063888 <- 97[0][1]
+| | | | amp:float[at 40, 1](Write) = 0.0063888 <- 97[0][1]
+| | | | choppy:float[at 41, 0](Write) = [x] <- 97[0][2]
+| | | | choppy:float[at 41, 1](Read) = [x] <- 97[0][2]
+| | ===basic block[index:1]===
+| | decl vars:
+| | using vars:
+| | | p:float3[at 0, 0](Read) = [ ] <- 97[0][-1]
+| | | h:float[at 0, 0](Read) = [x] <- 97[0][5]
+func:heightMapTracing_f3_f3_f3
+| params:
+| | name:ori type:float3
+| | name:dir type:t_float3
+| | name:p type:t_float3
+| return:t_float
+| ===block[id:93 index:0]===
+| syntax:func func index:1
+| owner func:heightMapTracing
+| ==BasicBlock[count:2+1] & ChildBlock[count:2]==
+| | ===basic block[index:0]===
+| | decl vars:
+| | | _func_ret_val_7:float[at 0]
+| | | _func_ret_flag_7:bool[at 1]
+| | | tm:float[at 2]
+| | | tx:float[at 3]
+| | | param:float3[at 4]
+| | | hx:float[at 5]
+| | using vars:
+| | | _func_ret_val_7:float[at 0, 0](Decl) = [ ] <- 93[0][0]
+| | | _func_ret_flag_7:bool[at 1, 0](Decl) = false <- 93[0][1]
+| | | tm:float[at 2, 0](Decl) = 0.0 <- 93[0][2]
+| | | tx:float[at 3, 0](Decl) = 1000.0 <- 93[0][3]
+| | | param:float3[at 4, 0](Decl) = [x] <- 93[0][4]
+| | | ori:float3[at 4, 0](Read) = [ ] <- 93[0][-1]
+| | | dir:float3[at 4, 0](Read) = [ ] <- 93[0][-1]
+| | | hx:float[at 5, 0](Decl) = [x] <- 93[0][5]
+| | | param:float3[at 5, 0](Read) = [x] <- 93[0][4]
+| | | hx:float[at 6, 0](Read) = [x] <- 93[0][5]
+| | ===block[id:62 index:0]===
+| | syntax:if func index:0
+| | owner func:heightMapTracing
+| | | ===basic block[index:0]===
+| | | decl vars:
+| | | using vars:
+| | | | p:float3[at 0, 0](Write) = [x] <- 93[0][-1]
+| | | | ori:float3[at 0, 0](Read) = [ ] <- 93[0][-1]
+| | | | dir:float3[at 0, 0](Read) = [ ] <- 93[0][-1]
+| | | | _func_ret_flag_7:bool[at 1, 0](Write) = true <- 93[0][1]
+| | | | _func_ret_val_7:float[at 2, 0](Write) = 1000.0 <- 93[0][0]
+| | ===basic block[index:1]===
+| | decl vars:
+| | using vars:
+| | | _func_ret_flag_7:bool[at 0, 0](Read) = [x] <- 93[0][1]
+| | ===block[id:63 index:1]===
+| | syntax:if func index:0
+| | owner func:heightMapTracing
+| | ==BasicBlock[count:1+1] & ChildBlock[count:1]==
+| | | ===basic block[index:0]===
+| | | decl vars:
+| | | | param_1:float3[at 0]
+| | | | hm:float[at 1]
+| | | | tmid:float[at 2]
+| | | using vars:
+| | | | param_1:float3[at 0, 0](Decl) = [x] <- 63[0][0]
+| | | | ori:float3[at 0, 0](Read) = [ ] <- 93[0][-1]
+| | | | dir:float3[at 0, 0](Read) = [ ] <- 93[0][-1]
+| | | | hm:float[at 1, 0](Decl) = [x] <- 63[0][1]
+| | | | param_1:float3[at 1, 0](Read) = [x] <- 63[0][0]
+| | | | tmid:float[at 2, 0](Decl) = 0.0 <- 63[0][2]
+| | | ===block[id:64 index:0]===
+| | | syntax:block func index:0
+| | | owner func:heightMapTracing
+| | | ==BasicBlock[count:8+1] & ChildBlock[count:8]==
+| | | | ===basic block[index:0]===
+| | | | decl vars:
+| | | | | i:int[at 0]
+| | | | | param_2:float3[at 3]
+| | | | | hmid:float[at 4]
+| | | | using vars:
+| | | | | i:int[at 0, 0](Decl) = 0 <- 64[0][0]
+| | | | | tmid:float[at 1, 0](Write) = [x] <- 63[0][2]
+| | | | | tm:float[at 1, 0](Read) = 0.0 <- 93[0][2]
+| | | | | tx:float[at 1, 0](Read) = 1000.0 <- 93[0][3]
+| | | | | hm:float[at 1, 0](Read) = [x] <- 63[0][1]
+| | | | | hm:float[at 1, 1](Read) = [x] <- 63[0][1]
+| | | | | hx:float[at 1, 0](Read) = [x] <- 93[0][5]
+| | | | | p:float3[at 2, 0](Write) = [x] <- 93[0][-1]
+| | | | | ori:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | dir:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | tmid:float[at 2, 0](Read) = [x] <- 63[0][2]
+| | | | | param_2:float3[at 3, 0](Decl) = [x] <- 64[0][3]
+| | | | | p:float3[at 3, 0](Read) = [x] <- 93[0][-1]
+| | | | | hmid:float[at 4, 0](Decl) = [x] <- 64[0][4]
+| | | | | param_2:float3[at 4, 0](Read) = [x] <- 64[0][3]
+| | | | | hmid:float[at 5, 0](Read) = [x] <- 64[0][4]
+| | | | ===block[id:65 index:0]===
+| | | | syntax:if func index:0
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tx:float[at 0, 0](Write) = [x] <- 93[0][3]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hx:float[at 1, 0](Write) = [x] <- 93[0][5]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ==SubsequentBlock[count:1]==
+| | | | ===block[id:66 index:0]===
+| | | | syntax:if func index:1
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tm:float[at 0, 0](Write) = [x] <- 93[0][2]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hm:float[at 1, 0](Write) = [x] <- 63[0][1]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ===basic block[index:1]===
+| | | | decl vars:
+| | | | | param_2:float3[at 3]
+| | | | using vars:
+| | | | | i:int[at 0, 0](Write) = 1 <- 64[0][0]
+| | | | | tmid:float[at 1, 0](Write) = [x] <- 63[0][2]
+| | | | | tm:float[at 1, 0](Read) = [x] <- 93[0][2]
+| | | | | tx:float[at 1, 0](Read) = [x] <- 93[0][3]
+| | | | | hm:float[at 1, 0](Read) = [x] <- 63[0][1]
+| | | | | hm:float[at 1, 1](Read) = [x] <- 63[0][1]
+| | | | | hx:float[at 1, 0](Read) = [x] <- 93[0][5]
+| | | | | p:float3[at 2, 0](Write) = [x] <- 93[0][-1]
+| | | | | ori:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | dir:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | tmid:float[at 2, 0](Read) = [x] <- 63[0][2]
+| | | | | param_2:float3[at 3, 0](Decl) = [x] <- 64[1][3]
+| | | | | p:float3[at 3, 0](Read) = [x] <- 93[0][-1]
+| | | | | param_2:float3[at 4, 0](Read) = [x] <- 64[0][3]
+| | | | | hmid:float[at 5, 0](Read) = [x] <- 64[0][4]
+| | | | ===block[id:67 index:1]===
+| | | | syntax:if func index:0
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tx:float[at 0, 0](Write) = [x] <- 93[0][3]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hx:float[at 1, 0](Write) = [x] <- 93[0][5]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ==SubsequentBlock[count:1]==
+| | | | ===block[id:68 index:0]===
+| | | | syntax:if func index:1
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tm:float[at 0, 0](Write) = [x] <- 93[0][2]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hm:float[at 1, 0](Write) = [x] <- 63[0][1]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ===basic block[index:2]===
+| | | | decl vars:
+| | | | using vars:
+| | | | | i:int[at 0, 0](Write) = 2 <- 64[0][0]
+| | | | | tmid:float[at 1, 0](Write) = [x] <- 63[0][2]
+| | | | | tm:float[at 1, 0](Read) = [x] <- 93[0][2]
+| | | | | tx:float[at 1, 0](Read) = [x] <- 93[0][3]
+| | | | | hm:float[at 1, 0](Read) = [x] <- 63[0][1]
+| | | | | hm:float[at 1, 1](Read) = [x] <- 63[0][1]
+| | | | | hx:float[at 1, 0](Read) = [x] <- 93[0][5]
+| | | | | p:float3[at 2, 0](Write) = [x] <- 93[0][-1]
+| | | | | ori:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | dir:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | tmid:float[at 2, 0](Read) = [x] <- 63[0][2]
+| | | | | p:float3[at 3, 0](Read) = [x] <- 93[0][-1]
+| | | | | param_2:float3[at 4, 0](Read) = [x] <- 64[0][3]
+| | | | | hmid:float[at 5, 0](Read) = [x] <- 64[0][4]
+| | | | ===block[id:69 index:2]===
+| | | | syntax:if func index:0
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tx:float[at 0, 0](Write) = [x] <- 93[0][3]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hx:float[at 1, 0](Write) = [x] <- 93[0][5]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ==SubsequentBlock[count:1]==
+| | | | ===block[id:70 index:0]===
+| | | | syntax:if func index:1
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tm:float[at 0, 0](Write) = [x] <- 93[0][2]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hm:float[at 1, 0](Write) = [x] <- 63[0][1]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ===basic block[index:3]===
+| | | | decl vars:
+| | | | using vars:
+| | | | | i:int[at 0, 0](Write) = 3 <- 64[0][0]
+| | | | | tmid:float[at 1, 0](Write) = [x] <- 63[0][2]
+| | | | | tm:float[at 1, 0](Read) = [x] <- 93[0][2]
+| | | | | tx:float[at 1, 0](Read) = [x] <- 93[0][3]
+| | | | | hm:float[at 1, 0](Read) = [x] <- 63[0][1]
+| | | | | hm:float[at 1, 1](Read) = [x] <- 63[0][1]
+| | | | | hx:float[at 1, 0](Read) = [x] <- 93[0][5]
+| | | | | p:float3[at 2, 0](Write) = [x] <- 93[0][-1]
+| | | | | ori:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | dir:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | tmid:float[at 2, 0](Read) = [x] <- 63[0][2]
+| | | | | p:float3[at 3, 0](Read) = [x] <- 93[0][-1]
+| | | | | param_2:float3[at 4, 0](Read) = [x] <- 64[0][3]
+| | | | | hmid:float[at 5, 0](Read) = [x] <- 64[0][4]
+| | | | ===block[id:71 index:3]===
+| | | | syntax:if func index:0
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tx:float[at 0, 0](Write) = [x] <- 93[0][3]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hx:float[at 1, 0](Write) = [x] <- 93[0][5]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ==SubsequentBlock[count:1]==
+| | | | ===block[id:72 index:0]===
+| | | | syntax:if func index:1
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tm:float[at 0, 0](Write) = [x] <- 93[0][2]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hm:float[at 1, 0](Write) = [x] <- 63[0][1]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ===basic block[index:4]===
+| | | | decl vars:
+| | | | using vars:
+| | | | | i:int[at 0, 0](Write) = 4 <- 64[0][0]
+| | | | | tmid:float[at 1, 0](Write) = [x] <- 63[0][2]
+| | | | | tm:float[at 1, 0](Read) = [x] <- 93[0][2]
+| | | | | tx:float[at 1, 0](Read) = [x] <- 93[0][3]
+| | | | | hm:float[at 1, 0](Read) = [x] <- 63[0][1]
+| | | | | hm:float[at 1, 1](Read) = [x] <- 63[0][1]
+| | | | | hx:float[at 1, 0](Read) = [x] <- 93[0][5]
+| | | | | p:float3[at 2, 0](Write) = [x] <- 93[0][-1]
+| | | | | ori:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | dir:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | tmid:float[at 2, 0](Read) = [x] <- 63[0][2]
+| | | | | p:float3[at 3, 0](Read) = [x] <- 93[0][-1]
+| | | | | param_2:float3[at 4, 0](Read) = [x] <- 64[0][3]
+| | | | | hmid:float[at 5, 0](Read) = [x] <- 64[0][4]
+| | | | ===block[id:73 index:4]===
+| | | | syntax:if func index:0
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tx:float[at 0, 0](Write) = [x] <- 93[0][3]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hx:float[at 1, 0](Write) = [x] <- 93[0][5]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ==SubsequentBlock[count:1]==
+| | | | ===block[id:74 index:0]===
+| | | | syntax:if func index:1
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tm:float[at 0, 0](Write) = [x] <- 93[0][2]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hm:float[at 1, 0](Write) = [x] <- 63[0][1]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ===basic block[index:5]===
+| | | | decl vars:
+| | | | using vars:
+| | | | | i:int[at 0, 0](Write) = 5 <- 64[0][0]
+| | | | | tmid:float[at 1, 0](Write) = [x] <- 63[0][2]
+| | | | | tm:float[at 1, 0](Read) = [x] <- 93[0][2]
+| | | | | tx:float[at 1, 0](Read) = [x] <- 93[0][3]
+| | | | | hm:float[at 1, 0](Read) = [x] <- 63[0][1]
+| | | | | hm:float[at 1, 1](Read) = [x] <- 63[0][1]
+| | | | | hx:float[at 1, 0](Read) = [x] <- 93[0][5]
+| | | | | p:float3[at 2, 0](Write) = [x] <- 93[0][-1]
+| | | | | ori:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | dir:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | tmid:float[at 2, 0](Read) = [x] <- 63[0][2]
+| | | | | p:float3[at 3, 0](Read) = [x] <- 93[0][-1]
+| | | | | param_2:float3[at 4, 0](Read) = [x] <- 64[0][3]
+| | | | | hmid:float[at 5, 0](Read) = [x] <- 64[0][4]
+| | | | ===block[id:75 index:5]===
+| | | | syntax:if func index:0
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tx:float[at 0, 0](Write) = [x] <- 93[0][3]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hx:float[at 1, 0](Write) = [x] <- 93[0][5]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ==SubsequentBlock[count:1]==
+| | | | ===block[id:76 index:0]===
+| | | | syntax:if func index:1
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tm:float[at 0, 0](Write) = [x] <- 93[0][2]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hm:float[at 1, 0](Write) = [x] <- 63[0][1]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ===basic block[index:6]===
+| | | | decl vars:
+| | | | using vars:
+| | | | | i:int[at 0, 0](Write) = 6 <- 64[0][0]
+| | | | | tmid:float[at 1, 0](Write) = [x] <- 63[0][2]
+| | | | | tm:float[at 1, 0](Read) = [x] <- 93[0][2]
+| | | | | tx:float[at 1, 0](Read) = [x] <- 93[0][3]
+| | | | | hm:float[at 1, 0](Read) = [x] <- 63[0][1]
+| | | | | hm:float[at 1, 1](Read) = [x] <- 63[0][1]
+| | | | | hx:float[at 1, 0](Read) = [x] <- 93[0][5]
+| | | | | p:float3[at 2, 0](Write) = [x] <- 93[0][-1]
+| | | | | ori:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | dir:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | tmid:float[at 2, 0](Read) = [x] <- 63[0][2]
+| | | | | p:float3[at 3, 0](Read) = [x] <- 93[0][-1]
+| | | | | param_2:float3[at 4, 0](Read) = [x] <- 64[0][3]
+| | | | | hmid:float[at 5, 0](Read) = [x] <- 64[0][4]
+| | | | ===block[id:77 index:6]===
+| | | | syntax:if func index:0
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tx:float[at 0, 0](Write) = [x] <- 93[0][3]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hx:float[at 1, 0](Write) = [x] <- 93[0][5]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ==SubsequentBlock[count:1]==
+| | | | ===block[id:78 index:0]===
+| | | | syntax:if func index:1
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tm:float[at 0, 0](Write) = [x] <- 93[0][2]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hm:float[at 1, 0](Write) = [x] <- 63[0][1]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ===basic block[index:7]===
+| | | | decl vars:
+| | | | using vars:
+| | | | | i:int[at 0, 0](Write) = 7 <- 64[0][0]
+| | | | | tmid:float[at 1, 0](Write) = [x] <- 63[0][2]
+| | | | | tm:float[at 1, 0](Read) = [x] <- 93[0][2]
+| | | | | tx:float[at 1, 0](Read) = [x] <- 93[0][3]
+| | | | | hm:float[at 1, 0](Read) = [x] <- 63[0][1]
+| | | | | hm:float[at 1, 1](Read) = [x] <- 63[0][1]
+| | | | | hx:float[at 1, 0](Read) = [x] <- 93[0][5]
+| | | | | p:float3[at 2, 0](Write) = [x] <- 93[0][-1]
+| | | | | ori:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | dir:float3[at 2, 0](Read) = [ ] <- 93[0][-1]
+| | | | | tmid:float[at 2, 0](Read) = [x] <- 63[0][2]
+| | | | | p:float3[at 3, 0](Read) = [x] <- 93[0][-1]
+| | | | | param_2:float3[at 4, 0](Read) = [x] <- 64[0][3]
+| | | | | hmid:float[at 5, 0](Read) = [x] <- 64[0][4]
+| | | | ===block[id:79 index:7]===
+| | | | syntax:if func index:0
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tx:float[at 0, 0](Write) = [x] <- 93[0][3]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hx:float[at 1, 0](Write) = [x] <- 93[0][5]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ==SubsequentBlock[count:1]==
+| | | | ===block[id:80 index:0]===
+| | | | syntax:if func index:1
+| | | | owner func:heightMapTracing
+| | | | | ===basic block[index:0]===
+| | | | | decl vars:
+| | | | | using vars:
+| | | | | | tm:float[at 0, 0](Write) = [x] <- 93[0][2]
+| | | | | | tmid:float[at 0, 0](Read) = [x] <- 63[0][2]
+| | | | | | hm:float[at 1, 0](Write) = [x] <- 63[0][1]
+| | | | | | hmid:float[at 1, 0](Read) = [x] <- 64[0][4]
+| | | | ===basic block[index:8]===
+| | | | decl vars:
+| | | | using vars:
+| | | ===basic block[index:1]===
+| | | decl vars:
+| | | using vars:
+| | | | _func_ret_flag_7:bool[at 0, 0](Write) = true <- 93[0][1]
+| | | | _func_ret_val_7:float[at 1, 0](Write) = [x] <- 93[0][0]
+| | | | tmid:float[at 1, 0](Read) = [x] <- 63[0][2]
+| | ===basic block[index:2]===
+| | decl vars:
+| | using vars:
+| | | _func_ret_val_7:float[at 0, 0](Read) = [x] <- 93[0][0]
+func:map_detailed_f3
+| params:
+| | name:p type:t_float3
+| return:t_float
+| ===block[id:98 index:0]===
+| syntax:func func index:1
+| owner func:map_detailed
+| ==BasicBlock[count:1+1] & ChildBlock[count:1]==
+| | ===basic block[index:0]===
+| | decl vars:
+| | | freq:float[at 0]
+| | | amp:float[at 1]
+| | | choppy:float[at 2]
+| | | uv:float2[at 3]
+| | | h:float[at 5]
+| | using vars:
+| | | freq:float[at 0, 0](Decl) = 0.159999996 <- 98[0][0]
+| | | amp:float[at 1, 0](Decl) = 0.600000024 <- 98[0][1]
+| | | choppy:float[at 2, 0](Decl) = 4.0 <- 98[0][2]
+| | | uv:float2[at 3, 0](Decl) = [x] <- 98[0][3]
+| | | p:float3[at 3, 0](Read) = [ ] <- 98[0][-1]
+| | | uv:float2[at 4, 0](Read) = [x] <- 98[0][3]
+| | | uv:float2[at 4, 1](ObjSet) = [ ] <- 98[0][3]
+| | | h:float[at 5, 0](Decl) = 0.0 <- 98[0][5]
+| | ===block[id:83 index:0]===
+| | syntax:block func index:0
+| | owner func:map_detailed
+| | | ===basic block[index:0]===
+| | | decl vars:
+| | | | i:int[at 0]
+| | | | param:float2[at 1]
+| | | | param_1:float[at 2]
+| | | | _476:float[at 3]
+| | | | d:float[at 4]
+| | | | param_2:float2[at 5]
+| | | | param_3:float[at 6]
+| | | | _488:float[at 7]
+| | | | param:float2[at 15]
+| | | using vars:
+| | | | i:int[at 0, 0](Decl) = 0 <- 83[0][0]
+| | | | param:float2[at 1, 0](Decl) = [x] <- 83[0][1]
+| | | | uv:float2[at 1, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 1, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 1, 0](Read) = 0.159999996 <- 98[0][0]
+| | | | param_1:float[at 2, 0](Decl) = [x] <- 83[0][2]
+| | | | choppy:float[at 2, 0](Read) = 4.0 <- 98[0][2]
+| | | | _476:float[at 3, 0](Decl) = [x] <- 83[0][3]
+| | | | param:float2[at 3, 0](Read) = [x] <- 83[0][1]
+| | | | param:float2[at 3, 1](Write) = [x] <- 83[0][1]
+| | | | param_1:float[at 3, 0](Read) = [x] <- 83[0][2]
+| | | | d:float[at 4, 0](Decl) = [x] <- 83[0][4]
+| | | | _476:float[at 4, 0](Read) = [x] <- 83[0][3]
+| | | | param_2:float2[at 5, 0](Decl) = [x] <- 83[0][5]
+| | | | uv:float2[at 5, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 5, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 5, 0](Read) = 0.159999996 <- 98[0][0]
+| | | | param_3:float[at 6, 0](Decl) = [x] <- 83[0][6]
+| | | | choppy:float[at 6, 0](Read) = 4.0 <- 98[0][2]
+| | | | _488:float[at 7, 0](Decl) = [x] <- 83[0][7]
+| | | | param_2:float2[at 7, 0](Read) = [x] <- 83[0][5]
+| | | | param_2:float2[at 7, 1](Write) = [x] <- 83[0][5]
+| | | | param_3:float[at 7, 0](Read) = [x] <- 83[0][6]
+| | | | d:float[at 8, 0](Read) = [x] <- 83[0][4]
+| | | | d:float[at 8, 1](Write) = [x] <- 83[0][4]
+| | | | _488:float[at 8, 0](Read) = [x] <- 83[0][7]
+| | | | h:float[at 9, 0](Read) = [x] <- 98[0][5]
+| | | | h:float[at 9, 1](Write) = [x] <- 98[0][5]
+| | | | d:float[at 9, 0](Read) = [x] <- 83[0][4]
+| | | | amp:float[at 9, 0](Read) = 0.600000024 <- 98[0][1]
+| | | | uv:float2[at 10, 0](Write) = [x] <- 98[0][3]
+| | | | uv:float2[at 10, 1](Read) = [x] <- 98[0][3]
+| | | | freq:float[at 11, 0](Read) = 0.304 <- 98[0][0]
+| | | | freq:float[at 11, 1](Write) = 0.304 <- 98[0][0]
+| | | | amp:float[at 12, 0](Read) = 0.132 <- 98[0][1]
+| | | | amp:float[at 12, 1](Write) = 0.132 <- 98[0][1]
+| | | | choppy:float[at 13, 0](Write) = [x] <- 98[0][2]
+| | | | choppy:float[at 13, 1](Read) = [x] <- 98[0][2]
+| | | | i:int[at 14, 0](Write) = 1 <- 83[0][0]
+| | | | param:float2[at 15, 0](Decl) = [x] <- 83[0][15]
+| | | | uv:float2[at 15, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 15, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 15, 0](Read) = 0.304 <- 98[0][0]
+| | | | choppy:float[at 16, 0](Read) = [x] <- 98[0][2]
+| | | | param:float2[at 17, 0](Read) = [x] <- 83[0][1]
+| | | | param:float2[at 17, 1](Write) = [x] <- 83[0][1]
+| | | | param_1:float[at 17, 0](Read) = [x] <- 83[0][2]
+| | | | _476:float[at 18, 0](Read) = [x] <- 83[0][3]
+| | | | uv:float2[at 19, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 19, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 19, 0](Read) = 0.304 <- 98[0][0]
+| | | | choppy:float[at 20, 0](Read) = [x] <- 98[0][2]
+| | | | param_2:float2[at 21, 0](Read) = [x] <- 83[0][5]
+| | | | param_2:float2[at 21, 1](Write) = [x] <- 83[0][5]
+| | | | param_3:float[at 21, 0](Read) = [x] <- 83[0][6]
+| | | | d:float[at 22, 0](Read) = [x] <- 83[0][4]
+| | | | d:float[at 22, 1](Write) = [x] <- 83[0][4]
+| | | | _488:float[at 22, 0](Read) = [x] <- 83[0][7]
+| | | | h:float[at 23, 0](Read) = [x] <- 98[0][5]
+| | | | h:float[at 23, 1](Write) = [x] <- 98[0][5]
+| | | | d:float[at 23, 0](Read) = [x] <- 83[0][4]
+| | | | amp:float[at 23, 0](Read) = 0.132 <- 98[0][1]
+| | | | uv:float2[at 24, 0](Write) = [x] <- 98[0][3]
+| | | | uv:float2[at 24, 1](Read) = [x] <- 98[0][3]
+| | | | freq:float[at 25, 0](Read) = 0.5776 <- 98[0][0]
+| | | | freq:float[at 25, 1](Write) = 0.5776 <- 98[0][0]
+| | | | amp:float[at 26, 0](Read) = 0.02904 <- 98[0][1]
+| | | | amp:float[at 26, 1](Write) = 0.02904 <- 98[0][1]
+| | | | choppy:float[at 27, 0](Write) = [x] <- 98[0][2]
+| | | | choppy:float[at 27, 1](Read) = [x] <- 98[0][2]
+| | | | i:int[at 28, 0](Write) = 2 <- 83[0][0]
+| | | | uv:float2[at 29, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 29, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 29, 0](Read) = 0.5776 <- 98[0][0]
+| | | | choppy:float[at 30, 0](Read) = [x] <- 98[0][2]
+| | | | param:float2[at 31, 0](Read) = [x] <- 83[0][1]
+| | | | param:float2[at 31, 1](Write) = [x] <- 83[0][1]
+| | | | param_1:float[at 31, 0](Read) = [x] <- 83[0][2]
+| | | | _476:float[at 32, 0](Read) = [x] <- 83[0][3]
+| | | | uv:float2[at 33, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 33, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 33, 0](Read) = 0.5776 <- 98[0][0]
+| | | | choppy:float[at 34, 0](Read) = [x] <- 98[0][2]
+| | | | param_2:float2[at 35, 0](Read) = [x] <- 83[0][5]
+| | | | param_2:float2[at 35, 1](Write) = [x] <- 83[0][5]
+| | | | param_3:float[at 35, 0](Read) = [x] <- 83[0][6]
+| | | | d:float[at 36, 0](Read) = [x] <- 83[0][4]
+| | | | d:float[at 36, 1](Write) = [x] <- 83[0][4]
+| | | | _488:float[at 36, 0](Read) = [x] <- 83[0][7]
+| | | | h:float[at 37, 0](Read) = [x] <- 98[0][5]
+| | | | h:float[at 37, 1](Write) = [x] <- 98[0][5]
+| | | | d:float[at 37, 0](Read) = [x] <- 83[0][4]
+| | | | amp:float[at 37, 0](Read) = 0.02904 <- 98[0][1]
+| | | | uv:float2[at 38, 0](Write) = [x] <- 98[0][3]
+| | | | uv:float2[at 38, 1](Read) = [x] <- 98[0][3]
+| | | | freq:float[at 39, 0](Read) = 1.09744 <- 98[0][0]
+| | | | freq:float[at 39, 1](Write) = 1.09744 <- 98[0][0]
+| | | | amp:float[at 40, 0](Read) = 0.0063888 <- 98[0][1]
+| | | | amp:float[at 40, 1](Write) = 0.0063888 <- 98[0][1]
+| | | | choppy:float[at 41, 0](Write) = [x] <- 98[0][2]
+| | | | choppy:float[at 41, 1](Read) = [x] <- 98[0][2]
+| | | | i:int[at 42, 0](Write) = 3 <- 83[0][0]
+| | | | uv:float2[at 43, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 43, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 43, 0](Read) = 1.09744 <- 98[0][0]
+| | | | choppy:float[at 44, 0](Read) = [x] <- 98[0][2]
+| | | | param:float2[at 45, 0](Read) = [x] <- 83[0][1]
+| | | | param:float2[at 45, 1](Write) = [x] <- 83[0][1]
+| | | | param_1:float[at 45, 0](Read) = [x] <- 83[0][2]
+| | | | _476:float[at 46, 0](Read) = [x] <- 83[0][3]
+| | | | uv:float2[at 47, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 47, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 47, 0](Read) = 1.09744 <- 98[0][0]
+| | | | choppy:float[at 48, 0](Read) = [x] <- 98[0][2]
+| | | | param_2:float2[at 49, 0](Read) = [x] <- 83[0][5]
+| | | | param_2:float2[at 49, 1](Write) = [x] <- 83[0][5]
+| | | | param_3:float[at 49, 0](Read) = [x] <- 83[0][6]
+| | | | d:float[at 50, 0](Read) = [x] <- 83[0][4]
+| | | | d:float[at 50, 1](Write) = [x] <- 83[0][4]
+| | | | _488:float[at 50, 0](Read) = [x] <- 83[0][7]
+| | | | h:float[at 51, 0](Read) = [x] <- 98[0][5]
+| | | | h:float[at 51, 1](Write) = [x] <- 98[0][5]
+| | | | d:float[at 51, 0](Read) = [x] <- 83[0][4]
+| | | | amp:float[at 51, 0](Read) = 0.0063888 <- 98[0][1]
+| | | | uv:float2[at 52, 0](Write) = [x] <- 98[0][3]
+| | | | uv:float2[at 52, 1](Read) = [x] <- 98[0][3]
+| | | | freq:float[at 53, 0](Read) = 2.085136 <- 98[0][0]
+| | | | freq:float[at 53, 1](Write) = 2.085136 <- 98[0][0]
+| | | | amp:float[at 54, 0](Read) = 0.0014055 <- 98[0][1]
+| | | | amp:float[at 54, 1](Write) = 0.0014055 <- 98[0][1]
+| | | | choppy:float[at 55, 0](Write) = [x] <- 98[0][2]
+| | | | choppy:float[at 55, 1](Read) = [x] <- 98[0][2]
+| | | | i:int[at 56, 0](Write) = 4 <- 83[0][0]
+| | | | uv:float2[at 57, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 57, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 57, 0](Read) = 2.085136 <- 98[0][0]
+| | | | choppy:float[at 58, 0](Read) = [x] <- 98[0][2]
+| | | | param:float2[at 59, 0](Read) = [x] <- 83[0][1]
+| | | | param:float2[at 59, 1](Write) = [x] <- 83[0][1]
+| | | | param_1:float[at 59, 0](Read) = [x] <- 83[0][2]
+| | | | _476:float[at 60, 0](Read) = [x] <- 83[0][3]
+| | | | uv:float2[at 61, 0](Read) = [x] <- 98[0][3]
+| | | | iTime:float[at 61, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | | freq:float[at 61, 0](Read) = 2.085136 <- 98[0][0]
+| | | | choppy:float[at 62, 0](Read) = [x] <- 98[0][2]
+| | | | param_2:float2[at 63, 0](Read) = [x] <- 83[0][5]
+| | | | param_2:float2[at 63, 1](Write) = [x] <- 83[0][5]
+| | | | param_3:float[at 63, 0](Read) = [x] <- 83[0][6]
+| | | | d:float[at 64, 0](Read) = [x] <- 83[0][4]
+| | | | d:float[at 64, 1](Write) = [x] <- 83[0][4]
+| | | | _488:float[at 64, 0](Read) = [x] <- 83[0][7]
+| | | | h:float[at 65, 0](Read) = [x] <- 98[0][5]
+| | | | h:float[at 65, 1](Write) = [x] <- 98[0][5]
+| | | | d:float[at 65, 0](Read) = [x] <- 83[0][4]
+| | | | amp:float[at 65, 0](Read) = 0.0014055 <- 98[0][1]
+| | | | uv:float2[at 66, 0](Write) = [x] <- 98[0][3]
+| | | | uv:float2[at 66, 1](Read) = [x] <- 98[0][3]
+| | | | freq:float[at 67, 0](Read) = 3.961758 <- 98[0][0]
+| | | | freq:float[at 67, 1](Write) = 3.961758 <- 98[0][0]
+| | | | amp:float[at 68, 0](Read) = 0.0003092 <- 98[0][1]
+| | | | amp:float[at 68, 1](Write) = 0.0003092 <- 98[0][1]
+| | | | choppy:float[at 69, 0](Write) = [x] <- 98[0][2]
+| | | | choppy:float[at 69, 1](Read) = [x] <- 98[0][2]
+| | ===basic block[index:1]===
+| | decl vars:
+| | using vars:
+| | | p:float3[at 0, 0](Read) = [ ] <- 98[0][-1]
+| | | h:float[at 0, 0](Read) = [x] <- 98[0][5]
+func:mainImage_f4_f2
+| params:
+| | name:fragColor type:t_float4
+| | name:fragCoord type:t_float2
+| return:void
+| ===block[id:91 index:0]===
+| syntax:func func index:1
+| owner func:mainImage
+| ==BasicBlock[count:1+1] & ChildBlock[count:1]==
+| | ===basic block[index:0]===
+| | decl vars:
+| | | time:float[at 0]
+| | | color:float3[at 1]
+| | using vars:
+| | | time:float[at 0, 0](Decl) = [x] <- 91[0][0]
+| | | iTime:float[at 0, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | iMouse:float4[at 0, 0](Read) = [ ] <- MaybeGlobal[-1][-1]
+| | | color:float3[at 1, 0](Decl) = [x] <- 91[0][1]
+| | ===block[id:86 index:0]===
+| | syntax:block func index:0
+| | owner func:mainImage
+| | ==BasicBlock[count:3+1] & ChildBlock[count:3]==
+| | | ===basic block[index:0]===
+| | | decl vars:
+| | | | i:int[at 0]
+| | | using vars:
+| | | | i:int[at 0, 0](Decl) = -1 <- 86[0][0]
+| | | ===block[id:87 index:0]===
+| | | syntax:block func index:0
+| | | owner func:mainImage
+| | | | ===basic block[index:0]===
+| | | | decl vars:
+| | | | | j:int[at 0]
+| | | | | uv:float2[at 1]
+| | | | | param:float2[at 2]
+| | | | | param_1:float[at 3]
+| | | | | uv:float2[at 6]
+| | | | using vars:
+| | | | | j:int[at 0, 0](Decl) = -1 <- 87[0][0]
+| | | | | uv:float2[at 1, 0](Decl) = [x] <- 87[0][1]
+| | | | | fragCoord:float2[at 1, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 1, 0](Read) = -1 <- 86[0][0]
+| | | | | j:int[at 1, 0](Read) = -1 <- 87[0][0]
+| | | | | param:float2[at 2, 0](Decl) = [x] <- 87[0][2]
+| | | | | uv:float2[at 2, 0](Read) = [x] <- 87[0][1]
+| | | | | param_1:float[at 3, 0](Decl) = [x] <- 87[0][3]
+| | | | | time:float[at 3, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 4, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 4, 1](Write) = [x] <- 91[0][1]
+| | | | | param:float2[at 4, 0](Read) = [x] <- 87[0][2]
+| | | | | param_1:float[at 4, 0](Read) = [x] <- 87[0][3]
+| | | | | j:int[at 5, 0](Write) = 0 <- 87[0][0]
+| | | | | uv:float2[at 6, 0](Decl) = [x] <- 87[0][6]
+| | | | | fragCoord:float2[at 6, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 6, 0](Read) = -1 <- 86[0][0]
+| | | | | j:int[at 6, 0](Read) = 0 <- 87[0][0]
+| | | | | uv:float2[at 7, 0](Read) = [x] <- 87[0][1]
+| | | | | time:float[at 8, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 9, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 9, 1](Write) = [x] <- 91[0][1]
+| | | | | param:float2[at 9, 0](Read) = [x] <- 87[0][2]
+| | | | | param_1:float[at 9, 0](Read) = [x] <- 87[0][3]
+| | | | | j:int[at 10, 0](Write) = 1 <- 87[0][0]
+| | | | | fragCoord:float2[at 11, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 11, 0](Read) = -1 <- 86[0][0]
+| | | | | j:int[at 11, 0](Read) = 1 <- 87[0][0]
+| | | | | uv:float2[at 12, 0](Read) = [x] <- 87[0][1]
+| | | | | time:float[at 13, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 14, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 14, 1](Write) = [x] <- 91[0][1]
+| | | | | param:float2[at 14, 0](Read) = [x] <- 87[0][2]
+| | | | | param_1:float[at 14, 0](Read) = [x] <- 87[0][3]
+| | | ===basic block[index:1]===
+| | | decl vars:
+| | | using vars:
+| | | | i:int[at 0, 0](Write) = 0 <- 86[0][0]
+| | | ===block[id:88 index:1]===
+| | | syntax:block func index:0
+| | | owner func:mainImage
+| | | | ===basic block[index:0]===
+| | | | decl vars:
+| | | | | j_88:int[at 0]
+| | | | | uv_88:float2[at 1]
+| | | | | param_88:float2[at 2]
+| | | | | param_1_88:float[at 3]
+| | | | | uv:float2[at 6]
+| | | | using vars:
+| | | | | j_88:int[at 0, 0](Decl) = -1 <- 88[0][0]
+| | | | | uv_88:float2[at 1, 0](Decl) = [x] <- 88[0][1]
+| | | | | fragCoord:float2[at 1, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 1, 0](Read) = 0 <- 86[0][0]
+| | | | | j_88:int[at 1, 0](Read) = -1 <- 88[0][0]
+| | | | | param_88:float2[at 2, 0](Decl) = [x] <- 88[0][2]
+| | | | | uv_88:float2[at 2, 0](Read) = [x] <- 88[0][1]
+| | | | | param_1_88:float[at 3, 0](Decl) = [x] <- 88[0][3]
+| | | | | time:float[at 3, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 4, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 4, 1](Write) = [x] <- 91[0][1]
+| | | | | param_88:float2[at 4, 0](Read) = [x] <- 88[0][2]
+| | | | | param_1_88:float[at 4, 0](Read) = [x] <- 88[0][3]
+| | | | | j_88:int[at 5, 0](Write) = 0 <- 88[0][0]
+| | | | | uv:float2[at 6, 0](Decl) = [x] <- 88[0][6]
+| | | | | fragCoord:float2[at 6, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 6, 0](Read) = 0 <- 86[0][0]
+| | | | | j_88:int[at 6, 0](Read) = 0 <- 88[0][0]
+| | | | | uv_88:float2[at 7, 0](Read) = [x] <- 88[0][1]
+| | | | | time:float[at 8, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 9, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 9, 1](Write) = [x] <- 91[0][1]
+| | | | | param_88:float2[at 9, 0](Read) = [x] <- 88[0][2]
+| | | | | param_1_88:float[at 9, 0](Read) = [x] <- 88[0][3]
+| | | | | j_88:int[at 10, 0](Write) = 1 <- 88[0][0]
+| | | | | fragCoord:float2[at 11, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 11, 0](Read) = 0 <- 86[0][0]
+| | | | | j_88:int[at 11, 0](Read) = 1 <- 88[0][0]
+| | | | | uv_88:float2[at 12, 0](Read) = [x] <- 88[0][1]
+| | | | | time:float[at 13, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 14, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 14, 1](Write) = [x] <- 91[0][1]
+| | | | | param_88:float2[at 14, 0](Read) = [x] <- 88[0][2]
+| | | | | param_1_88:float[at 14, 0](Read) = [x] <- 88[0][3]
+| | | ===basic block[index:2]===
+| | | decl vars:
+| | | using vars:
+| | | | i:int[at 0, 0](Write) = 1 <- 86[0][0]
+| | | ===block[id:89 index:2]===
+| | | syntax:block func index:0
+| | | owner func:mainImage
+| | | | ===basic block[index:0]===
+| | | | decl vars:
+| | | | | j_89:int[at 0]
+| | | | | uv_89:float2[at 1]
+| | | | | param_89:float2[at 2]
+| | | | | param_1_89:float[at 3]
+| | | | | uv:float2[at 6]
+| | | | using vars:
+| | | | | j_89:int[at 0, 0](Decl) = -1 <- 89[0][0]
+| | | | | uv_89:float2[at 1, 0](Decl) = [x] <- 89[0][1]
+| | | | | fragCoord:float2[at 1, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 1, 0](Read) = 1 <- 86[0][0]
+| | | | | j_89:int[at 1, 0](Read) = -1 <- 89[0][0]
+| | | | | param_89:float2[at 2, 0](Decl) = [x] <- 89[0][2]
+| | | | | uv_89:float2[at 2, 0](Read) = [x] <- 89[0][1]
+| | | | | param_1_89:float[at 3, 0](Decl) = [x] <- 89[0][3]
+| | | | | time:float[at 3, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 4, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 4, 1](Write) = [x] <- 91[0][1]
+| | | | | param_89:float2[at 4, 0](Read) = [x] <- 89[0][2]
+| | | | | param_1_89:float[at 4, 0](Read) = [x] <- 89[0][3]
+| | | | | j_89:int[at 5, 0](Write) = 0 <- 89[0][0]
+| | | | | uv:float2[at 6, 0](Decl) = [x] <- 89[0][6]
+| | | | | fragCoord:float2[at 6, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 6, 0](Read) = 1 <- 86[0][0]
+| | | | | j_89:int[at 6, 0](Read) = 0 <- 89[0][0]
+| | | | | uv_89:float2[at 7, 0](Read) = [x] <- 89[0][1]
+| | | | | time:float[at 8, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 9, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 9, 1](Write) = [x] <- 91[0][1]
+| | | | | param_89:float2[at 9, 0](Read) = [x] <- 89[0][2]
+| | | | | param_1_89:float[at 9, 0](Read) = [x] <- 89[0][3]
+| | | | | j_89:int[at 10, 0](Write) = 1 <- 89[0][0]
+| | | | | fragCoord:float2[at 11, 0](Read) = [ ] <- 91[0][-1]
+| | | | | i:int[at 11, 0](Read) = 1 <- 86[0][0]
+| | | | | j_89:int[at 11, 0](Read) = 1 <- 89[0][0]
+| | | | | uv_89:float2[at 12, 0](Read) = [x] <- 89[0][1]
+| | | | | time:float[at 13, 0](Read) = [x] <- 91[0][0]
+| | | | | color:float3[at 14, 0](Read) = [x] <- 91[0][1]
+| | | | | color:float3[at 14, 1](Write) = [x] <- 91[0][1]
+| | | | | param_89:float2[at 14, 0](Read) = [x] <- 89[0][2]
+| | | | | param_1_89:float[at 14, 0](Read) = [x] <- 89[0][3]
+| | | ===basic block[index:3]===
+| | | decl vars:
+| | | using vars:
+| | ===basic block[index:1]===
+| | decl vars:
+| | using vars:
+| | | color:float3[at 0, 0](Read) = [x] <- 91[0][1]
+| | | color:float3[at 0, 1](Write) = [x] <- 91[0][1]
+| | | fragColor:float4[at 1, 0](Write) = [x] <- 91[0][-1]
+| | | color:float3[at 1, 0](Read) = [x] <- 91[0][1]
+Transform done.

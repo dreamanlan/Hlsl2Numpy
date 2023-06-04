@@ -292,7 +292,7 @@ namespace Hlsl2Numpy
             val = string.Empty;
             for (int ix = endStatementIndex; ix >= 0; --ix) {
                 var stmInfo = Statements[ix];
-                if (stmInfo.TryGetVarSetConst(endStatementUsingVarIndex, name, out var v)) {
+                if (stmInfo.TryGetVarSetConst(ix < endStatementIndex ? -1 : endStatementUsingVarIndex, name, out var v)) {
                     val = v;
                     ret = true;
                     break;
@@ -308,7 +308,7 @@ namespace Hlsl2Numpy
             val = string.Empty;
             for (int ix = endStatementIndex; ix >= 0; --ix) {
                 var stmInfo = Statements[ix];
-                if (stmInfo.TryGetVarSetOrCacheConst(endStatementUsingVarIndex, name, out var v)) {
+                if (stmInfo.TryGetVarSetOrCacheConst(ix < endStatementIndex ? -1 : endStatementUsingVarIndex, name, out var v)) {
                     val = v;
                     ret = true;
                     break;
@@ -341,10 +341,11 @@ namespace Hlsl2Numpy
             for (int ix = 0; ix <= endBasicBlockStatementIndex && ix < Statements.Count; ++ix) {
                 var bbsi = Statements[ix];
                 if (bbsi.UsingVars.TryGetValue(name, out var uvinfo) && uvinfo.Vars.Count > 0) {
-                    if (endBasicBlockStatementUsingVarIndex < 0)
-                        endBasicBlockStatementUsingVarIndex = uvinfo.Vars.Count - 1;
-                    if (endBasicBlockStatementUsingVarIndex >= 0 && endBasicBlockStatementUsingVarIndex < uvinfo.Vars.Count) {
-                        vinfo = uvinfo.Vars[endBasicBlockStatementUsingVarIndex];
+                    int usingVarIndex = (ix < endBasicBlockStatementIndex ? -1 : endBasicBlockStatementUsingVarIndex);
+                    if (usingVarIndex < 0)
+                        usingVarIndex = uvinfo.Vars.Count - 1;
+                    if (usingVarIndex >= 0 && usingVarIndex < uvinfo.Vars.Count) {
+                        vinfo = uvinfo.Vars[usingVarIndex];
                         basicBlockStmInfo = bbsi;
                         ret = true;
                         break;

@@ -23,137 +23,205 @@ layout (binding = 0) uniform sampler2D iChannel3;
 
 
 
-float focalDistance=1.0,aperture=0.01,shadowCone=0.3;
-
-float Rect(in vec3 z, vec3 r){return max(abs(z.x)-r.x,max(abs(z.y)-r.y,abs(z.z)-r.z));}
-
-void Kaleido(inout vec2 v,float power){float a=floor(.5+atan(v.x,-v.y)*power/6.283)*6.283/power;v=cos(a)*v+sin(a)*vec2(v.y,-v.x);}
 
 
-float hash(float n) {return fract(sin(n) * 4378.54533);}
-float noyz(vec3 x) {
- vec3 p=floor(x),j=fract(x);
- const float tw=7.0,tx=13.0;
- float n=p.x+p.y*tw+p.z*tx;
- float a=hash(n),b=hash(n+1.0),c=hash(n+tw),d=hash(n+tw+1.0);
- float e=hash(n+tx),f=hash(n+1.0+tx),g=hash(n+tw+tx),h=hash(n+1.0+tw+tx);
- vec3 u=j*j*(3.0-2.0*j);
- return mix(a+(b-a)*u.x+(c-a)*u.y+(a-b-c+d)*u.x*u.y,e+(f-e)*u.x+(g-e)*u.y+(e-f-g+h)*u.x*u.y,u.z);
+const int NUM_STEPS = 8;
+const float PI = 3.141592;
+const float EPSILON = 1e-3;
+
+
+
+
+const int ITER_GEOMETRY = 3;
+const int ITER_FRAGMENT = 5;
+const float SEA_HEIGHT = 0.6;
+const float SEA_CHOPPY = 4.0;
+const float SEA_SPEED = 0.8;
+const float SEA_FREQ = 0.16;
+const vec3 SEA_BASE = vec3(0.0,0.09,0.18);
+const vec3 SEA_WATER_COLOR = vec3(0.8,0.9,0.6)*0.6;
+
+const mat2 octave_m = mat2(1.6,1.2,-1.2,1.6);
+
+
+mat3 fromEuler(vec3 ang) {
+ vec2 a1 = vec2(sin(ang.x),cos(ang.x));
+    vec2 a2 = vec2(sin(ang.y),cos(ang.y));
+    vec2 a3 = vec2(sin(ang.z),cos(ang.z));
+    mat3 m;
+    m[0] = vec3(a1.y*a3.y+a1.x*a2.x*a3.x,a1.y*a2.x*a3.x+a3.y*a1.x,-a2.y*a3.x);
+ m[1] = vec3(-a2.y*a1.x,a1.y*a2.y,a2.x);
+ m[2] = vec3(a3.y*a1.x*a2.x+a1.y*a3.x,a1.x*a3.x-a1.y*a3.y*a2.x,a2.y*a3.y);
+ return m;
+}
+float hash( vec2 p ) {
+ float h = dot(p,vec2(127.1,311.7));
+    return fract(sin(h)*43758.5453123);
+}
+float noise( in vec2 p ) {
+    vec2 i = floor( p );
+    vec2 f = fract( p );
+ vec2 u = f*f*(3.0-2.0*f);
+    return -1.0+2.0*mix( mix( hash( i + vec2(0.0,0.0) ),
+                     hash( i + vec2(1.0,0.0) ), u.x),
+                mix( hash( i + vec2(0.0,1.0) ),
+                     hash( i + vec2(1.0,1.0) ), u.x), u.y);
 }
 
-float fbm(vec3 p) {
- float h=noyz(p);
- h+=0.5*noyz(p*=2.3);
- return h+0.25*noyz(p*2.3);
+
+float diffuse(vec3 n,vec3 l,float p) {
+    return pow(dot(n,l) * 0.4 + 0.6,p);
+}
+float specular(vec3 n,vec3 l,vec3 e,float s) {
+    float nrm = (s + 8.0) / (PI * 8.0);
+    return pow(max(dot(reflect(e,n),l),0.0),s) * nrm;
 }
 
-const float scl=0.08;
 
-float DE(vec3 z0, inout vec4 mcol){
- float dW=100.0,dD=100.0;
- float dC=fbm(z0*0.25+vec3(100.0))*0.5+sin(z0.y)*0.1+sin(z0.z*0.4)*0.1+min(z0.y*0.04+0.1,0.1);
- vec2 v=floor(vec2(z0.x,abs(z0.z))*0.5+0.5);
- z0.xz=clamp(z0.xz,-2.0,2.0)*2.0-z0.xz;
- float r=length(z0.xz);
- float dS=r-0.6;
- if(r<1.0){
-  float shape=0.285-v.x*0.02;
-  z0.y+=v.y*0.2;
-  vec3 z=z0*10.0;
-  dS=max(z0.y-2.5,r-max(0.11-z0.y*0.1,0.01));
-  float y2=max(abs(abs(mod(z.y+0.5,2.0)-1.0)-0.5)-0.05,abs(z.y-7.1)-8.3);
-  float y=sin(clamp(floor(z.y)*shape,-0.4,3.4))*40.0;
-  Kaleido(z.xz,8.0+floor(y));
-  dW=Rect(z,vec3(0.9+y*0.1,22.0,0.9+y*0.1))*scl;
-  dD=max(z0.y-1.37,max(y2,r*10.0-1.75-sin(clamp((z.y-0.5)*shape,-0.05,3.49))*4.0))*scl;
-  dS=min(dS,min(dW,dD));
- }
- dS=min(dS,dC);
- if(dS==dW)mcol+=vec4(0.8,0.9,0.9,1.0);
- else if(dS==dD)mcol+=vec4(0.6,0.4,0.3,0.0);
- else if(dS==dC)mcol+=vec4(1.0,1.0,1.0,-1.0);
- else mcol+=vec4(0.7+sin(z0.y*100.0)*0.3,1.0,0.8,0.0);
- return dS;
+vec3 getSkyColor(vec3 e) {
+    e.y = (max(e.y,0.0)*0.8+0.2)*0.8;
+    return vec3(pow(1.0-e.y,2.0), 1.0-e.y, 0.6+(1.0-e.y)*0.4) * 1.1;
 }
 
-float pixelSize;
-float CircleOfConfusion(float t){
- return max(abs(focalDistance-t)*aperture,pixelSize*(1.0+t));
-}
-mat3 lookat(vec3 fw,vec3 up){
- fw=normalize(fw);vec3 rt=normalize(cross(fw,normalize(up)));return mat3(rt,cross(rt,fw),fw);
-}
-float linstep(float a, float b, float t){return clamp((t-a)/(b-a),0.,1.);}
 
-float randStep(inout float randSeed){
- ++randSeed;
- return (0.8+0.2*fract(sin(randSeed)*4375.54531));
+float sea_octave(vec2 uv, float choppy) {
+    uv += noise(uv);
+    vec2 wv = 1.0-abs(sin(uv));
+    vec2 swv = abs(cos(uv));
+    wv = mix(wv,swv,wv);
+    return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
 }
 
-float FuzzyShadow(vec3 ro, vec3 rd, float coneGrad, float rCoC, inout vec4 mcol, inout float randSeed){
- float t=rCoC*2.0,d=1.0,s=1.0;
- for(int i=0;i<6;i++){
-  if(s<0.1)continue;
-  float r=rCoC+t*coneGrad;
-  d=DE(ro+rd*t, mcol)+r*0.4;
-  s*=linstep(-r,r,d);
-  t+=abs(d)*randStep(randSeed);
- }
- return clamp(s*0.75+0.25,0.0,1.0);
-}
+float map(vec3 p) {
+    float freq = SEA_FREQ;
+    float amp = SEA_HEIGHT;
+    float choppy = SEA_CHOPPY;
+    vec2 uv = p.xz; uv.x *= 0.75;
 
-void mainImage(out vec4 O, in vec2 U) {
- vec4 mcol=vec4(0.0);
- float randSeed;
- randSeed=fract(sin(iTime+dot(U,vec2(9.123,13.431)))*473.719245);
- pixelSize=2.0/iResolution.y;
- float tim=iTime*0.25;
- vec3 ro=vec3(cos(tim),sin(tim*0.7)*0.5+0.3,sin(tim))*(1.8+.5*sin(tim*.41));
- vec3 rd=lookat(vec3(0.0,0.6,sin(tim*2.3))-ro,vec3(0.1,1.0,0.0))*normalize(vec3((2.0*U.xy-iResolution.xy)/iResolution.y,2.0));
- vec3 L=normalize(vec3(0.5,0.75,-0.5));
- vec4 col=vec4(0.0);
- float t=DE(ro, mcol)*randSeed*.8;
- ro+=rd*t;
- for(int i=0;i<72;i++){
-  if(col.w>0.9 || t>20.0)continue;
-  float rCoC=CircleOfConfusion(t);
-  float d=DE(ro, mcol);
-  float fClouds=max(0.0,-mcol.a);
-  if(d<max(rCoC,fClouds*0.5)){
-   vec3 p=ro;
-   if(fClouds<0.1)p-=rd*abs(d-rCoC);
-   vec2 v=vec2(rCoC*0.333,0.0);
-   vec3 N=normalize(vec3(-DE(p-v.xyy, mcol)+DE(p+v.xyy, mcol),-DE(p-v.yxy, mcol)+DE(p+v.yxy, mcol),-DE(p-v.yyx, mcol)+DE(p+v.yyx, mcol)));
-
-   mcol*=0.143;
-   vec3 scol;
-   float alpha;
-   if(fClouds>0.1){
-    float dn=clamp(0.5-d,0.0,1.0);dn=dn*2.0;dn*=dn;
-    alpha=(1.0-col.w)*dn;
-    scol=vec3(1.0)*(0.6+dn*dot(N,L)*0.4);
-    scol+=dn*max(0.0,dot(reflect(rd,N),L))*vec3(1.0,0.5,0.0);
-
-   }else{
-    scol=mcol.rgb*(0.2+0.4*(1.0+dot(N,L)));
-    scol+=0.5*pow(max(0.0,dot(reflect(rd,N),L)),32.0)*vec3(1.0,0.5,0.0);
-    if(d<rCoC*0.25 && mcol.a>0.9){
-     rd=reflect(rd,N);d=-rCoC*0.25;ro=p;t+=1.0;
+    float d, h = 0.0;
+    for(int i = 0; i < ITER_GEOMETRY; i++) {
+     d = sea_octave((uv+(1.0 + iTime * SEA_SPEED))*freq,choppy);
+     d += sea_octave((uv-(1.0 + iTime * SEA_SPEED))*freq,choppy);
+        h += d * amp;
+     uv *= octave_m; freq *= 1.9; amp *= 0.22;
+        choppy = mix(choppy,1.0,0.2);
     }
-    scol*=FuzzyShadow(p,L,shadowCone,rCoC,mcol,randSeed);
-    alpha=(1.0-col.w)*linstep(-rCoC,rCoC,-d-0.5*rCoC);
-   }
-   col+=vec4(scol*alpha,alpha);
-  }
-  mcol=vec4(0.0);
-  d=abs(d+0.33*rCoC)*randStep(randSeed);
-  ro+=d*rd;
-  t+=d;
- }
- vec3 scol=vec3(0.4,0.5,0.6)+rd*0.05+pow(max(0.0,dot(rd,L)),100.0)*vec3(1.0,0.75,0.5);
- col.rgb+=scol*(1.0-clamp(col.w,0.0,1.0));
+    return p.y - h;
+}
 
- O = vec4(clamp(col.rgb,0.0,1.0),1.0);
+float map_detailed(vec3 p) {
+    float freq = SEA_FREQ;
+    float amp = SEA_HEIGHT;
+    float choppy = SEA_CHOPPY;
+    vec2 uv = p.xz; uv.x *= 0.75;
+
+    float d, h = 0.0;
+    for(int i = 0; i < ITER_FRAGMENT; i++) {
+     d = sea_octave((uv+(1.0 + iTime * SEA_SPEED))*freq,choppy);
+     d += sea_octave((uv-(1.0 + iTime * SEA_SPEED))*freq,choppy);
+        h += d * amp;
+     uv *= octave_m; freq *= 1.9; amp *= 0.22;
+        choppy = mix(choppy,1.0,0.2);
+    }
+    return p.y - h;
+}
+
+vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
+    float fresnel = clamp(1.0 - dot(n,-eye), 0.0, 1.0);
+    fresnel = min(pow(fresnel,3.0), 0.5);
+
+    vec3 reflected = getSkyColor(reflect(eye,n));
+    vec3 refracted = SEA_BASE + diffuse(n,l,80.0) * SEA_WATER_COLOR * 0.12;
+
+    vec3 color = mix(refracted,reflected,fresnel);
+
+    float atten = max(1.0 - dot(dist,dist) * 0.001, 0.0);
+    color += SEA_WATER_COLOR * (p.y - SEA_HEIGHT) * 0.18 * atten;
+
+    color += vec3(specular(n,l,eye,60.0));
+
+    return color;
+}
+
+
+vec3 getNormal(vec3 p, float eps) {
+    vec3 n;
+    n.y = map_detailed(p);
+    n.x = map_detailed(vec3(p.x+eps,p.y,p.z)) - n.y;
+    n.z = map_detailed(vec3(p.x,p.y,p.z+eps)) - n.y;
+    n.y = eps;
+    return normalize(n);
+}
+
+float heightMapTracing(vec3 ori, vec3 dir, out vec3 p) {
+    float tm = 0.0;
+    float tx = 1000.0;
+    float hx = map(ori + dir * tx);
+    if(hx > 0.0) {
+        p = ori + dir * tx;
+        return tx;
+    }
+    float hm = map(ori + dir * tm);
+    float tmid = 0.0;
+    for(int i = 0; i < NUM_STEPS; i++) {
+        tmid = mix(tm,tx, hm/(hm-hx));
+        p = ori + dir * tmid;
+     float hmid = map(p);
+  if(hmid < 0.0) {
+         tx = tmid;
+            hx = hmid;
+        } else {
+            tm = tmid;
+            hm = hmid;
+        }
+    }
+    return tmid;
+}
+
+vec3 getPixel(in vec2 coord, float time) {
+    vec2 uv = coord / iResolution.xy;
+    uv = uv * 2.0 - 1.0;
+    uv.x *= iResolution.x / iResolution.y;
+
+
+    vec3 ang = vec3(sin(time*3.0)*0.1,sin(time)*0.2+0.3,time);
+    vec3 ori = vec3(0.0,3.5,time*5.0);
+    vec3 dir = normalize(vec3(uv.xy,-2.0)); dir.z += length(uv) * 0.14;
+    dir = normalize(dir) * fromEuler(ang);
+
+
+    vec3 p;
+    heightMapTracing(ori,dir,p);
+    vec3 dist = p - ori;
+    vec3 n = getNormal(p, dot(dist,dist) * (0.1 / iResolution.x));
+    vec3 light = normalize(vec3(0.0,1.0,0.8));
+
+
+    return mix(
+        getSkyColor(dir),
+        getSeaColor(p,n,light,dir,dist),
+     pow(smoothstep(0.0,-0.02,dir.y),0.2));
+}
+
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+    float time = iTime * 0.3 + iMouse.x*0.01;
+
+
+    vec3 color = vec3(0.0);
+    for(int i = -1; i <= 1; i++) {
+        for(int j = -1; j <= 1; j++) {
+         vec2 uv = fragCoord+vec2(i,j)/3.0;
+      color += getPixel(uv, time);
+        }
+    }
+    color /= 9.0;
+
+
+
+
+
+ fragColor = vec4(pow(color,vec3(0.65)), 1.0);
 }
 
 void main()

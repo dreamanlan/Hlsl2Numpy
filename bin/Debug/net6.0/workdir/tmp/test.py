@@ -8193,482 +8193,520 @@ def compute_dispatch(fc, fcd, entry):
 def shader_dispatch(fc, fcd, entry):
     pass
 
+def fromEuler_f3(ang):
+	a1 = h_f2_n_n(h_sin_n(swizzle_n3_x(ang)), h_cos_n(swizzle_n3_x(ang)))
+	a2 = h_f2_n_n(h_sin_n(swizzle_n3_y(ang)), h_cos_n(swizzle_n3_y(ang)))
+	a3 = h_f2_n_n(h_sin_n(swizzle_n3_z(ang)), h_cos_n(swizzle_n3_z(ang)))
+	m = h_f3x3_defval()
+	array_set_n3x3_n(m, 0, h_f3_n_n_n(h_add_f_f(h_mul_f_f(swizzle_n2_y(a1), swizzle_n2_y(a3)), h_mul_f_f(h_mul_f_f(swizzle_n2_x(a1), swizzle_n2_x(a2)), swizzle_n2_x(a3))), h_add_f_f(h_mul_f_f(h_mul_f_f(swizzle_n2_y(a1), swizzle_n2_x(a2)), swizzle_n2_x(a3)), h_mul_f_f(swizzle_n2_y(a3), swizzle_n2_x(a1))), h_mul_f_f(h_sub_f(swizzle_n2_y(a2)), swizzle_n2_x(a3))))
+	array_set_n3x3_n(m, 1, h_f3_n_n_n(h_mul_f_f(h_sub_f(swizzle_n2_y(a2)), swizzle_n2_x(a1)), h_mul_f_f(swizzle_n2_y(a1), swizzle_n2_y(a2)), swizzle_n2_x(a2)))
+	array_set_n3x3_n(m, 2, h_f3_n_n_n(h_add_f_f(h_mul_f_f(h_mul_f_f(swizzle_n2_y(a3), swizzle_n2_x(a1)), swizzle_n2_x(a2)), h_mul_f_f(swizzle_n2_y(a1), swizzle_n2_x(a3))), h_sub_f_f(h_mul_f_f(swizzle_n2_x(a1), swizzle_n2_x(a3)), h_mul_f_f(h_mul_f_f(swizzle_n2_y(a1), swizzle_n2_y(a3)), swizzle_n2_x(a2))), h_mul_f_f(swizzle_n2_y(a2), swizzle_n2_y(a3))))
+	return m
 
-def hash_f_arr(n):
-	return h_frac_t_n(h_mul_t_f_f(h_sin_t_n(n), 4378.54541))
 
-def noyz_f3_arr(x):
-	p = h_floor_t_v(x)
-	j = h_frac_t_v(x)
-	n = h_add_t_f_t_f(h_add_t_f_t_f(swizzle_t_n3_x(p), h_mul_t_f_f(swizzle_t_n3_y(p), 7.0)), h_mul_t_f_f(swizzle_t_n3_z(p), 13.0))
-	param = n
-	a = hash_f_arr(param)
-	param_1 = h_add_t_f_f(n, 1.0)
-	b = hash_f_arr(param_1)
-	param_2 = h_add_t_f_f(n, 7.0)
-	c = hash_f_arr(param_2)
-	param_3 = h_add_t_f_f(h_add_t_f_f(n, 7.0), 1.0)
-	d = hash_f_arr(param_3)
-	param_4 = h_add_t_f_f(n, 13.0)
-	e = hash_f_arr(param_4)
-	param_5 = h_add_t_f_f(h_add_t_f_f(n, 1.0), 13.0)
-	f = hash_f_arr(param_5)
-	param_6 = h_add_t_f_f(h_add_t_f_f(n, 7.0), 13.0)
-	g = hash_f_arr(param_6)
-	param_7 = h_add_t_f_f(h_add_t_f_f(h_add_t_f_f(n, 1.0), 7.0), 13.0)
-	h = hash_f_arr(param_7)
-	u = h_mul_t_vf_t_vf(h_mul_t_vf_t_vf(j, j), h_sub_vf_t_vf(swizzle_n_xxx(3.0), h_mul_t_vf_f(j, 2.0)))
-	return h_lerp_t_n_t_n_t_n(h_add_t_f_t_f(h_add_t_f_t_f(h_add_t_f_t_f(a, h_mul_t_f_t_f(h_sub_t_f_t_f(b, a), swizzle_t_n3_x(u))), h_mul_t_f_t_f(h_sub_t_f_t_f(c, a), swizzle_t_n3_y(u))), h_mul_t_f_t_f(h_mul_t_f_t_f(h_add_t_f_t_f(h_sub_t_f_t_f(h_sub_t_f_t_f(a, b), c), d), swizzle_t_n3_x(u)), swizzle_t_n3_y(u))), h_add_t_f_t_f(h_add_t_f_t_f(h_add_t_f_t_f(e, h_mul_t_f_t_f(h_sub_t_f_t_f(f, e), swizzle_t_n3_x(u))), h_mul_t_f_t_f(h_sub_t_f_t_f(g, e), swizzle_t_n3_y(u))), h_mul_t_f_t_f(h_mul_t_f_t_f(h_add_t_f_t_f(h_sub_t_f_t_f(h_sub_t_f_t_f(e, f), g), h), swizzle_t_n3_x(u)), swizzle_t_n3_y(u))), swizzle_t_n3_z(u))
+def hash_f2_arr(p):
+	h = h_dot_t_v_v(p, h_f2_n_n(127.099998, 311.700012))
+	return h_frac_t_n(h_mul_t_f_f(h_sin_t_n(h), 43758.5469))
 
-def Rect_f3_f3_arr(z, r):
-	return h_max_t_n_t_n(h_sub_t_f_t_f(h_abs_t_n(swizzle_t_n3_x(z)), swizzle_t_n3_x(r)), h_max_t_n_t_n(h_sub_t_f_t_f(h_abs_t_n(swizzle_t_n3_y(z)), swizzle_t_n3_y(r)), h_sub_t_f_t_f(h_abs_t_n(swizzle_t_n3_z(z)), swizzle_t_n3_z(r))))
+def _noise_f2_arr(p):
+	i = h_floor_t_v(p)
+	f = h_frac_t_v(p)
+	u = h_mul_t_vf_t_vf(h_mul_t_vf_t_vf(f, f), h_sub_vf_t_vf(swizzle_n_xx(3.0), h_mul_t_vf_f(f, 2.0)))
+	param = h_add_t_vf_vf(i, swizzle_n_xx(0.0))
+	param_1 = h_add_t_vf_vf(i, h_f2_n_n(1.0, 0.0))
+	param_2 = h_add_t_vf_vf(i, h_f2_n_n(0.0, 1.0))
+	param_3 = h_add_t_vf_vf(i, swizzle_n_xx(1.0))
+	return h_add_f_t_f(-1.0, h_mul_f_t_f(2.0, h_lerp_t_n_t_n_t_n(h_lerp_t_n_t_n_t_n(hash_f2_arr(param), hash_f2_arr(param_1), swizzle_t_n2_x(u)), h_lerp_t_n_t_n_t_n(hash_f2_arr(param_2), hash_f2_arr(param_3), swizzle_t_n2_x(u)), swizzle_t_n2_y(u))))
 
-def Kaleido_f2_f_arr(v, power):
-	a = h_div_t_f_t_f(h_mul_t_f_f(h_floor_t_n(h_add_f_t_f(0.5, h_div_t_f_f(h_mul_t_f_t_f(h_atan2_t_n_t_n(swizzle_t_n2_x(v), h_sub_t_f(swizzle_t_n2_y(v))), power), 6.28299999))), 6.28299999), power)
-	v = h_add_t_vf_t_vf(h_mul_t_vf_t_f(v, h_cos_t_n(a)), h_mul_t_vf_t_f(h_t_f2_t_n_t_n(swizzle_t_n2_y(v), h_sub_t_f(swizzle_t_n2_x(v))), h_sin_t_n(a)))
-	return v
+def sea_octave_f2_f_arr(uv, choppy):
+	param = uv
+	uv = h_add_t_vf_t_vf(uv, swizzle_t_n_xx(_noise_f2_arr(param)))
+	wv = h_sub_vf_t_vf(swizzle_n_xx(1.0), h_abs_t_v(h_sin_t_v(uv)))
+	swv = h_abs_t_v(h_cos_t_v(uv))
+	wv = h_lerp_t_v_t_v_t_v(wv, swv, wv)
+	return h_pow_t_n_n(h_sub_f_t_f(1.0, h_pow_t_n_n(h_mul_t_f_t_f(swizzle_t_n2_x(wv), swizzle_t_n2_y(wv)), 0.649999976)), choppy), uv
 
-def mod_f_f_arr(x, y):
-	return h_sub_t_f_t_f(x, h_mul_f_t_f(y, h_floor_t_n(h_div_t_f_f(x, y))))
+def specular_f3_f3_f3_f_arr(n, l, e, s):
+	nrm = h_div_f_f(h_add_f_f(s, 8.0), 25.1327362)
+	return h_mul_t_f_f(h_pow_t_n_n(h_max_t_n_n(h_dot_t_v_v(h_reflect_t_v_t_v(e, n), l), 0.0), s), nrm)
 
-def fbm_f3_arr(p):
+def diffuse_f3_f3_f_arr(n, l, p):
+	return h_pow_t_n_n(h_add_t_f_f(h_mul_t_f_f(h_dot_t_v_v(n, l), 0.400000006), 0.600000024), p)
+
+def map_detailed_f3_arr(p):
+	global iTime
+	freq = 0.159999996
+	amp = 0.600000024
+	choppy = 4.0
+	uv = swizzle_t_n3_xz(p)
+	swizzle_set_t_n2_x(uv, h_mul_t_f_f(swizzle_t_n2_x(uv), 0.75))
+	h = h_broadcast_f(False, 0.0)
+	if True:
+		i = 0
+		param = h_mul_t_vf_f(h_add_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.159999996)
+		param_1 = 4.0
+		_476 = tuple_get_retval((_call_ret_60 := sea_octave_f2_f_arr(param, param_1), param := tuple_get_outparam(_call_ret_60, 1)))
+		d = _476
+		param_2 = h_mul_t_vf_f(h_sub_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.159999996)
+		param_3 = 4.0
+		_488 = tuple_get_retval((_call_ret_61 := sea_octave_f2_f_arr(param_2, param_3), param_2 := tuple_get_outparam(_call_ret_61, 1)))
+		d = h_add_t_f_t_f(d, _488)
+		h = h_add_t_f_t_f(h, h_mul_t_f_f(d, 0.600000024))
+		uv = h_matmul_f2x2_t_f2(h_f2x2_n2_n2(h_f2_n_n(1.60000002, 1.20000005), h_f2_n_n(-1.20000005, 1.60000002)), uv)
+		freq = h_mul_f_f(freq, 1.89999998)
+		amp = h_mul_f_f(amp, 0.219999999)
+		choppy = h_lerp_n_n_n(choppy, 1.0, 0.200000003)
+		i = 1
+		param = h_mul_t_vf_f(h_add_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.304)
+		param_1 = choppy
+		_476 = tuple_get_retval((_call_ret_62 := sea_octave_f2_f_arr(param, param_1), param := tuple_get_outparam(_call_ret_62, 1)))
+		d = _476
+		param_2 = h_mul_t_vf_f(h_sub_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.304)
+		param_3 = choppy
+		_488 = tuple_get_retval((_call_ret_63 := sea_octave_f2_f_arr(param_2, param_3), param_2 := tuple_get_outparam(_call_ret_63, 1)))
+		d = h_add_t_f_t_f(d, _488)
+		h = h_add_t_f_t_f(h, h_mul_t_f_f(d, 0.132))
+		uv = h_matmul_f2x2_t_f2(h_f2x2_n2_n2(h_f2_n_n(1.60000002, 1.20000005), h_f2_n_n(-1.20000005, 1.60000002)), uv)
+		freq = h_mul_f_f(freq, 1.89999998)
+		amp = h_mul_f_f(amp, 0.219999999)
+		choppy = h_lerp_n_n_n(choppy, 1.0, 0.200000003)
+		i = 2
+		param = h_mul_t_vf_f(h_add_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.5776)
+		param_1 = choppy
+		_476 = tuple_get_retval((_call_ret_64 := sea_octave_f2_f_arr(param, param_1), param := tuple_get_outparam(_call_ret_64, 1)))
+		d = _476
+		param_2 = h_mul_t_vf_f(h_sub_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.5776)
+		param_3 = choppy
+		_488 = tuple_get_retval((_call_ret_65 := sea_octave_f2_f_arr(param_2, param_3), param_2 := tuple_get_outparam(_call_ret_65, 1)))
+		d = h_add_t_f_t_f(d, _488)
+		h = h_add_t_f_t_f(h, h_mul_t_f_f(d, 0.02904))
+		uv = h_matmul_f2x2_t_f2(h_f2x2_n2_n2(h_f2_n_n(1.60000002, 1.20000005), h_f2_n_n(-1.20000005, 1.60000002)), uv)
+		freq = h_mul_f_f(freq, 1.89999998)
+		amp = h_mul_f_f(amp, 0.219999999)
+		choppy = h_lerp_n_n_n(choppy, 1.0, 0.200000003)
+		i = 3
+		param = h_mul_t_vf_f(h_add_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 1.09744)
+		param_1 = choppy
+		_476 = tuple_get_retval((_call_ret_66 := sea_octave_f2_f_arr(param, param_1), param := tuple_get_outparam(_call_ret_66, 1)))
+		d = _476
+		param_2 = h_mul_t_vf_f(h_sub_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 1.09744)
+		param_3 = choppy
+		_488 = tuple_get_retval((_call_ret_67 := sea_octave_f2_f_arr(param_2, param_3), param_2 := tuple_get_outparam(_call_ret_67, 1)))
+		d = h_add_t_f_t_f(d, _488)
+		h = h_add_t_f_t_f(h, h_mul_t_f_f(d, 0.0063888))
+		uv = h_matmul_f2x2_t_f2(h_f2x2_n2_n2(h_f2_n_n(1.60000002, 1.20000005), h_f2_n_n(-1.20000005, 1.60000002)), uv)
+		freq = h_mul_f_f(freq, 1.89999998)
+		amp = h_mul_f_f(amp, 0.219999999)
+		choppy = h_lerp_n_n_n(choppy, 1.0, 0.200000003)
+		i = 4
+		param = h_mul_t_vf_f(h_add_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 2.085136)
+		param_1 = choppy
+		_476 = tuple_get_retval((_call_ret_68 := sea_octave_f2_f_arr(param, param_1), param := tuple_get_outparam(_call_ret_68, 1)))
+		d = _476
+		param_2 = h_mul_t_vf_f(h_sub_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 2.085136)
+		param_3 = choppy
+		_488 = tuple_get_retval((_call_ret_69 := sea_octave_f2_f_arr(param_2, param_3), param_2 := tuple_get_outparam(_call_ret_69, 1)))
+		d = h_add_t_f_t_f(d, _488)
+		h = h_add_t_f_t_f(h, h_mul_t_f_f(d, 0.0014055))
+		uv = h_matmul_f2x2_t_f2(h_f2x2_n2_n2(h_f2_n_n(1.60000002, 1.20000005), h_f2_n_n(-1.20000005, 1.60000002)), uv)
+		freq = h_mul_f_f(freq, 1.89999998)
+		amp = h_mul_f_f(amp, 0.219999999)
+		choppy = h_lerp_n_n_n(choppy, 1.0, 0.200000003)
+	return h_sub_t_f_t_f(swizzle_t_n3_y(p), h)
+
+def map_f3_arr(p):
+	global iTime
+	freq = 0.159999996
+	amp = 0.600000024
+	choppy = 4.0
+	uv = swizzle_t_n3_xz(p)
+	swizzle_set_t_n2_x(uv, h_mul_t_f_f(swizzle_t_n2_x(uv), 0.75))
+	h = h_broadcast_f(False, 0.0)
+	if True:
+		i = 0
+		param = h_mul_t_vf_f(h_add_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.159999996)
+		param_1 = 4.0
+		_399 = tuple_get_retval((_call_ret_54 := sea_octave_f2_f_arr(param, param_1), param := tuple_get_outparam(_call_ret_54, 1)))
+		d = _399
+		param_2 = h_mul_t_vf_f(h_sub_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.159999996)
+		param_3 = 4.0
+		_411 = tuple_get_retval((_call_ret_55 := sea_octave_f2_f_arr(param_2, param_3), param_2 := tuple_get_outparam(_call_ret_55, 1)))
+		d = h_add_t_f_t_f(d, _411)
+		h = h_add_t_f_t_f(h, h_mul_t_f_f(d, 0.600000024))
+		uv = h_matmul_f2x2_t_f2(h_f2x2_n2_n2(h_f2_n_n(1.60000002, 1.20000005), h_f2_n_n(-1.20000005, 1.60000002)), uv)
+		freq = h_mul_f_f(freq, 1.89999998)
+		amp = h_mul_f_f(amp, 0.219999999)
+		choppy = h_lerp_n_n_n(choppy, 1.0, 0.200000003)
+		i = 1
+		param = h_mul_t_vf_f(h_add_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.304)
+		param_1 = choppy
+		_399 = tuple_get_retval((_call_ret_56 := sea_octave_f2_f_arr(param, param_1), param := tuple_get_outparam(_call_ret_56, 1)))
+		d = _399
+		param_2 = h_mul_t_vf_f(h_sub_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.304)
+		param_3 = choppy
+		_411 = tuple_get_retval((_call_ret_57 := sea_octave_f2_f_arr(param_2, param_3), param_2 := tuple_get_outparam(_call_ret_57, 1)))
+		d = h_add_t_f_t_f(d, _411)
+		h = h_add_t_f_t_f(h, h_mul_t_f_f(d, 0.132))
+		uv = h_matmul_f2x2_t_f2(h_f2x2_n2_n2(h_f2_n_n(1.60000002, 1.20000005), h_f2_n_n(-1.20000005, 1.60000002)), uv)
+		freq = h_mul_f_f(freq, 1.89999998)
+		amp = h_mul_f_f(amp, 0.219999999)
+		choppy = h_lerp_n_n_n(choppy, 1.0, 0.200000003)
+		i = 2
+		param = h_mul_t_vf_f(h_add_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.5776)
+		param_1 = choppy
+		_399 = tuple_get_retval((_call_ret_58 := sea_octave_f2_f_arr(param, param_1), param := tuple_get_outparam(_call_ret_58, 1)))
+		d = _399
+		param_2 = h_mul_t_vf_f(h_sub_t_vf_vf(uv, swizzle_n_xx(h_add_f_f(1.0, h_mul_f_f(iTime, 0.800000011)))), 0.5776)
+		param_3 = choppy
+		_411 = tuple_get_retval((_call_ret_59 := sea_octave_f2_f_arr(param_2, param_3), param_2 := tuple_get_outparam(_call_ret_59, 1)))
+		d = h_add_t_f_t_f(d, _411)
+		h = h_add_t_f_t_f(h, h_mul_t_f_f(d, 0.02904))
+		uv = h_matmul_f2x2_t_f2(h_f2x2_n2_n2(h_f2_n_n(1.60000002, 1.20000005), h_f2_n_n(-1.20000005, 1.60000002)), uv)
+		freq = h_mul_f_f(freq, 1.89999998)
+		amp = h_mul_f_f(amp, 0.219999999)
+		choppy = h_lerp_n_n_n(choppy, 1.0, 0.200000003)
+	return h_sub_t_f_t_f(swizzle_t_n3_y(p), h)
+
+def getSeaColor_f3_f3_f3_f3_f3_arr(p, n, l, eye, dist):
+	fresnel = h_clamp_t_n_n_n(h_sub_f_t_f(1.0, h_dot_t_v_t_v(n, h_sub_t_vf(eye))), 0.0, 1.0)
+	fresnel = h_min_t_n_n(h_pow_t_n_n(fresnel, 3.0), 0.5)
+	param = h_reflect_t_v_t_v(eye, n)
+	_528 = tuple_get_retval((_call_ret_53 := getSkyColor_f3_arr(h_copy_t_f3(param)), param := tuple_get_outparam(_call_ret_53, 1)))
+	reflected = _528
+	param_1 = n
+	param_2 = l
+	param_3 = 80.0
+	refracted = h_add_vf_t_vf(h_f3_n_n_n(0.0, 0.0900000035, 0.180000007), h_mul_t_vf_f(h_mul_vf_t_f(h_f3_n_n_n(0.479999989, 0.540000021, 0.360000014), diffuse_f3_f3_f_arr(param_1, param_2, 80.0)), 0.119999997))
+	color = h_lerp_t_v_t_v_t_v(refracted, reflected, swizzle_t_n_xxx(fresnel))
+	atten = h_max_t_n_n(h_sub_f_t_f(1.0, h_mul_t_f_f(h_dot_t_v_t_v(dist, dist), 0.00100000005)), 0.0)
+	color = h_add_t_vf_t_vf(color, h_mul_t_vf_t_f(h_mul_t_vf_f(h_mul_vf_t_f(h_f3_n_n_n(0.479999989, 0.540000021, 0.360000014), h_sub_t_f_f(swizzle_t_n3_y(p), 0.600000024)), 0.180000007), atten))
+	param_4 = n
+	param_5 = l
+	param_6 = eye
+	param_7 = 60.0
+	color = h_add_t_vf_t_vf(color, swizzle_t_n_xxx(specular_f3_f3_f3_f_arr(param_4, param_5, param_6, 60.0)))
+	return color
+
+def getSkyColor_f3_arr(e):
+	swizzle_set_t_n3_y(e, h_mul_t_f_f(h_add_t_f_f(h_mul_t_f_f(h_max_t_n_n(swizzle_t_n3_y(e), 0.0), 0.800000011), 0.200000003), 0.800000011))
+	return h_mul_t_vf_f(h_t_f3_t_n_t_n_t_n(h_pow_t_n_n(h_sub_f_t_f(1.0, swizzle_t_n3_y(e)), 2.0), h_sub_f_t_f(1.0, swizzle_t_n3_y(e)), h_add_f_t_f(0.600000024, h_mul_t_f_f(h_sub_f_t_f(1.0, swizzle_t_n3_y(e)), 0.400000006))), 1.10000002), e
+
+def getNormal_f3_f_arr(p, eps):
 	param = p
-	h = noyz_f3_arr(param)
-	_285 = p
-	_286 = h_mul_t_vf_f(_285, 2.29999995)
-	p = _286
-	param_1 = _286
-	h = h_add_t_f_t_f(h, h_mul_f_t_f(0.5, noyz_f3_arr(param_1)))
-	param_2 = h_mul_t_vf_f(p, 2.29999995)
-	return h_add_t_f_t_f(h, h_mul_f_t_f(0.25, noyz_f3_arr(param_2))), p
+	n = h_t_f3_defval(True)
+	swizzle_set_t_n3_y(n, map_detailed_f3_arr(param))
+	param_1 = h_t_f3_t_n_t_n_t_n(h_add_t_f_t_f(swizzle_t_n3_x(p), eps), swizzle_t_n3_y(p), swizzle_t_n3_z(p))
+	swizzle_set_t_n3_x(n, h_sub_t_f_t_f(map_detailed_f3_arr(param_1), swizzle_t_n3_y(n)))
+	param_2 = h_t_f3_t_n_t_n_t_n(swizzle_t_n3_x(p), swizzle_t_n3_y(p), h_add_t_f_t_f(swizzle_t_n3_z(p), eps))
+	swizzle_set_t_n3_z(n, h_sub_t_f_t_f(map_detailed_f3_arr(param_2), swizzle_t_n3_y(n)))
+	swizzle_set_t_n3_y(n, h_copy_t_f(eps))
+	return h_normalize_t_v(n)
 
-def randStep_f_arr(randSeed):
-	randSeed = h_add_t_f_f(randSeed, 1.0)
-	return h_add_f_t_f(0.800000011, h_mul_f_t_f(0.200000003, h_frac_t_n(h_mul_t_f_f(h_sin_t_n(randSeed), 4375.54541)))), randSeed
+def heightMapTracing_f3_f3_f3_arr(ori, dir, p):
+	_func_ret_val_7 = h_t_f_defval(False)
+	_func_ret_flag_7 = h_broadcast_b(False, False)
+	tm = h_broadcast_f(False, 0.0)
+	tx = h_broadcast_f(False, 1000.0)
+	param = h_add_vf_t_vf(ori, h_mul_t_vf_f(dir, 1000.0))
+	hx = map_f3_arr(param)
+	_vecif_43_exp = h_greater_than_t_n_n(hx, 0.0)
+	if any_ifexp_true_t_n(_vecif_43_exp):
+		_vecif_43_p = p
+		_vecif_43__func_ret_flag_7 = _func_ret_flag_7
+		_vecif_43__func_ret_val_7 = _func_ret_val_7
+		_vecif_43_p = h_add_vf_t_vf(ori, h_mul_t_vf_f(dir, 1000.0))
+		_vecif_43__func_ret_flag_7 = h_broadcast_b(False, True)
+		_vecif_43__func_ret_val_7 = h_broadcast_f(False, 1000.0)
+		p = h_where_t_n_t_v_t_v(_vecif_43_exp, _vecif_43_p, p)
+		_func_ret_flag_7 = h_where_t_n_t_n_t_n(_vecif_43_exp, _vecif_43__func_ret_flag_7, _func_ret_flag_7)
+		_func_ret_val_7 = h_where_t_n_t_n_t_n(_vecif_43_exp, _vecif_43__func_ret_val_7, _func_ret_val_7)
+	_vecif_44_exp = h_not_t_n(_func_ret_flag_7)
+	if any_ifexp_true_t_n(_vecif_44_exp):
+		_vecif_44__func_ret_flag_7 = _func_ret_flag_7
+		_vecif_44__func_ret_val_7 = _func_ret_val_7
+		_vecif_44_p = p
+		_vecif_44_tx = tx
+		_vecif_44_hx = hx
+		_vecif_44_tm = tm
+		param_1 = h_add_vf_t_vf(ori, h_mul_t_vf_f(dir, 0.0))
+		hm = map_f3_arr(param_1)
+		tmid = h_broadcast_f(False, 0.0)
+		if True:
+			i = 0
+			tmid = h_lerp_n_n_t_n(0.0, 1000.0, h_div_t_f_t_f(hm, h_sub_t_f_t_f(hm, _vecif_44_hx)))
+			_vecif_44_p = h_add_vf_t_vf(ori, h_mul_t_vf_t_f(dir, tmid))
+			param_2 = _vecif_44_p
+			hmid = map_f3_arr(param_2)
+			_vecif_45_exp_0 = h_less_than_t_n_n(hmid, 0.0)
+			if any_ifexp_true_t_n(_vecif_45_exp_0):
+				_vecif_45_tx = _vecif_44_tx
+				_vecif_45_hx = _vecif_44_hx
+				_vecif_45_tx = tmid
+				_vecif_45_hx = hmid
+				_vecif_44_tx = h_where_t_n_t_n_t_n(_vecif_45_exp_0, _vecif_45_tx, _vecif_44_tx)
+				_vecif_44_hx = h_where_t_n_t_n_t_n(_vecif_45_exp_0, _vecif_45_hx, _vecif_44_hx)
+			if not_all_ifexp_true_t_n(_vecif_45_exp_0):
+				_vecif_45_tm = _vecif_44_tm
+				_vecif_45_hm = hm
+				_vecif_45_tm = tmid
+				_vecif_45_hm = hmid
+				#condition: not _vecif_45_exp_0
+				_vecif_44_tm = h_where_t_n_t_n_t_n(_vecif_45_exp_0, _vecif_44_tm, _vecif_45_tm)
+				#condition: not _vecif_45_exp_0
+				hm = h_where_t_n_t_n_t_n(_vecif_45_exp_0, hm, _vecif_45_hm)
+			i = 1
+			tmid = h_lerp_t_n_t_n_t_n(_vecif_44_tm, _vecif_44_tx, h_div_t_f_t_f(hm, h_sub_t_f_t_f(hm, _vecif_44_hx)))
+			_vecif_44_p = h_add_vf_t_vf(ori, h_mul_t_vf_t_f(dir, tmid))
+			param_2 = _vecif_44_p
+			hmid = map_f3_arr(param_2)
+			_vecif_46_exp_0 = h_less_than_t_n_n(hmid, 0.0)
+			if any_ifexp_true_t_n(_vecif_46_exp_0):
+				_vecif_46_tx = _vecif_44_tx
+				_vecif_46_hx = _vecif_44_hx
+				_vecif_46_tx = tmid
+				_vecif_46_hx = hmid
+				_vecif_44_tx = h_where_t_n_t_n_t_n(_vecif_46_exp_0, _vecif_46_tx, _vecif_44_tx)
+				_vecif_44_hx = h_where_t_n_t_n_t_n(_vecif_46_exp_0, _vecif_46_hx, _vecif_44_hx)
+			if not_all_ifexp_true_t_n(_vecif_46_exp_0):
+				_vecif_46_tm = _vecif_44_tm
+				_vecif_46_hm = hm
+				_vecif_46_tm = tmid
+				_vecif_46_hm = hmid
+				#condition: not _vecif_46_exp_0
+				_vecif_44_tm = h_where_t_n_t_n_t_n(_vecif_46_exp_0, _vecif_44_tm, _vecif_46_tm)
+				#condition: not _vecif_46_exp_0
+				hm = h_where_t_n_t_n_t_n(_vecif_46_exp_0, hm, _vecif_46_hm)
+			i = 2
+			tmid = h_lerp_t_n_t_n_t_n(_vecif_44_tm, _vecif_44_tx, h_div_t_f_t_f(hm, h_sub_t_f_t_f(hm, _vecif_44_hx)))
+			_vecif_44_p = h_add_vf_t_vf(ori, h_mul_t_vf_t_f(dir, tmid))
+			param_2 = _vecif_44_p
+			hmid = map_f3_arr(param_2)
+			_vecif_47_exp_0 = h_less_than_t_n_n(hmid, 0.0)
+			if any_ifexp_true_t_n(_vecif_47_exp_0):
+				_vecif_47_tx = _vecif_44_tx
+				_vecif_47_hx = _vecif_44_hx
+				_vecif_47_tx = tmid
+				_vecif_47_hx = hmid
+				_vecif_44_tx = h_where_t_n_t_n_t_n(_vecif_47_exp_0, _vecif_47_tx, _vecif_44_tx)
+				_vecif_44_hx = h_where_t_n_t_n_t_n(_vecif_47_exp_0, _vecif_47_hx, _vecif_44_hx)
+			if not_all_ifexp_true_t_n(_vecif_47_exp_0):
+				_vecif_47_tm = _vecif_44_tm
+				_vecif_47_hm = hm
+				_vecif_47_tm = tmid
+				_vecif_47_hm = hmid
+				#condition: not _vecif_47_exp_0
+				_vecif_44_tm = h_where_t_n_t_n_t_n(_vecif_47_exp_0, _vecif_44_tm, _vecif_47_tm)
+				#condition: not _vecif_47_exp_0
+				hm = h_where_t_n_t_n_t_n(_vecif_47_exp_0, hm, _vecif_47_hm)
+			i = 3
+			tmid = h_lerp_t_n_t_n_t_n(_vecif_44_tm, _vecif_44_tx, h_div_t_f_t_f(hm, h_sub_t_f_t_f(hm, _vecif_44_hx)))
+			_vecif_44_p = h_add_vf_t_vf(ori, h_mul_t_vf_t_f(dir, tmid))
+			param_2 = _vecif_44_p
+			hmid = map_f3_arr(param_2)
+			_vecif_48_exp_0 = h_less_than_t_n_n(hmid, 0.0)
+			if any_ifexp_true_t_n(_vecif_48_exp_0):
+				_vecif_48_tx = _vecif_44_tx
+				_vecif_48_hx = _vecif_44_hx
+				_vecif_48_tx = tmid
+				_vecif_48_hx = hmid
+				_vecif_44_tx = h_where_t_n_t_n_t_n(_vecif_48_exp_0, _vecif_48_tx, _vecif_44_tx)
+				_vecif_44_hx = h_where_t_n_t_n_t_n(_vecif_48_exp_0, _vecif_48_hx, _vecif_44_hx)
+			if not_all_ifexp_true_t_n(_vecif_48_exp_0):
+				_vecif_48_tm = _vecif_44_tm
+				_vecif_48_hm = hm
+				_vecif_48_tm = tmid
+				_vecif_48_hm = hmid
+				#condition: not _vecif_48_exp_0
+				_vecif_44_tm = h_where_t_n_t_n_t_n(_vecif_48_exp_0, _vecif_44_tm, _vecif_48_tm)
+				#condition: not _vecif_48_exp_0
+				hm = h_where_t_n_t_n_t_n(_vecif_48_exp_0, hm, _vecif_48_hm)
+			i = 4
+			tmid = h_lerp_t_n_t_n_t_n(_vecif_44_tm, _vecif_44_tx, h_div_t_f_t_f(hm, h_sub_t_f_t_f(hm, _vecif_44_hx)))
+			_vecif_44_p = h_add_vf_t_vf(ori, h_mul_t_vf_t_f(dir, tmid))
+			param_2 = _vecif_44_p
+			hmid = map_f3_arr(param_2)
+			_vecif_49_exp_0 = h_less_than_t_n_n(hmid, 0.0)
+			if any_ifexp_true_t_n(_vecif_49_exp_0):
+				_vecif_49_tx = _vecif_44_tx
+				_vecif_49_hx = _vecif_44_hx
+				_vecif_49_tx = tmid
+				_vecif_49_hx = hmid
+				_vecif_44_tx = h_where_t_n_t_n_t_n(_vecif_49_exp_0, _vecif_49_tx, _vecif_44_tx)
+				_vecif_44_hx = h_where_t_n_t_n_t_n(_vecif_49_exp_0, _vecif_49_hx, _vecif_44_hx)
+			if not_all_ifexp_true_t_n(_vecif_49_exp_0):
+				_vecif_49_tm = _vecif_44_tm
+				_vecif_49_hm = hm
+				_vecif_49_tm = tmid
+				_vecif_49_hm = hmid
+				#condition: not _vecif_49_exp_0
+				_vecif_44_tm = h_where_t_n_t_n_t_n(_vecif_49_exp_0, _vecif_44_tm, _vecif_49_tm)
+				#condition: not _vecif_49_exp_0
+				hm = h_where_t_n_t_n_t_n(_vecif_49_exp_0, hm, _vecif_49_hm)
+			i = 5
+			tmid = h_lerp_t_n_t_n_t_n(_vecif_44_tm, _vecif_44_tx, h_div_t_f_t_f(hm, h_sub_t_f_t_f(hm, _vecif_44_hx)))
+			_vecif_44_p = h_add_vf_t_vf(ori, h_mul_t_vf_t_f(dir, tmid))
+			param_2 = _vecif_44_p
+			hmid = map_f3_arr(param_2)
+			_vecif_50_exp_0 = h_less_than_t_n_n(hmid, 0.0)
+			if any_ifexp_true_t_n(_vecif_50_exp_0):
+				_vecif_50_tx = _vecif_44_tx
+				_vecif_50_hx = _vecif_44_hx
+				_vecif_50_tx = tmid
+				_vecif_50_hx = hmid
+				_vecif_44_tx = h_where_t_n_t_n_t_n(_vecif_50_exp_0, _vecif_50_tx, _vecif_44_tx)
+				_vecif_44_hx = h_where_t_n_t_n_t_n(_vecif_50_exp_0, _vecif_50_hx, _vecif_44_hx)
+			if not_all_ifexp_true_t_n(_vecif_50_exp_0):
+				_vecif_50_tm = _vecif_44_tm
+				_vecif_50_hm = hm
+				_vecif_50_tm = tmid
+				_vecif_50_hm = hmid
+				#condition: not _vecif_50_exp_0
+				_vecif_44_tm = h_where_t_n_t_n_t_n(_vecif_50_exp_0, _vecif_44_tm, _vecif_50_tm)
+				#condition: not _vecif_50_exp_0
+				hm = h_where_t_n_t_n_t_n(_vecif_50_exp_0, hm, _vecif_50_hm)
+			i = 6
+			tmid = h_lerp_t_n_t_n_t_n(_vecif_44_tm, _vecif_44_tx, h_div_t_f_t_f(hm, h_sub_t_f_t_f(hm, _vecif_44_hx)))
+			_vecif_44_p = h_add_vf_t_vf(ori, h_mul_t_vf_t_f(dir, tmid))
+			param_2 = _vecif_44_p
+			hmid = map_f3_arr(param_2)
+			_vecif_51_exp_0 = h_less_than_t_n_n(hmid, 0.0)
+			if any_ifexp_true_t_n(_vecif_51_exp_0):
+				_vecif_51_tx = _vecif_44_tx
+				_vecif_51_hx = _vecif_44_hx
+				_vecif_51_tx = tmid
+				_vecif_51_hx = hmid
+				_vecif_44_tx = h_where_t_n_t_n_t_n(_vecif_51_exp_0, _vecif_51_tx, _vecif_44_tx)
+				_vecif_44_hx = h_where_t_n_t_n_t_n(_vecif_51_exp_0, _vecif_51_hx, _vecif_44_hx)
+			if not_all_ifexp_true_t_n(_vecif_51_exp_0):
+				_vecif_51_tm = _vecif_44_tm
+				_vecif_51_hm = hm
+				_vecif_51_tm = tmid
+				_vecif_51_hm = hmid
+				#condition: not _vecif_51_exp_0
+				_vecif_44_tm = h_where_t_n_t_n_t_n(_vecif_51_exp_0, _vecif_44_tm, _vecif_51_tm)
+				#condition: not _vecif_51_exp_0
+				hm = h_where_t_n_t_n_t_n(_vecif_51_exp_0, hm, _vecif_51_hm)
+			i = 7
+			tmid = h_lerp_t_n_t_n_t_n(_vecif_44_tm, _vecif_44_tx, h_div_t_f_t_f(hm, h_sub_t_f_t_f(hm, _vecif_44_hx)))
+			_vecif_44_p = h_add_vf_t_vf(ori, h_mul_t_vf_t_f(dir, tmid))
+			param_2 = _vecif_44_p
+			hmid = map_f3_arr(param_2)
+			_vecif_52_exp_0 = h_less_than_t_n_n(hmid, 0.0)
+			if any_ifexp_true_t_n(_vecif_52_exp_0):
+				_vecif_52_tx = _vecif_44_tx
+				_vecif_52_hx = _vecif_44_hx
+				_vecif_52_tx = tmid
+				_vecif_52_hx = hmid
+				_vecif_44_tx = h_where_t_n_t_n_t_n(_vecif_52_exp_0, _vecif_52_tx, _vecif_44_tx)
+				_vecif_44_hx = h_where_t_n_t_n_t_n(_vecif_52_exp_0, _vecif_52_hx, _vecif_44_hx)
+			if not_all_ifexp_true_t_n(_vecif_52_exp_0):
+				_vecif_52_tm = _vecif_44_tm
+				_vecif_52_hm = hm
+				_vecif_52_tm = tmid
+				_vecif_52_hm = hmid
+				#condition: not _vecif_52_exp_0
+				_vecif_44_tm = h_where_t_n_t_n_t_n(_vecif_52_exp_0, _vecif_44_tm, _vecif_52_tm)
+				#condition: not _vecif_52_exp_0
+				hm = h_where_t_n_t_n_t_n(_vecif_52_exp_0, hm, _vecif_52_hm)
+		_vecif_44__func_ret_flag_7 = h_broadcast_b(False, True)
+		_vecif_44__func_ret_val_7 = tmid
+		_func_ret_flag_7 = h_where_t_n_t_n_t_n(_vecif_44_exp, _vecif_44__func_ret_flag_7, _func_ret_flag_7)
+		_func_ret_val_7 = h_where_t_n_t_n_t_n(_vecif_44_exp, _vecif_44__func_ret_val_7, _func_ret_val_7)
+		p = h_where_t_n_t_v_t_v(_vecif_44_exp, _vecif_44_p, p)
+		tx = h_where_t_n_t_n_t_n(_vecif_44_exp, _vecif_44_tx, tx)
+		hx = h_where_t_n_t_n_t_n(_vecif_44_exp, _vecif_44_hx, hx)
+		tm = h_where_t_n_t_n_t_n(_vecif_44_exp, _vecif_44_tm, tm)
+	return _func_ret_val_7, p
 
-def linstep_f_f_f_arr(a, b, t):
-	return h_clamp_t_n_n_n(h_div_t_f_t_f(h_sub_t_f_t_f(t, a), h_sub_t_f_t_f(b, a)), 0.0, 1.0)
+def getPixel_f2_f_arr(coord, time):
+	global iResolution
+	uv = h_div_t_vf_vf(coord, swizzle_n3_xy(iResolution))
+	uv = h_sub_t_vf_vf(h_mul_t_vf_f(uv, 2.0), swizzle_n_xx(1.0))
+	swizzle_set_t_n2_x(uv, h_mul_t_f_f(swizzle_t_n2_x(uv), h_div_f_f(swizzle_n3_x(iResolution), swizzle_n3_y(iResolution))))
+	ang = h_f3_n_n_n(h_mul_f_f(h_sin_n(h_mul_f_f(time, 3.0)), 0.100000001), h_add_f_f(h_mul_f_f(h_sin_n(time), 0.200000003), 0.300000012), time)
+	ori = h_f3_n_n_n(0.0, 3.5, h_mul_f_f(time, 5.0))
+	dir = h_normalize_t_v(h_t_f3_t_n2_n(uv, -2.0))
+	swizzle_set_t_n3_z(dir, h_add_t_f_t_f(swizzle_t_n3_z(dir), h_mul_t_f_f(h_length_t_v(uv), 0.140000001)))
+	param = ang
+	dir = h_matmul_f3x3_t_f3(fromEuler_f3(param), h_normalize_t_v(dir))
+	param_1 = ori
+	param_2 = dir
+	param_3 = h_t_f3_defval(False)
+	_764 = tuple_get_retval((_call_ret_41 := heightMapTracing_f3_f3_f3_arr(param_1, param_2, param_3), param_3 := tuple_get_outparam(_call_ret_41, 1)))
+	p = param_3
+	dist = h_sub_t_vf_vf(p, ori)
+	param_4 = p
+	param_5 = h_mul_t_f_f(h_dot_t_v_t_v(dist, dist), h_div_f_f(0.100000001, swizzle_n3_x(iResolution)))
+	n = getNormal_f3_f_arr(param_4, param_5)
+	light = h_f3_n_n_n(0.0, 0.780868828, 0.624695063)
+	param_6 = dir
+	_788 = tuple_get_retval((_call_ret_42 := getSkyColor_f3_arr(h_copy_t_f3(param_6)), param_6 := tuple_get_outparam(_call_ret_42, 1)))
+	param_7 = p
+	param_8 = n
+	param_9 = light
+	param_10 = dir
+	param_11 = dist
+	return h_lerp_t_v_t_v_t_v(_788, getSeaColor_f3_f3_f3_f3_f3_arr(param_7, param_8, param_9, param_10, param_11), swizzle_t_n_xxx(h_pow_t_n_n(h_smoothstep_n_n_t_n(0.0, -0.0199999996, swizzle_t_n3_y(dir)), 0.200000003)))
 
-def FuzzyShadow_f3_f3_f_f_f4_f_arr(ro, rd, coneGrad, rCoC, mcol, randSeed):
-	t = h_mul_t_f_f(rCoC, 2.0)
-	d = h_broadcast_f(False, 1.0)
-	s = h_broadcast_f(False, 1.0)
-	_br_flag_16 = False
-	_cont_flag_16 = h_broadcast_b(False, False)
-	i = 0
-	while True:
-		try:
-			_vecif_60_exp_0 = h_not_n(_br_flag_16)
-			if any_ifexp_true_n(_vecif_60_exp_0):
-				_vecif_60__cont_flag_16 = _cont_flag_16
-				_vecif_60__br_flag_16 = _br_flag_16
-				_vecif_60_mcol = mcol
-				_vecif_60_d = d
-				_vecif_60_s = s
-				_vecif_60_randSeed = randSeed
-				_vecif_60_t = t
-				_vecif_60__cont_flag_16 = h_broadcast_b(False, False)
-				_vecif_61_exp_0 = h_less_than_n_n(i, 6)
-				if any_ifexp_true_n(_vecif_61_exp_0):
-					_vecif_61__cont_flag_16 = _vecif_60__cont_flag_16
-					_vecif_61_mcol = _vecif_60_mcol
-					_vecif_61_d = _vecif_60_d
-					_vecif_61_s = _vecif_60_s
-					_vecif_61_randSeed = _vecif_60_randSeed
-					_vecif_61_t = _vecif_60_t
-					_vecif_62_exp = h_less_than_t_n_n(_vecif_61_s, 0.100000001)
-					if any_ifexp_true_t_n(_vecif_62_exp):
-						_vecif_62__cont_flag_16 = _vecif_61__cont_flag_16
-						_vecif_62__cont_flag_16 = h_broadcast_b(False, True)
-						_vecif_61__cont_flag_16 = h_where_t_n_t_n_t_n(_vecif_62_exp, _vecif_62__cont_flag_16, _vecif_61__cont_flag_16)
-					_vecif_63_exp = h_not_t_n(_vecif_61__cont_flag_16)
-					if any_ifexp_true_t_n(_vecif_63_exp):
-						_vecif_63_mcol = _vecif_61_mcol
-						_vecif_63_d = _vecif_61_d
-						_vecif_63_s = _vecif_61_s
-						_vecif_63_randSeed = _vecif_61_randSeed
-						_vecif_63_t = _vecif_61_t
-						r = h_add_t_f_t_f(rCoC, h_mul_t_f_f(_vecif_63_t, coneGrad))
-						param = h_add_t_vf_t_vf(ro, h_mul_vf_t_f(rd, _vecif_63_t))
-						param_1 = _vecif_63_mcol
-						_637 = tuple_get_retval((_call_ret_64 := DE_f3_f4_arr(h_copy_t_f3(param), param_1), param := tuple_get_outparam(_call_ret_64, 1), param_1 := tuple_get_outparam(_call_ret_64, 2)))
-						_vecif_63_mcol = param_1
-						_vecif_63_d = h_add_t_f_t_f(_637, h_mul_t_f_f(r, 0.400000006))
-						param_2 = h_sub_t_f(r)
-						param_3 = r
-						param_4 = _vecif_63_d
-						_vecif_63_s = h_mul_t_f_t_f(_vecif_63_s, linstep_f_f_f_arr(param_2, param_3, param_4))
-						param_5 = _vecif_63_randSeed
-						_656 = tuple_get_retval((_call_ret_65 := randStep_f_arr(param_5), param_5 := tuple_get_outparam(_call_ret_65, 1)))
-						_vecif_63_randSeed = param_5
-						_vecif_63_t = h_add_t_f_t_f(_vecif_63_t, h_mul_t_f_t_f(h_abs_t_n(_vecif_63_d), _656))
-						_vecif_61_mcol = h_where_t_n_t_v_t_v(_vecif_63_exp, _vecif_63_mcol, _vecif_61_mcol)
-						_vecif_61_d = h_where_t_n_t_n_t_n(_vecif_63_exp, _vecif_63_d, _vecif_61_d)
-						_vecif_61_s = h_where_t_n_t_n_t_n(_vecif_63_exp, _vecif_63_s, _vecif_61_s)
-						_vecif_61_randSeed = h_where_t_n_t_n_t_n(_vecif_63_exp, _vecif_63_randSeed, _vecif_61_randSeed)
-						_vecif_61_t = h_where_t_n_t_n_t_n(_vecif_63_exp, _vecif_63_t, _vecif_61_t)
-					_vecif_60__cont_flag_16 = h_where_n_t_n_t_n(_vecif_61_exp_0, _vecif_61__cont_flag_16, _vecif_60__cont_flag_16)
-					_vecif_60_mcol = h_where_n_t_v_t_v(_vecif_61_exp_0, _vecif_61_mcol, _vecif_60_mcol)
-					_vecif_60_d = h_where_n_t_n_t_n(_vecif_61_exp_0, _vecif_61_d, _vecif_60_d)
-					_vecif_60_s = h_where_n_t_n_t_n(_vecif_61_exp_0, _vecif_61_s, _vecif_60_s)
-					_vecif_60_randSeed = h_where_n_t_n_t_n(_vecif_61_exp_0, _vecif_61_randSeed, _vecif_60_randSeed)
-					_vecif_60_t = h_where_n_t_n_t_n(_vecif_61_exp_0, _vecif_61_t, _vecif_60_t)
-				if not_any_ifexp_true_n(_vecif_61_exp_0):
-					_vecif_61__br_flag_16 = _vecif_60__br_flag_16
-					_vecif_61__br_flag_16 = True
-					#condition: not _vecif_61_exp_0
-					_vecif_60__br_flag_16 = h_where_n_n_n(_vecif_61_exp_0, _vecif_60__br_flag_16, _vecif_61__br_flag_16)
-				_cont_flag_16 = h_where_n_t_n_t_n(_vecif_60_exp_0, _vecif_60__cont_flag_16, _cont_flag_16)
-				_br_flag_16 = h_where_n_n_n(_vecif_60_exp_0, _vecif_60__br_flag_16, _br_flag_16)
-				mcol = h_where_n_t_v_t_v(_vecif_60_exp_0, _vecif_60_mcol, mcol)
-				d = h_where_n_t_n_t_n(_vecif_60_exp_0, _vecif_60_d, d)
-				s = h_where_n_t_n_t_n(_vecif_60_exp_0, _vecif_60_s, s)
-				randSeed = h_where_n_t_n_t_n(_vecif_60_exp_0, _vecif_60_randSeed, randSeed)
-				t = h_where_n_t_n_t_n(_vecif_60_exp_0, _vecif_60_t, t)
-			if not_any_ifexp_true_n(_vecif_60_exp_0):
-				break
-		finally:
-			i = h_inc_i(i)
-	return h_clamp_t_n_n_n(h_add_t_f_f(h_mul_t_f_f(s, 0.75), 0.25), 0.0, 1.0), mcol, randSeed
-
-def CircleOfConfusion_f_arr(t):
-	global focalDistance, aperture, pixelSize
-	return h_max_t_n_t_n(h_mul_t_f_f(h_abs_t_n(h_sub_f_t_f(focalDistance, t)), aperture), h_mul_f_t_f(pixelSize, h_add_f_t_f(1.0, t)))
-
-def DE_f3_f4_arr(z0, mcol):
-	dW = h_broadcast_f(False, 100.0)
-	dD = h_broadcast_f(False, 100.0)
-	param = h_add_t_vf_vf(h_mul_t_vf_f(z0, 0.25), swizzle_n_xxx(100.0))
-	_311 = tuple_get_retval((_call_ret_55 := fbm_f3_arr(param), param := tuple_get_outparam(_call_ret_55, 1)))
-	dC = h_add_t_f_t_f(h_add_t_f_t_f(h_add_t_f_t_f(h_mul_t_f_f(_311, 0.5), h_mul_t_f_f(h_sin_t_n(swizzle_t_n3_y(z0)), 0.100000001)), h_mul_t_f_f(h_sin_t_n(h_mul_t_f_f(swizzle_t_n3_z(z0), 0.400000006)), 0.100000001)), h_min_t_n_n(h_add_t_f_f(h_mul_t_f_f(swizzle_t_n3_y(z0), 0.0399999991), 0.100000001), 0.100000001))
-	v = h_floor_t_v(h_add_t_vf_vf(h_mul_t_vf_f(h_t_f2_t_n_t_n(swizzle_t_n3_x(z0), h_abs_t_n(swizzle_t_n3_z(z0))), 0.5), swizzle_n_xx(0.5)))
-	_344 = h_copy_t_f3(z0)
-	_351 = h_copy_t_f3(z0)
-	_353 = h_sub_t_vf_t_vf(h_mul_t_vf_f(h_clamp_t_v_v_v(swizzle_t_n3_xz(_344), swizzle_n_xx(-2.0), swizzle_n_xx(2.0)), 2.0), swizzle_t_n3_xz(_351))
-	swizzle_set_t_n3_x(z0, swizzle_t_n2_x(_353))
-	swizzle_set_t_n3_z(z0, swizzle_t_n2_y(_353))
-	r = h_length_t_v(swizzle_t_n3_xz(z0))
-	dS = h_sub_t_f_f(r, 0.600000024)
-	_vecif_56_exp = h_less_than_t_n_n(r, 1.0)
-	if any_ifexp_true_t_n(_vecif_56_exp):
-		_vecif_56_z0 = h_copy_t_f3(z0)
-		_vecif_56_dS = dS
-		_vecif_56_dW = dW
-		_vecif_56_dD = dD
-		shape = h_sub_f_t_f(0.284999996, h_mul_t_f_f(swizzle_t_n2_x(v), 0.0199999996))
-		swizzle_set_t_n3_y(_vecif_56_z0, h_add_t_f_t_f(swizzle_t_n3_y(_vecif_56_z0), h_mul_t_f_f(swizzle_t_n2_y(v), 0.200000003)))
-		z = h_mul_t_vf_f(_vecif_56_z0, 10.0)
-		_vecif_56_dS = h_max_t_n_t_n(h_sub_t_f_f(swizzle_t_n3_y(_vecif_56_z0), 2.5), h_sub_t_f_t_f(r, h_max_t_n_n(h_sub_f_t_f(0.109999999, h_mul_t_f_f(swizzle_t_n3_y(_vecif_56_z0), 0.100000001)), 0.00999999977)))
-		y2 = h_max_t_n_t_n(h_sub_t_f_f(h_abs_t_n(h_sub_t_f_f(h_abs_t_n(h_sub_t_f_f(mod_f_f_arr(h_add_t_f_f(swizzle_t_n3_y(z), 0.5), 2.0), 1.0)), 0.5)), 0.0500000007), h_sub_t_f_f(h_abs_t_n(h_sub_t_f_f(swizzle_t_n3_y(z), 7.0999999)), 8.30000019))
-		y = h_mul_t_f_f(h_sin_t_n(h_clamp_t_n_n_n(h_mul_t_f_t_f(h_floor_t_n(swizzle_t_n3_y(z)), shape), -0.400000006, 3.4000001)), 40.0)
-		param_1 = swizzle_t_n3_xz(z)
-		param_2 = h_add_f_t_f(8.0, h_floor_t_n(y))
-		param_1 = Kaleido_f2_f_arr(param_1, param_2)
-		swizzle_set_t_n3_x(z, swizzle_t_n2_x(param_1))
-		swizzle_set_t_n3_z(z, swizzle_t_n2_y(param_1))
-		param_3 = h_copy_t_f3(z)
-		param_4 = h_t_f3_t_n_n_t_n(h_add_f_t_f(0.899999976, h_mul_t_f_f(y, 0.100000001)), 22.0, h_add_f_t_f(0.899999976, h_mul_t_f_f(y, 0.100000001)))
-		_vecif_56_dW = h_mul_t_f_f(Rect_f3_f3_arr(param_3, param_4), 0.0799999982)
-		_vecif_56_dD = h_mul_t_f_f(h_max_t_n_t_n(h_sub_t_f_f(swizzle_t_n3_y(_vecif_56_z0), 1.37), h_max_t_n_t_n(y2, h_sub_t_f_t_f(h_sub_t_f_f(h_mul_t_f_f(r, 10.0), 1.75), h_mul_t_f_f(h_sin_t_n(h_clamp_t_n_n_n(h_mul_t_f_t_f(h_sub_t_f_f(swizzle_t_n3_y(z), 0.5), shape), -0.0500000007, 3.49000001)), 4.0)))), 0.0799999982)
-		_vecif_56_dS = h_min_t_n_t_n(_vecif_56_dS, h_min_t_n_t_n(_vecif_56_dW, _vecif_56_dD))
-		z0 = h_where_t_n_t_v_t_v(_vecif_56_exp, _vecif_56_z0, z0)
-		dS = h_where_t_n_t_n_t_n(_vecif_56_exp, _vecif_56_dS, dS)
-		dW = h_where_t_n_t_n_t_n(_vecif_56_exp, _vecif_56_dW, dW)
-		dD = h_where_t_n_t_n_t_n(_vecif_56_exp, _vecif_56_dD, dD)
-	dS = h_min_t_n_t_n(dS, dC)
-	_vecif_57_exp_0 = h_equal_t_n_t_n(dS, dW)
-	if any_ifexp_true_t_n(_vecif_57_exp_0):
-		_vecif_57_mcol = mcol
-		_vecif_57_mcol = h_add_t_vf_vf(_vecif_57_mcol, h_f4_n_n_n_n(0.800000011, 0.899999976, 0.899999976, 1.0))
-		mcol = h_where_t_n_t_v_t_v(_vecif_57_exp_0, _vecif_57_mcol, mcol)
-	if not_all_ifexp_true_t_n(_vecif_57_exp_0):
-		_vecif_57_mcol = mcol
-		_vecif_58_exp_0 = h_equal_t_n_t_n(dS, dD)
-		if any_ifexp_true_t_n(_vecif_58_exp_0):
-			_vecif_58_mcol = _vecif_57_mcol
-			_vecif_58_mcol = h_add_t_vf_vf(_vecif_58_mcol, h_f4_n_n_n_n(0.600000024, 0.400000006, 0.300000012, 0.0))
-			_vecif_57_mcol = h_where_t_n_t_v_t_v(_vecif_58_exp_0, _vecif_58_mcol, _vecif_57_mcol)
-		if not_all_ifexp_true_t_n(_vecif_58_exp_0):
-			_vecif_58_mcol = _vecif_57_mcol
-			_vecif_59_exp_0 = h_equal_t_n_t_n(dS, dC)
-			if any_ifexp_true_t_n(_vecif_59_exp_0):
-				_vecif_59_mcol = _vecif_58_mcol
-				_vecif_59_mcol = h_add_t_vf_vf(_vecif_59_mcol, h_f4_n_n_n_n(1.0, 1.0, 1.0, -1.0))
-				_vecif_58_mcol = h_where_t_n_t_v_t_v(_vecif_59_exp_0, _vecif_59_mcol, _vecif_58_mcol)
-			if not_all_ifexp_true_t_n(_vecif_59_exp_0):
-				_vecif_59_mcol = _vecif_58_mcol
-				_vecif_59_mcol = h_add_t_vf_t_vf(_vecif_59_mcol, h_t_f4_t_n_n_n_n(h_add_f_t_f(0.699999988, h_mul_t_f_f(h_sin_t_n(h_mul_t_f_f(swizzle_t_n3_y(z0), 100.0)), 0.300000012)), 1.0, 0.800000011, 0.0))
-				#condition: not _vecif_59_exp_0
-				_vecif_58_mcol = h_where_t_n_t_v_t_v(_vecif_59_exp_0, _vecif_58_mcol, _vecif_59_mcol)
-			#condition: not _vecif_58_exp_0
-			_vecif_57_mcol = h_where_t_n_t_v_t_v(_vecif_58_exp_0, _vecif_57_mcol, _vecif_58_mcol)
-		#condition: not _vecif_57_exp_0
-		mcol = h_where_t_n_t_v_t_v(_vecif_57_exp_0, mcol, _vecif_57_mcol)
-	return dS, z0, mcol
-
-def lookat_f3_f3_arr(fw, up):
-	fw = h_normalize_t_v(fw)
-	rt = h_normalize_t_v(h_cross_t_v_v(fw, h_normalize_v(up)))
-	return h_t_f3x3_t_n3_t_n3_t_n3(h_cast_t_f3_t_f3(rt), h_cast_t_f3_t_f3(h_cross_t_v_t_v(rt, fw)), h_cast_t_f3_t_f3(fw)), fw
-
-def mainImage_f4_f2_arr(O, U):
-	global iTime, pixelSize, iResolution, shadowCone
-	mcol = h_broadcast_f4(False, swizzle_n_xxxx(0.0))
-	randSeed = h_frac_t_n(h_mul_t_f_f(h_sin_t_n(h_add_f_t_f(iTime, h_dot_t_v_v(U, h_f2_n_n(9.12300014, 13.4309998)))), 473.719238))
-	pixelSize = h_div_f_f(2.0, swizzle_n3_y(iResolution))
-	tim = h_mul_f_f(iTime, 0.25)
-	ro = h_broadcast_f3(False, h_mul_vf_f(h_f3_n_n_n(h_cos_n(tim), h_add_f_f(h_mul_f_f(h_sin_n(h_mul_f_f(tim, 0.699999988)), 0.5), 0.300000012), h_sin_n(tim)), h_add_f_f(1.79999995, h_mul_f_f(0.5, h_sin_n(h_mul_f_f(tim, 0.409999996))))))
-	param = h_sub_vf_t_vf(h_f3_n_n_n(0.0, 0.600000024, h_sin_n(h_mul_f_f(tim, 2.29999995))), ro)
-	param_1 = h_f3_n_n_n(0.100000001, 1.0, 0.0)
-	_723 = tuple_get_retval((_call_ret_35 := lookat_f3_f3_arr(param, param_1), param := tuple_get_outparam(_call_ret_35, 1)))
-	rd = h_matmul_t_f3_t_f3x3(h_normalize_t_v(h_t_f3_t_n2_n(h_div_t_vf_vf(h_sub_t_vf_vf(h_mul_t_vf_f(U, 2.0), swizzle_n3_xy(iResolution)), swizzle_n_xx(swizzle_n3_y(iResolution))), 2.0)), _723)
-	L = h_f3_n_n_n(0.485071242, 0.727606893, -0.485071242)
-	col = h_broadcast_f4(False, swizzle_n_xxxx(0.0))
-	param_2 = ro
-	param_3 = mcol
-	_749 = tuple_get_retval((_call_ret_36 := DE_f3_f4_arr(h_copy_t_f3(param_2), param_3), param_2 := tuple_get_outparam(_call_ret_36, 1), param_3 := tuple_get_outparam(_call_ret_36, 2)))
-	mcol = param_3
-	t = h_mul_t_f_f(h_mul_t_f_t_f(_749, randSeed), 0.800000011)
-	ro = h_add_t_vf_t_vf(ro, h_mul_t_vf_t_f(rd, t))
-	alpha = h_t_f_defval(False)
-	scol = h_t_f3_defval(False)
-	_br_flag_18 = False
-	_cont_flag_18 = h_broadcast_b(False, False)
-	i = 0
-	while True:
-		try:
-			_vecif_37_exp_0 = h_not_n(_br_flag_18)
-			if any_ifexp_true_n(_vecif_37_exp_0):
-				_vecif_37__cont_flag_18 = _cont_flag_18
-				_vecif_37__br_flag_18 = _br_flag_18
-				_vecif_37_mcol = mcol
-				_vecif_37_randSeed = randSeed
-				_vecif_37_ro = ro
-				_vecif_37_t = t
-				_vecif_37_col = col
-				_vecif_37_alpha = alpha
-				_vecif_37_scol = scol
-				_vecif_37_rd = rd
-				_vecif_37__cont_flag_18 = h_broadcast_b(False, False)
-				_vecif_38_exp_0 = h_less_than_n_n(i, 72)
-				if any_ifexp_true_n(_vecif_38_exp_0):
-					_vecif_38__cont_flag_18 = _vecif_37__cont_flag_18
-					_vecif_38_mcol = _vecif_37_mcol
-					_vecif_38_randSeed = _vecif_37_randSeed
-					_vecif_38_ro = _vecif_37_ro
-					_vecif_38_t = _vecif_37_t
-					_vecif_38_col = _vecif_37_col
-					_vecif_38_alpha = _vecif_37_alpha
-					_vecif_38_scol = _vecif_37_scol
-					_vecif_38_rd = _vecif_37_rd
-					_vecif_39_exp = h_or_t_n_t_n(h_greater_than_t_n_n(swizzle_t_n4_w(_vecif_38_col), 0.899999976), h_greater_than_t_n_n(_vecif_38_t, 20.0))
-					if any_ifexp_true_t_n(_vecif_39_exp):
-						_vecif_39__cont_flag_18 = _vecif_38__cont_flag_18
-						_vecif_39__cont_flag_18 = h_broadcast_b(False, True)
-						_vecif_38__cont_flag_18 = h_where_t_n_t_n_t_n(_vecif_39_exp, _vecif_39__cont_flag_18, _vecif_38__cont_flag_18)
-					_vecif_40_exp = h_not_t_n(_vecif_38__cont_flag_18)
-					if any_ifexp_true_t_n(_vecif_40_exp):
-						_vecif_40_mcol = _vecif_38_mcol
-						_vecif_40_randSeed = _vecif_38_randSeed
-						_vecif_40_ro = _vecif_38_ro
-						_vecif_40_t = _vecif_38_t
-						_vecif_40_col = _vecif_38_col
-						_vecif_40_alpha = _vecif_38_alpha
-						_vecif_40_scol = _vecif_38_scol
-						_vecif_40_rd = _vecif_38_rd
-						param_4 = _vecif_40_t
-						rCoC = CircleOfConfusion_f_arr(param_4)
-						param_5 = _vecif_40_ro
-						param_6 = _vecif_40_mcol
-						_788 = tuple_get_retval((_call_ret_41 := DE_f3_f4_arr(h_copy_t_f3(param_5), param_6), param_5 := tuple_get_outparam(_call_ret_41, 1), param_6 := tuple_get_outparam(_call_ret_41, 2)))
-						_vecif_40_mcol = param_6
-						d = _788
-						fClouds = h_max_n_t_n(0.0, h_sub_t_f(swizzle_t_n4_w(_vecif_40_mcol)))
-						_vecif_42_exp = h_less_than_t_n_t_n(d, h_max_t_n_t_n(rCoC, h_mul_t_f_f(fClouds, 0.5)))
-						if any_ifexp_true_t_n(_vecif_42_exp):
-							_vecif_42_mcol = _vecif_40_mcol
-							_vecif_42_col = _vecif_40_col
-							_vecif_42_alpha = _vecif_40_alpha
-							_vecif_42_scol = _vecif_40_scol
-							_vecif_42_randSeed = _vecif_40_randSeed
-							_vecif_42_rd = _vecif_40_rd
-							_vecif_42_d = d
-							_vecif_42_ro = _vecif_40_ro
-							_vecif_42_t = _vecif_40_t
-							p = _vecif_42_ro
-							_vecif_43_exp = h_less_than_t_n_n(fClouds, 0.100000001)
-							if any_ifexp_true_t_n(_vecif_43_exp):
-								_vecif_43_p = p
-								_vecif_43_p = h_sub_t_vf_t_vf(_vecif_43_p, h_mul_t_vf_t_f(_vecif_42_rd, h_abs_t_n(h_sub_t_f_t_f(_vecif_42_d, rCoC))))
-								p = h_where_t_n_t_v_t_v(_vecif_43_exp, _vecif_43_p, p)
-							v = h_t_f2_t_n_n(h_mul_t_f_f(rCoC, 0.333000004), 0.0)
-							param_7 = h_sub_t_vf_t_vf(p, swizzle_t_n2_xyy(v))
-							param_8 = _vecif_42_mcol
-							_830 = tuple_get_retval((_call_ret_44 := DE_f3_f4_arr(h_copy_t_f3(param_7), param_8), param_7 := tuple_get_outparam(_call_ret_44, 1), param_8 := tuple_get_outparam(_call_ret_44, 2)))
-							_vecif_42_mcol = param_8
-							param_9 = h_add_t_vf_t_vf(p, swizzle_t_n2_xyy(v))
-							param_10 = _vecif_42_mcol
-							_840 = tuple_get_retval((_call_ret_45 := DE_f3_f4_arr(h_copy_t_f3(param_9), param_10), param_9 := tuple_get_outparam(_call_ret_45, 1), param_10 := tuple_get_outparam(_call_ret_45, 2)))
-							_vecif_42_mcol = param_10
-							param_11 = h_sub_t_vf_t_vf(p, swizzle_t_n2_yxy(v))
-							param_12 = _vecif_42_mcol
-							_850 = tuple_get_retval((_call_ret_46 := DE_f3_f4_arr(h_copy_t_f3(param_11), param_12), param_11 := tuple_get_outparam(_call_ret_46, 1), param_12 := tuple_get_outparam(_call_ret_46, 2)))
-							_vecif_42_mcol = param_12
-							param_13 = h_add_t_vf_t_vf(p, swizzle_t_n2_yxy(v))
-							param_14 = _vecif_42_mcol
-							_860 = tuple_get_retval((_call_ret_47 := DE_f3_f4_arr(h_copy_t_f3(param_13), param_14), param_13 := tuple_get_outparam(_call_ret_47, 1), param_14 := tuple_get_outparam(_call_ret_47, 2)))
-							_vecif_42_mcol = param_14
-							param_15 = h_sub_t_vf_t_vf(p, swizzle_t_n2_yyx(v))
-							param_16 = _vecif_42_mcol
-							_870 = tuple_get_retval((_call_ret_48 := DE_f3_f4_arr(h_copy_t_f3(param_15), param_16), param_15 := tuple_get_outparam(_call_ret_48, 1), param_16 := tuple_get_outparam(_call_ret_48, 2)))
-							_vecif_42_mcol = param_16
-							param_17 = h_add_t_vf_t_vf(p, swizzle_t_n2_yyx(v))
-							param_18 = _vecif_42_mcol
-							_880 = tuple_get_retval((_call_ret_49 := DE_f3_f4_arr(h_copy_t_f3(param_17), param_18), param_17 := tuple_get_outparam(_call_ret_49, 1), param_18 := tuple_get_outparam(_call_ret_49, 2)))
-							_vecif_42_mcol = param_18
-							N = h_normalize_t_v(h_t_f3_t_n_t_n_t_n(h_add_t_f_t_f(h_sub_t_f(_830), _840), h_add_t_f_t_f(h_sub_t_f(_850), _860), h_add_t_f_t_f(h_sub_t_f(_870), _880)))
-							_vecif_42_mcol = h_mul_t_vf_f(_vecif_42_mcol, 0.143000007)
-							_vecif_50_exp_0 = h_greater_than_t_n_n(fClouds, 0.100000001)
-							if any_ifexp_true_t_n(_vecif_50_exp_0):
-								_vecif_50_alpha = _vecif_42_alpha
-								_vecif_50_scol = _vecif_42_scol
-								dn = h_clamp_t_n_n_n(h_sub_f_t_f(0.5, _vecif_42_d), 0.0, 1.0)
-								dn = h_mul_t_f_f(dn, 2.0)
-								dn = h_mul_t_f_t_f(dn, dn)
-								_vecif_50_alpha = h_mul_t_f_t_f(h_sub_f_t_f(1.0, swizzle_t_n4_w(_vecif_42_col)), dn)
-								_vecif_50_scol = h_mul_vf_t_f(swizzle_n_xxx(1.0), h_add_f_t_f(0.600000024, h_mul_t_f_f(h_mul_t_f_t_f(dn, h_dot_t_v_v(N, L)), 0.400000006)))
-								_vecif_50_scol = h_add_t_vf_t_vf(_vecif_50_scol, h_mul_vf_t_f(h_f3_n_n_n(1.0, 0.5, 0.0), h_mul_t_f_t_f(dn, h_max_n_t_n(0.0, h_dot_t_v_v(h_reflect_t_v_t_v(_vecif_42_rd, N), L)))))
-								_vecif_42_alpha = h_where_t_n_t_n_t_n(_vecif_50_exp_0, _vecif_50_alpha, _vecif_42_alpha)
-								_vecif_42_scol = h_where_t_n_t_v_t_v(_vecif_50_exp_0, _vecif_50_scol, _vecif_42_scol)
-							if not_all_ifexp_true_t_n(_vecif_50_exp_0):
-								_vecif_50_scol = _vecif_42_scol
-								_vecif_50_mcol = _vecif_42_mcol
-								_vecif_50_randSeed = _vecif_42_randSeed
-								_vecif_50_alpha = _vecif_42_alpha
-								_vecif_50_rd = _vecif_42_rd
-								_vecif_50_d = _vecif_42_d
-								_vecif_50_ro = _vecif_42_ro
-								_vecif_50_t = _vecif_42_t
-								_vecif_50_scol = h_mul_t_vf_t_f(swizzle_t_n4_xyz(_vecif_50_mcol), h_add_f_t_f(0.200000003, h_mul_f_t_f(0.400000006, h_add_f_t_f(1.0, h_dot_t_v_v(N, L)))))
-								_vecif_50_scol = h_add_t_vf_t_vf(_vecif_50_scol, h_mul_vf_t_f(h_f3_n_n_n(1.0, 0.5, 0.0), h_mul_f_t_f(0.5, h_pow_t_n_n(h_max_n_t_n(0.0, h_dot_t_v_v(h_reflect_t_v_t_v(_vecif_50_rd, N), L)), 32.0))))
-								_954 = h_less_than_t_n_t_n(_vecif_50_d, h_mul_t_f_f(rCoC, 0.25))
-								_960 = h_t_b_defval(False)
-								_vecif_51_exp_0 = _954
-								if any_ifexp_true_t_n(_vecif_51_exp_0):
-									_vecif_51__960 = _960
-									_vecif_51__960 = h_greater_than_t_n_n(swizzle_t_n4_w(_vecif_50_mcol), 0.899999976)
-									_960 = h_where_t_n_t_n_t_n(_vecif_51_exp_0, _vecif_51__960, _960)
-								if not_all_ifexp_true_t_n(_vecif_51_exp_0):
-									_vecif_51__960 = _960
-									_vecif_51__960 = _954
-									#condition: not _vecif_51_exp_0
-									_960 = h_where_t_n_t_n_t_n(_vecif_51_exp_0, _960, _vecif_51__960)
-								_vecif_52_exp = _960
-								if any_ifexp_true_t_n(_vecif_52_exp):
-									_vecif_52_rd = _vecif_50_rd
-									_vecif_52_d = _vecif_50_d
-									_vecif_52_ro = _vecif_50_ro
-									_vecif_52_t = _vecif_50_t
-									_vecif_52_rd = h_reflect_t_v_t_v(_vecif_52_rd, N)
-									_vecif_52_d = h_mul_t_f_f(h_sub_t_f(rCoC), 0.25)
-									_vecif_52_ro = p
-									_vecif_52_t = h_add_t_f_f(_vecif_52_t, 1.0)
-									_vecif_50_rd = h_where_t_n_t_v_t_v(_vecif_52_exp, _vecif_52_rd, _vecif_50_rd)
-									_vecif_50_d = h_where_t_n_t_n_t_n(_vecif_52_exp, _vecif_52_d, _vecif_50_d)
-									_vecif_50_ro = h_where_t_n_t_v_t_v(_vecif_52_exp, _vecif_52_ro, _vecif_50_ro)
-									_vecif_50_t = h_where_t_n_t_n_t_n(_vecif_52_exp, _vecif_52_t, _vecif_50_t)
-								param_19 = p
-								param_20 = L
-								param_21 = shadowCone
-								param_22 = rCoC
-								param_23 = _vecif_50_mcol
-								param_24 = _vecif_50_randSeed
-								_984 = tuple_get_retval((_call_ret_53 := FuzzyShadow_f3_f3_f_f_f4_f_arr(param_19, param_20, param_21, param_22, param_23, param_24), param_23 := tuple_get_outparam(_call_ret_53, 1), param_24 := tuple_get_outparam(_call_ret_53, 2)))
-								_vecif_50_mcol = param_23
-								_vecif_50_randSeed = param_24
-								_vecif_50_scol = h_mul_t_vf_t_f(_vecif_50_scol, _984)
-								param_25 = h_sub_t_f(rCoC)
-								param_26 = rCoC
-								param_27 = h_sub_t_f_t_f(h_sub_t_f(_vecif_50_d), h_mul_f_t_f(0.5, rCoC))
-								_vecif_50_alpha = h_mul_t_f_t_f(h_sub_f_t_f(1.0, swizzle_t_n4_w(_vecif_42_col)), linstep_f_f_f_arr(param_25, param_26, param_27))
-								#condition: not _vecif_50_exp_0
-								_vecif_42_scol = h_where_t_n_t_v_t_v(_vecif_50_exp_0, _vecif_42_scol, _vecif_50_scol)
-								#condition: not _vecif_50_exp_0
-								_vecif_42_mcol = h_where_t_n_t_v_t_v(_vecif_50_exp_0, _vecif_42_mcol, _vecif_50_mcol)
-								#condition: not _vecif_50_exp_0
-								_vecif_42_randSeed = h_where_t_n_t_n_t_n(_vecif_50_exp_0, _vecif_42_randSeed, _vecif_50_randSeed)
-								#condition: not _vecif_50_exp_0
-								_vecif_42_alpha = h_where_t_n_t_n_t_n(_vecif_50_exp_0, _vecif_42_alpha, _vecif_50_alpha)
-								#condition: not _vecif_50_exp_0
-								_vecif_42_rd = h_where_t_n_t_v_t_v(_vecif_50_exp_0, _vecif_42_rd, _vecif_50_rd)
-								#condition: not _vecif_50_exp_0
-								_vecif_42_d = h_where_t_n_t_n_t_n(_vecif_50_exp_0, _vecif_42_d, _vecif_50_d)
-								#condition: not _vecif_50_exp_0
-								_vecif_42_ro = h_where_t_n_t_v_t_v(_vecif_50_exp_0, _vecif_42_ro, _vecif_50_ro)
-								#condition: not _vecif_50_exp_0
-								_vecif_42_t = h_where_t_n_t_n_t_n(_vecif_50_exp_0, _vecif_42_t, _vecif_50_t)
-							_vecif_42_col = h_add_t_vf_t_vf(_vecif_42_col, h_t_f4_t_n3_t_n(h_mul_t_vf_t_f(_vecif_42_scol, _vecif_42_alpha), _vecif_42_alpha))
-							_vecif_40_mcol = h_where_t_n_t_v_t_v(_vecif_42_exp, _vecif_42_mcol, _vecif_40_mcol)
-							_vecif_40_col = h_where_t_n_t_v_t_v(_vecif_42_exp, _vecif_42_col, _vecif_40_col)
-							_vecif_40_alpha = h_where_t_n_t_n_t_n(_vecif_42_exp, _vecif_42_alpha, _vecif_40_alpha)
-							_vecif_40_scol = h_where_t_n_t_v_t_v(_vecif_42_exp, _vecif_42_scol, _vecif_40_scol)
-							_vecif_40_randSeed = h_where_t_n_t_n_t_n(_vecif_42_exp, _vecif_42_randSeed, _vecif_40_randSeed)
-							_vecif_40_rd = h_where_t_n_t_v_t_v(_vecif_42_exp, _vecif_42_rd, _vecif_40_rd)
-							d = h_where_t_n_t_n_t_n(_vecif_42_exp, _vecif_42_d, d)
-							_vecif_40_ro = h_where_t_n_t_v_t_v(_vecif_42_exp, _vecif_42_ro, _vecif_40_ro)
-							_vecif_40_t = h_where_t_n_t_n_t_n(_vecif_42_exp, _vecif_42_t, _vecif_40_t)
-						_vecif_40_mcol = h_broadcast_f4(False, swizzle_n_xxxx(0.0))
-						param_28 = _vecif_40_randSeed
-						_1023 = tuple_get_retval((_call_ret_54 := randStep_f_arr(param_28), param_28 := tuple_get_outparam(_call_ret_54, 1)))
-						_vecif_40_randSeed = param_28
-						d = h_mul_t_f_t_f(h_abs_t_n(h_add_t_f_t_f(d, h_mul_f_t_f(0.330000013, rCoC))), _1023)
-						_vecif_40_ro = h_add_t_vf_t_vf(_vecif_40_ro, h_mul_t_vf_t_f(_vecif_40_rd, d))
-						_vecif_40_t = h_add_t_f_t_f(_vecif_40_t, d)
-						_vecif_38_mcol = h_where_t_n_t_v_t_v(_vecif_40_exp, _vecif_40_mcol, _vecif_38_mcol)
-						_vecif_38_randSeed = h_where_t_n_t_n_t_n(_vecif_40_exp, _vecif_40_randSeed, _vecif_38_randSeed)
-						_vecif_38_ro = h_where_t_n_t_v_t_v(_vecif_40_exp, _vecif_40_ro, _vecif_38_ro)
-						_vecif_38_t = h_where_t_n_t_n_t_n(_vecif_40_exp, _vecif_40_t, _vecif_38_t)
-						_vecif_38_col = h_where_t_n_t_v_t_v(_vecif_40_exp, _vecif_40_col, _vecif_38_col)
-						_vecif_38_alpha = h_where_t_n_t_n_t_n(_vecif_40_exp, _vecif_40_alpha, _vecif_38_alpha)
-						_vecif_38_scol = h_where_t_n_t_v_t_v(_vecif_40_exp, _vecif_40_scol, _vecif_38_scol)
-						_vecif_38_rd = h_where_t_n_t_v_t_v(_vecif_40_exp, _vecif_40_rd, _vecif_38_rd)
-					_vecif_37__cont_flag_18 = h_where_n_t_n_t_n(_vecif_38_exp_0, _vecif_38__cont_flag_18, _vecif_37__cont_flag_18)
-					_vecif_37_mcol = h_where_n_t_v_t_v(_vecif_38_exp_0, _vecif_38_mcol, _vecif_37_mcol)
-					_vecif_37_randSeed = h_where_n_t_n_t_n(_vecif_38_exp_0, _vecif_38_randSeed, _vecif_37_randSeed)
-					_vecif_37_ro = h_where_n_t_v_t_v(_vecif_38_exp_0, _vecif_38_ro, _vecif_37_ro)
-					_vecif_37_t = h_where_n_t_n_t_n(_vecif_38_exp_0, _vecif_38_t, _vecif_37_t)
-					_vecif_37_col = h_where_n_t_v_t_v(_vecif_38_exp_0, _vecif_38_col, _vecif_37_col)
-					_vecif_37_alpha = h_where_n_t_n_t_n(_vecif_38_exp_0, _vecif_38_alpha, _vecif_37_alpha)
-					_vecif_37_scol = h_where_n_t_v_t_v(_vecif_38_exp_0, _vecif_38_scol, _vecif_37_scol)
-					_vecif_37_rd = h_where_n_t_v_t_v(_vecif_38_exp_0, _vecif_38_rd, _vecif_37_rd)
-				if not_any_ifexp_true_n(_vecif_38_exp_0):
-					_vecif_38__br_flag_18 = _vecif_37__br_flag_18
-					_vecif_38__br_flag_18 = True
-					#condition: not _vecif_38_exp_0
-					_vecif_37__br_flag_18 = h_where_n_n_n(_vecif_38_exp_0, _vecif_37__br_flag_18, _vecif_38__br_flag_18)
-				_cont_flag_18 = h_where_n_t_n_t_n(_vecif_37_exp_0, _vecif_37__cont_flag_18, _cont_flag_18)
-				_br_flag_18 = h_where_n_n_n(_vecif_37_exp_0, _vecif_37__br_flag_18, _br_flag_18)
-				mcol = h_where_n_t_v_t_v(_vecif_37_exp_0, _vecif_37_mcol, mcol)
-				randSeed = h_where_n_t_n_t_n(_vecif_37_exp_0, _vecif_37_randSeed, randSeed)
-				ro = h_where_n_t_v_t_v(_vecif_37_exp_0, _vecif_37_ro, ro)
-				t = h_where_n_t_n_t_n(_vecif_37_exp_0, _vecif_37_t, t)
-				col = h_where_n_t_v_t_v(_vecif_37_exp_0, _vecif_37_col, col)
-				alpha = h_where_n_t_n_t_n(_vecif_37_exp_0, _vecif_37_alpha, alpha)
-				scol = h_where_n_t_v_t_v(_vecif_37_exp_0, _vecif_37_scol, scol)
-				rd = h_where_n_t_v_t_v(_vecif_37_exp_0, _vecif_37_rd, rd)
-			if not_any_ifexp_true_n(_vecif_37_exp_0):
-				break
-		finally:
-			i = h_inc_i(i)
-	scol_1 = h_add_t_vf_t_vf(h_add_vf_t_vf(h_f3_n_n_n(0.400000006, 0.5, 0.600000024), h_mul_t_vf_f(rd, 0.0500000007)), h_mul_vf_t_f(h_f3_n_n_n(1.0, 0.75, 0.5), h_pow_t_n_n(h_max_n_t_n(0.0, h_dot_t_v_v(rd, L)), 100.0)))
-	_1051 = swizzle_t_n4_w(col)
-	_1055 = h_copy_t_f4(col)
-	_1057 = h_add_t_vf_t_vf(swizzle_t_n4_xyz(_1055), h_mul_t_vf_t_f(scol_1, h_sub_f_t_f(1.0, h_clamp_t_n_n_n(_1051, 0.0, 1.0))))
-	swizzle_set_t_n4_x(col, swizzle_t_n3_x(_1057))
-	swizzle_set_t_n4_y(col, swizzle_t_n3_y(_1057))
-	swizzle_set_t_n4_z(col, swizzle_t_n3_z(_1057))
-	O = h_t_f4_t_n3_n(h_clamp_t_v_v_v(swizzle_t_n4_xyz(col), swizzle_n_xxx(0.0), swizzle_n_xxx(1.0)), 1.0)
-	return O
+def mainImage_f4_f2_arr(fragColor, fragCoord):
+	global iTime, iMouse
+	time = h_add_f_f(h_mul_f_f(iTime, 0.300000012), h_mul_f_f(swizzle_n4_x(iMouse), 0.00999999977))
+	color = h_broadcast_f3(False, swizzle_n_xxx(0.0))
+	if True:
+		i = -1
+		if True:
+			j = -1
+			uv = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(-1), h_cast_f_i(-1)), swizzle_n_xx(3.0)))
+			param = uv
+			param_1 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param, param_1))
+			j = 0
+			uv = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(-1), h_cast_f_i(0)), swizzle_n_xx(3.0)))
+			param = uv
+			param_1 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param, param_1))
+			j = 1
+			uv = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(-1), h_cast_f_i(1)), swizzle_n_xx(3.0)))
+			param = uv
+			param_1 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param, param_1))
+		i = 0
+		if True:
+			j_88 = -1
+			uv_88 = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(0), h_cast_f_i(-1)), swizzle_n_xx(3.0)))
+			param_88 = uv_88
+			param_1_88 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param_88, param_1_88))
+			j_88 = 0
+			uv = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(0), h_cast_f_i(0)), swizzle_n_xx(3.0)))
+			param = uv_88
+			param_1 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param_88, param_1_88))
+			j_88 = 1
+			uv = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(0), h_cast_f_i(1)), swizzle_n_xx(3.0)))
+			param = uv_88
+			param_1 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param_88, param_1_88))
+		i = 1
+		if True:
+			j_89 = -1
+			uv_89 = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(1), h_cast_f_i(-1)), swizzle_n_xx(3.0)))
+			param_89 = uv_89
+			param_1_89 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param_89, param_1_89))
+			j_89 = 0
+			uv = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(1), h_cast_f_i(0)), swizzle_n_xx(3.0)))
+			param = uv_89
+			param_1 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param_89, param_1_89))
+			j_89 = 1
+			uv = h_add_t_vf_vf(fragCoord, h_div_vf_vf(h_f2_n_n(h_cast_f_i(1), h_cast_f_i(1)), swizzle_n_xx(3.0)))
+			param = uv_89
+			param_1 = time
+			color = h_add_t_vf_t_vf(color, getPixel_f2_f_arr(param_89, param_1_89))
+	color = h_div_t_vf_vf(color, swizzle_n_xxx(9.0))
+	fragColor = h_t_f4_t_n3_n(h_pow_t_v_v(color, swizzle_n_xxx(0.649999976)), 1.0)
+	return fragColor
 
 vec_broadcast_count = 19200
 iChannel0 = None
@@ -8681,27 +8719,20 @@ iChannel3 = None
 _iChannel3_sampler = None
 outColor = None
 inCoord = None
-focalDistance = 0.0
-aperture = 0.0
-shadowCone = 0.0
-pixelSize = 0.0
 iTime = 0.0
 iResolution = h_f3_defval()
+iMouse = h_f4_defval()
 iTimeDelta = 0.0
 iFrameRate = 0.0
 iFrame = 0
 iChannelTime = h_af_defval(4)
 iChannelResolution = h_af3_defval(4)
-iMouse = h_f4_defval()
 iDate = h_f4_defval()
 iSampleRate = 0.0
 
 
 def frag_main():
-	global focalDistance, aperture, shadowCone
-	focalDistance = 1.0
-	aperture = 0.00999999977
-	shadowCone = 0.300000012
+	pass
 
 def shader_main(fc, fcd):
 	global g_main_iChannel0, g_main_iChannel1, g_main_iChannel2, g_main_iChannel3, iChannel0, iChannel1, iChannel2, iChannel3, iChannelTime
