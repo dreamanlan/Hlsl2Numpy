@@ -47,54 +47,198 @@
 
 ## 测试用例列表
 0. 风暴
+
 ![风暴](doc_images/t0.gif "test0")
+
 2. 噪声FBM图
-![噪声FBM图](doc_images/t1.gif "test0")
-4. 立方体里的雾
-5. SDF圆盘
-6. 体积雾中的三个小球
-7. 荒漠风暴
-8. 石头近观
-9. 旋转的纹理球
-10. 化学立方体
-11. 云和山和海洋
-12. 高云之上
-13. 绿地、树、水
-14. switch
-15. 计数器版本一
-16. 计数器版本二
-17. 云中高塔
-18. 色块、结构与数组测试
-19. 小小寰球
-20. 沙漠
-21. 水晶
-22. SDF几何体
-23. 简单体积云
-24. 穿过云层
-25. 哈利波特字幕
-26. 穿过浓雾（室内）
-27. 秋月山谷
-28. 蘑菇云
-29. 跑步的人
-30. 寻找头的机器人
-31. 跑步的机器人（骨骼动画）
-32. 平衡木上的火柴人
-33. 变形人
-34. 桃花朵朵开
-35. 海浪
-36. 黑色烟雾
-37. 熔岩
-38. 万有引力
-39. 水底礁石
-40. 飞翔的鸟
-41. 花瓣与藤
-42. 流体
-43. 棋盘与红酒
-44. 机关小球
-45. 陨石坠落
-46. 分形
-47. 孤独的机器人
-48. 贴地飞行
-49. 湖光山色
-50. 眼睛与石化
-51. 三色烟雾
+
+![噪声FBM图](doc_images/t1.gif "test1")
+
+3. 立方体里的雾
+
+![立方体里的雾](doc_images/t2.gif "test2")
+
+4. SDF圆盘
+
+![SDF圆盘](doc_images/t3.gif "test3")
+
+5. 雾中的小球
+
+![雾中的小球](doc_images/t4.gif "test4")
+
+6. 荒漠风暴
+
+![荒漠风暴](doc_images/t5.gif "test5")
+
+7. 小小的石头
+
+![小小的石头](doc_images/t6.gif "test6")
+
+8. 旋转的球
+
+![旋转的球](doc_images/t7.gif "test7")
+
+9. 化学立方体
+
+![化学立方体](doc_images/t8.gif "test8")
+
+10. 云和山和海洋
+
+![云和山和海洋](doc_images/t9.gif "test9")
+
+11. 高云之上
+
+![高云之上](doc_images/t10.gif "test10")
+
+12. 绿地、树、水
+
+![绿地、树、水](doc_images/t11.gif "test11")
+
+13. switch
+
+![switch](doc_images/t12.gif "test12")
+
+14. 计数器版本一
+15. 计数器版本二
+
+![计数器](doc_images/t13&14.gif "test13&test14")
+
+16. 云中高塔
+
+![云中高塔](doc_images/t15.gif "test15")
+
+17. 色块
+
+![色块](doc_images/t16.gif "test16")
+
+18. 小小寰球
+
+![小小寰球](doc_images/t17.gif "test17")
+
+19. 沙漠
+
+![沙漠](doc_images/t18.gif "test18")
+
+20. 水晶
+
+![水晶](doc_images/t19.gif "test19")
+
+21. SDF几何体
+
+![SDF几何体](doc_images/t20.gif "test20")
+
+22. 简单体积云
+
+![简单体积云](doc_images/t21.gif "test21")
+
+23. 穿过云层
+
+![穿过云层](doc_images/t22.gif "test22")
+
+24. 哈利波特字幕
+
+![哈利波特字幕](doc_images/t23.gif "test23")
+
+25. 穿过浓雾
+
+![穿过浓雾](doc_images/t24.gif "test24")
+
+26. 秋月山谷
+
+![秋月山谷](doc_images/t25.gif "test25")
+
+27. 蘑菇云
+
+![蘑菇云](doc_images/t26.gif "test26")
+
+28. 跑步的人
+
+![跑步的人](doc_images/t27.gif "test27")
+
+29. 找头的机器人
+
+![找头的机器人](doc_images/t28.gif "test28")
+
+30. 跑步的机器人（骨骼动画）
+
+![跑步的机器人](doc_images/t29.gif "test29")
+
+31. 平衡木上的火柴人
+
+![平衡木上的火柴人](doc_images/t30.gif "test30")
+
+32. 变形人
+
+![变形人](doc_images/t31.gif "test31")
+
+33. 桃花朵朵开
+
+![桃花朵朵开](doc_images/t32.gif "test32")
+
+34. 海浪
+
+![海浪](doc_images/t33.gif "test33")
+
+35. 黑色烟雾
+
+![黑色烟雾](doc_images/t34.gif "test34")
+
+36. 熔岩
+
+![熔岩](doc_images/t35.gif "test35")
+
+37. 万有引力
+
+![万有引力](doc_images/t36.gif "test36")
+
+38. 水底礁石
+
+![水底礁石](doc_images/t37.gif "test37")
+
+39. 飞翔的鸟
+
+![飞翔的鸟](doc_images/t38.gif "test38")
+
+40. 花瓣与藤
+
+![花瓣与藤](doc_images/t39.gif "test39")
+
+41. 流体
+
+![流体](doc_images/t40.gif "test40")
+
+42. 棋盘与红酒
+
+![棋盘与红酒](doc_images/t41.gif "test41")
+
+43. 机关小球
+
+![机关小球](doc_images/t42.gif "test42")
+
+44. 陨石坠落
+
+![陨石坠落](doc_images/t43.gif "test43")
+
+45. 分形
+
+![分形](doc_images/t44.gif "test44")
+
+46. 孤独的机器人
+
+![孤独的机器人](doc_images/t45.gif "test45")
+
+47. 贴地飞行
+
+![贴地飞行](doc_images/t46.gif "test46")
+
+48. 湖光山色
+
+![湖光山色](doc_images/t47.gif "test47")
+
+49. 眼睛与石化
+
+![眼睛与石化](doc_images/t48.gif "test48")
+
+50. 三色烟雾
+
+![三色烟雾](doc_images/t49.gif "test49")
