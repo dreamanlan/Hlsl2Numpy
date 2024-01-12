@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Hlsl2Numpy": {
+      "commandName": "Project",
+      "commandLineArgs": "-debug -gendsl -gl -torch -unroll -maxloop 64 -printvecvars workdir/test.glsl",
+      "workingDirectory": "D:\\GitHub\\Hlsl2Numpy\\bin\\Debug\\net6.0",
+      "nativeDebugging": true
+    }
+  }
+}
