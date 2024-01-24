@@ -542,6 +542,21 @@ namespace Hlsl2Numpy
             s_StringBuilderPool.Recycle(sb);
         }
 
+        internal static string FloatToString(float v)
+        {
+            if (v > 1e-7 && v < 10e28)
+                return v.ToString(s_FloatFormat);
+            else
+                return string.Format("{0}", v);
+        }
+        internal static string DoubleToString(double v)
+        {
+            if (v > 1e-16 && v < 10e28)
+                return v.ToString(s_DoubleFormat);
+            else
+                return string.Format("{0}", v);
+        }
+
         private static Dictionary<string, StructInfo> s_StructInfos = new Dictionary<string, StructInfo>();
         private static Dictionary<string, CBufferInfo> s_CBufferInfos = new Dictionary<string, CBufferInfo>();
         private static Dictionary<string, string> s_GlobalTypeDefs = new Dictionary<string, string>();
@@ -591,7 +606,7 @@ namespace Hlsl2Numpy
 
         internal static Dsl.ValueData s_ConstDslValueOne = new Dsl.ValueData("1", Dsl.ValueData.NUM_TOKEN);
         internal static string s_FloatFormat = "###########################0.00#####";
-        internal static string s_DoubleFormat = "###########################0.000000#########";
+        internal static string s_DoubleFormat = "###########################0.000000##########";
 
         internal static List<string> s_TorchImports = new List<string> {
             "hlsl_lib_torch.py",

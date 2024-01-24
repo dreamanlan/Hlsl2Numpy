@@ -3171,13 +3171,13 @@ namespace Hlsl2Numpy
             else if (type == "double") {
                 if (double.TryParse(val, out var dval)) {
                     if (op == "++")
-                        ret = (dval + 1).ToString(s_DoubleFormat);
+                        ret = DoubleToString(dval + 1);
                     else if (op == "--")
-                        ret = (dval - 1).ToString(s_DoubleFormat);
+                        ret = DoubleToString(dval - 1);
                     else if (op == "+")
                         ret = val;
                     else if (op == "-")
-                        ret = (-dval).ToString(s_DoubleFormat);
+                        ret = DoubleToString(-dval);
                     else if (op == "!")
                         ret = (dval == 0 ? "true" : "false");
                 }
@@ -3185,13 +3185,13 @@ namespace Hlsl2Numpy
             else {
                 if (float.TryParse(val, out var fval)) {
                     if (op == "++")
-                        ret = (fval + 1).ToString(s_FloatFormat);
+                        ret = FloatToString(fval + 1);
                     else if (op == "--")
-                        ret = (fval - 1).ToString(s_FloatFormat);
+                        ret = FloatToString(fval - 1);
                     else if (op == "+")
                         ret = val;
                     else if (op == "-")
-                        ret = (-fval).ToString(s_FloatFormat);
+                        ret = FloatToString(-fval);
                     else if (op == "!")
                         ret = (fval == 0 ? "true" : "false");
                 }
@@ -3209,12 +3209,12 @@ namespace Hlsl2Numpy
                 }
                 else if (type1 == "float" || type2 == "float") {
                     if (float.TryParse(val1, out var v1) && float.TryParse(val2, out var v2)) {
-                        ret = (v1 + v2).ToString(s_FloatFormat);
+                        ret = FloatToString(v1 + v2);
                     }
                 }
                 else if (type1 == "double" || type2 == "double") {
                     if (double.TryParse(val1, out var v1) && double.TryParse(val2, out var v2)) {
-                        ret = (v1 + v2).ToString(s_DoubleFormat);
+                        ret = DoubleToString(v1 + v2);
                     }
                 }
             }
@@ -3226,12 +3226,12 @@ namespace Hlsl2Numpy
                 }
                 else if (type1 == "float" || type2 == "float") {
                     if (float.TryParse(val1, out var v1) && float.TryParse(val2, out var v2)) {
-                        ret = (v1 - v2).ToString(s_FloatFormat);
+                        ret = FloatToString(v1 - v2);
                     }
                 }
                 else if (type1 == "double" || type2 == "double") {
                     if (double.TryParse(val1, out var v1) && double.TryParse(val2, out var v2)) {
-                        ret = (v1 - v2).ToString(s_DoubleFormat);
+                        ret = DoubleToString(v1 - v2);
                     }
                 }
             }
@@ -3243,12 +3243,12 @@ namespace Hlsl2Numpy
                 }
                 else if (type1 == "float" || type2 == "float") {
                     if (float.TryParse(val1, out var v1) && float.TryParse(val2, out var v2)) {
-                        ret = (v1 * v2).ToString(s_FloatFormat);
+                        ret = FloatToString(v1 * v2);
                     }
                 }
                 else if (type1 == "double" || type2 == "double") {
                     if (double.TryParse(val1, out var v1) && double.TryParse(val2, out var v2)) {
-                        ret = (v1 * v2).ToString(s_DoubleFormat);
+                        ret = DoubleToString(v1 * v2);
                     }
                 }
             }
@@ -3260,12 +3260,12 @@ namespace Hlsl2Numpy
                 }
                 else if (type1 == "float" || type2 == "float") {
                     if (float.TryParse(val1, out var v1) && float.TryParse(val2, out var v2)) {
-                        ret = (v1 / v2).ToString(s_FloatFormat);
+                        ret = FloatToString(v1 / v2);
                     }
                 }
                 else if (type1 == "double" || type2 == "double") {
                     if (double.TryParse(val1, out var v1) && double.TryParse(val2, out var v2)) {
-                        ret = (v1 / v2).ToString(s_DoubleFormat);
+                        ret = DoubleToString(v1 / v2);
                     }
                 }
             }
