@@ -997,10 +997,17 @@ namespace Hlsl2Numpy
             }
         }
 
-        //todo:这里只考虑了变量整体赋值的情形，对于矩阵、数组、和结构成员的赋值，在向量化后也可能存在值类型变引用类型的情形，目前这些没有处理，
-        //不太好处理的原因是我们需要允许对 get 到的成员的 set 操作，所以 get 实际需要支持返回引用（可能需要一个 copy on write 的机制）
-        //另外，对float3.x 这类 swizzle 操作，向量化后也涉及值类型变引用类型的情形，目前是在 swizzle 实现里处理的，对于向量化后单一的 xyzw
-        //返回，都拷贝一份新数组返回（虽然语义上与原 shader 是一致的，但向量化后的运行性能会有一定影响）
+        //todo:Only the overall assignment of variables is considered here. For the assignment of
+        //matrices, arrays, and structure members, there may also be situations where the value
+        //type changes to a reference type after vectorization. Currently, these are not handled.
+        //The reason why it is not easy to handle is that we need Set operations are allowed on
+        //members obtained by get, so get actually needs to support returning references (a copy
+        //on write mechanism may be needed). In addition, for swizzle operations such as float3.x,
+        //vectorization also involves the situation where the value type changes to a reference
+        //type. , currently processed in the swizzle implementation, for a single xyzw return
+        //after vectorization, a new array is copied and returned (although the semantics are
+        //consistent with the original shader, the running performance after vectorization will
+        //have a certain impact)
         internal static bool ExistsSetObj(string vname)
         {
             bool ret = false;

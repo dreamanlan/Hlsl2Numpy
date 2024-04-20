@@ -150,7 +150,9 @@ namespace Hlsl2Numpy
         }
         private static void TransformOperator(Dsl.FunctionData func, StringBuilder sb, in ParseContextInfo contextInfo, int indent, ref SemanticInfo semanticInfo)
         {
-            //常量替换只替换运算结果，也就是只有操作数被替换，计算表达式仍然保留，计算结果为常量的会在使用结果的地方替换
+            //Constant replacement only replaces the operation result, that is, only the operands are
+            //replaced, while the top-level statements are still retained (it may be convenient to
+            //correspond to the shader source code, and the additional overhead should not be large)
             semanticInfo.IsVarValRef = false;
             semanticInfo.NameOrConst = string.Empty;
             string op = func.GetId();
@@ -306,7 +308,8 @@ namespace Hlsl2Numpy
                     string nop = op.Substring(0, op.Length - 1);
                     var lhs = func.GetParam(0);
                     var rhs = func.GetParam(1);
-                    //考虑到矢量化（或numpy的broadcast），out参数先处理后再处理赋值，这里不用处理out参数的情形
+                    //Considering vectorization (or numpy's broadcast), the out parameter is processed first
+                    //and then the assignment. There is no need to deal with the out parameter situation here.
                     bool isMemberAccess = IsMemberAccess(lhs, out Dsl.FunctionData? memAccess);
                     bool isElementAccess = IsElementAccess(lhs, out Dsl.FunctionData? elementAccess);
                     if (isMemberAccess) {
@@ -401,7 +404,8 @@ namespace Hlsl2Numpy
 
                     var lhs = func.GetParam(0);
                     var rhs = func.GetParam(1);
-                    //考虑到矢量化（或numpy的broadcast），out参数先处理后再处理赋值，这里不用处理out参数的情形
+                    //Considering vectorization (or numpy's broadcast), the out parameter is processed first
+                    //and then the assignment. There is no need to deal with the out parameter situation here.
                     bool isMemberAccess = IsMemberAccess(lhs, out Dsl.FunctionData? memAccess);
                     bool isElementAccess = IsElementAccess(lhs, out Dsl.FunctionData? elementAccess);
                     if (isMemberAccess) {
@@ -491,7 +495,8 @@ namespace Hlsl2Numpy
                     var opd2IsVarValRef = arg2Si.IsVarValRef;
                     var cres2 = arg2Si.NameOrConst;
                     semanticInfo.ResultType = OperatorTypeInference(op, opd1, opd2);
-                    //非赋值语句不用检查变量的常量值（应该在参数解析时已经得到常量值）
+                    //Non-assignment statements do not need to check the constant value of the variable
+                    //(the constant value should have been obtained during parameter parsing)
                     if (s_EnableConstPropagation) {
                         if (!opd1IsVarValRef && !opd2IsVarValRef && !string.IsNullOrEmpty(cres1) && !string.IsNullOrEmpty(cres2)) {
                             semanticInfo.NameOrConst = ConstCalc(op, opd1, cres1, opd2, cres2);
@@ -577,7 +582,9 @@ namespace Hlsl2Numpy
                             isStatement = false;
                         }
                         else {
-                            //这里不修改生成的赋值函数的对象类型标记，以允许赋值函数实现broadcast并返回broadcast后的对象
+                            //The object type tag of the generated assignment function is not modified
+                            //here to allow the assignment function to implement broadcast and return
+                            //the broadcast object.
                             if (VectorizeVar(lhs, out var varName, out needBroadcast)) {
                                 if (needBroadcast) {
                                     outVar = varName;
@@ -688,7 +695,9 @@ namespace Hlsl2Numpy
                             isStatement = false;
                         }
                         else {
-                            //这里不修改生成的赋值函数的对象类型标记，以允许赋值函数实现broadcast并返回broadcast后的对象
+                            //The object type tag of the generated assignment function is not modified
+                            //here to allow the assignment function to implement broadcast and return
+                            //the broadcast object.
                             if (VectorizeVar(lhs, out var varName, out needBroadcast)) {
                                 if (needBroadcast) {
                                     outVar = varName;
@@ -786,7 +795,7 @@ namespace Hlsl2Numpy
                 return;
             }
             else {
-                mname = func.GetParamId(0); //这里必须这样读取成员名，因为代码生成可能没有打开
+                mname = func.GetParamId(0); //The member name must be read like this because code generation may not be turned on
                 semanticInfo.ResultType = MemberTypeInference(".", objType, semanticInfo.ResultType, mname);
                 if (string.IsNullOrEmpty(semanticInfo.ResultType)) {
                     Console.WriteLine("unknown obj '{0}' or member '{1}', line: {2}", objType, mname, func.GetLine());
@@ -1278,7 +1287,9 @@ namespace Hlsl2Numpy
                 }
             }
             else {
-                //括号内只有一个参数，不用输出括号了（操作符都翻译到函数调用或赋值表达式了，赋值表达式输出时已经加了括号）
+                //There is only one parameter in the brackets, so there is no need to output brackets
+                //(the operators are translated into function calls or assignment expressions, and brackets
+                //are already added when the assignment expression is output)
                 if (!func.HaveId() && func.GetParamNum() == 1 && func.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS) {
                     var pp = func.GetParam(0);
                     var innerCall = pp as Dsl.FunctionData;
@@ -1321,7 +1332,10 @@ namespace Hlsl2Numpy
                     for (int ix = 0; ix < funcInfo.Params.Count; ++ix) {
                         var p = funcInfo.Params[ix];
                         if (p.IsOut) {
-                            //out参数在调用时传入默认值（避免忘记给out参数赋值，此情形dxc只会警告不报错，dxc此时与inout处理相同，我们还是按out的语义来处理，也就是out参数一定会输出一个值），参数类型与函数形参类型一致
+                            //The out parameter is passed in the default value when calling (to avoid forgetting to assign a value to
+                            //the out parameter. In this case, dxc will only warn and not report an error. dxc handles the same as
+                            //inout at this time. We still process it according to the semantics of out, that is, the out parameter
+                            //will definitely be output. a value), the parameter type is consistent with the function parameter type
                             argTypes[ix] = p.Type;
                             var argBuilder = argBuilders[ix];
                             if (CurFuncCodeGenerateEnabled()) {
@@ -1831,13 +1845,16 @@ namespace Hlsl2Numpy
         }
         internal static void TransformAssignmentStatement(string id, Dsl.ISyntaxComponent info, StringBuilder sb, int indent, ref SemanticInfo semanticInfo)
         {
-            //常量替换只替换运算结果，也就是只有操作数被替换，同时顶层语句仍然保留（可能能方便与shader源码对应，额外开销应该不大）
+            //Constant replacement only replaces the operation result, that is, only the operands are
+            //replaced, while the top-level statements are still retained (it may be convenient to
+            //correspond to the shader source code, and the additional overhead should not be large)
             string tmp = string.Empty;
             var assignFunc = info as Dsl.FunctionData;
             Debug.Assert(null != assignFunc);
             var lhs = assignFunc.GetParam(0);
             var rhs = assignFunc.GetParam(1);
-            //考虑到矢量化（或numpy的broadcast），out参数先处理后再处理赋值，这里不用处理out参数的情形
+            //Considering vectorization (or numpy's broadcast), the out parameter is processed first
+            //and then the assignment. There is no need to deal with the out parameter situation here.
             bool isMemberAccess = IsMemberAccess(lhs, out Dsl.FunctionData? memAccess);
             bool isElementAccess = IsElementAccess(lhs, out Dsl.FunctionData? elementAccess);
             if (isMemberAccess) {
@@ -1916,7 +1933,9 @@ namespace Hlsl2Numpy
         }
         private static void TransformCompoundAssignmentStatement(string id, Dsl.ISyntaxComponent info, StringBuilder sb, int indent)
         {
-            //常量替换只替换运算结果，也就是只有操作数被替换，同时顶层语句仍然保留（可能能方便与shader源码对应，额外开销应该不大）
+            //Constant replacement only replaces the operation result, that is, only the operands are
+            //replaced, while the top-level statements are still retained (it may be convenient to
+            //correspond to the shader source code, and the additional overhead should not be large)
             string tmp = string.Empty;
             var assignFunc = info as Dsl.FunctionData;
             Debug.Assert(null != assignFunc);
@@ -2026,7 +2045,9 @@ namespace Hlsl2Numpy
         }
         private static void TransformIncStatement(Dsl.ISyntaxComponent info, StringBuilder sb, int indent)
         {
-            //常量替换只替换运算结果，也就是只有操作数被替换，同时顶层语句仍然保留（可能能方便与shader源码对应，额外开销应该不大）
+            //Constant replacement only replaces the operation result, that is, only the operands are
+            //replaced, while the top-level statements are still retained (it may be convenient to
+            //correspond to the shader source code, and the additional overhead should not be large)
             string tmp = string.Empty;
             var incFunc = info as Dsl.FunctionData;
             Debug.Assert(null != incFunc);
@@ -2100,7 +2121,9 @@ namespace Hlsl2Numpy
         }
         private static void TransformDecStatement(Dsl.ISyntaxComponent info, StringBuilder sb, int indent)
         {
-            //常量替换只替换运算结果，也就是只有操作数被替换，同时顶层语句仍然保留（可能能方便与shader源码对应，额外开销应该不大）
+            //Constant replacement only replaces the operation result, that is, only the operands are
+            //replaced, while the top-level statements are still retained (it may be convenient to
+            //correspond to the shader source code, and the additional overhead should not be large)
             string tmp = string.Empty;
             var decFunc = info as Dsl.FunctionData;
             Debug.Assert(null != decFunc);

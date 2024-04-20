@@ -123,7 +123,9 @@ namespace Hlsl2Numpy
         internal static VarInfo? ParseVarDecl(Dsl.ISyntaxComponent info)
         {
             VarInfo? ret = null;
-            //声明未赋初值的变量，在python里都赋下初值，否则这个变量可能没有被引入正确的词法范围（比如对out变量，会出现访问未定义变量的情形）
+            //When declaring variables that are not assigned an initial value, assign an initial
+            //value in Python, otherwise the variable may not be introduced into the correct
+            //lexical scope (for example, for out variables, undefined variables may be accessed)
             var func = info as Dsl.FunctionData;
             if (null != func) {
                 var varInfo = ParseVarInfo(func, null);
@@ -688,7 +690,9 @@ namespace Hlsl2Numpy
                 bool needRewrite = true;
                 var body = GetOuterSyntaxs2(syntaxStack, out var func);
                 if (null != func && func.GetId() == "func") {
-                    //函数里只有一个返回语句或者在这个语句前没有返回语句，就不用改写这个返回语句
+                    //If there is only one return statement in the function or there is no return
+                    //statement before this statement, there is no need to rewrite the return
+                    //statement.
                     if (funcBlockInfo.StatementNum == 1 || !funcBlockInfo.NeedCheckRetFlag) {
                         needRewrite = false;
                     }
@@ -723,7 +727,9 @@ namespace Hlsl2Numpy
                 bool needRewrite = true;
                 var body = GetOuterSyntaxs2(syntaxStack, out var func);
                 if (null != func && func.GetId() == "func") {
-                    //函数里只有一个返回语句或者在这个语句前没有返回语句，就不用改写这个返回语句
+                    //If there is only one return statement in the function or there is no return
+                    //statement before this statement, there is no need to rewrite the return
+                    //statement.
                     if (funcBlockInfo.StatementNum == 1 || !funcBlockInfo.NeedCheckRetFlag) {
                         needRewrite = false;
                     }
@@ -926,7 +932,7 @@ namespace Hlsl2Numpy
         private static List<Dsl.ISyntaxComponent> BuildUntilIfStatementsForLoop(Dsl.ISyntaxComponent cond, out Dsl.FunctionData ifFunc)
         {
             List<Dsl.ISyntaxComponent> stms = new List<Dsl.ISyntaxComponent>();
-            //变量
+            //variable
             int uid = GenUniqueNumber();
             string condExpVar = string.Format("_until_if_exp_{0}", uid);
             var varDef = BuildVarDefStatement("bool", condExpVar, "true");

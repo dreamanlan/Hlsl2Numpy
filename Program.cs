@@ -328,7 +328,7 @@ namespace Hlsl2Numpy
                         if (isGlsl) {
                             var glslSrc = new StringBuilder();
                             if (fromShaderToy) {
-                                //glsllang的预处理要求宏参数严格匹配，shadertoy上许多shader不是很规范，这里用dxc先做预处理
+                                //The preprocessing of glsllang requires strict matching of macro parameters. Many shaders on shadertoy are not very standardized. Here we use dxc to do preprocessing first.
                                 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                                 //call dxc.exe -P -Fi input.i input.glsl
                                 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -349,8 +349,11 @@ namespace Hlsl2Numpy
                                 glslSrc.AppendLine("layout (location = TEXCOORD0) in vec2 {0};", GlslFragInfo.s_GlslFragInVar);
                                 glslSrc.AppendLine("layout (location = SV_Target0) out vec4 {0};", GlslFragInfo.s_GlslFragOutVar);
                                 glslSrc.AppendLine(string.Empty);
-                                //shadertoy内置的变量不要赋初值，否则glslcc转换到hlsl时会在main函数里给这些变量赋值，
-                                //这与shadertoy的行为不一致了，我们在python的lib里面会每帧赋值
+                                // Do not assign initial values to the variables built into shadertoy,
+                                // otherwise glslcc will assign values to these variables in the main
+                                // function when converting to hlsl.
+                                //This is inconsistent with the behavior of shadertoy. We assign values
+                                //every frame in the python lib.
                                 glslSrc.AppendLine("vec3 iResolution;");
                                 glslSrc.AppendLine("float iTime;");
                                 glslSrc.AppendLine("float iTimeDelta;");

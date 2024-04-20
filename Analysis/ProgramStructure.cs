@@ -528,7 +528,7 @@ namespace Hlsl2Numpy
         internal bool TryGetVarConstInBlockScope(int endBasicBlockIndex, int endBasicBlockStatementIndex, int endBasicBlockStatementUsingVarIndex, string name, BlockInfo queryBlock, out string val)
         {
             if (!IsFuncBlockInfoConstructed()) {
-                //数据流分析的数据结构未构建完成前不能决定变量是否具有常量值
+                //It cannot be determined whether a variable has a constant value before the data structure of data flow analysis is completed.
                 val = string.Empty;
                 return false;
             }
@@ -553,7 +553,7 @@ namespace Hlsl2Numpy
                     ret = true;
                 }
                 else {
-                    //查找子语句块与基本块（交替进行）
+                    //Find substatement blocks and basic blocks (alternating)
                     for (int ix = endBasicBlockIndex - 1; ix >= 0; --ix) {
                         var blockInfo = ChildBlocks[ix];
                         Debug.Assert(null != blockInfo);
@@ -682,7 +682,7 @@ namespace Hlsl2Numpy
         internal bool TryGetVarConstInParent(string name, BlockInfo queryBlock, out string val)
         {
             if (!IsFuncBlockInfoConstructed()) {
-                //数据流分析的数据结构未构建完成前不能决定变量是否具有常量值
+                //It cannot be determined whether a variable has a constant value before the data structure of data flow analysis is completed.
                 val = string.Empty;
                 return false;
             }
@@ -691,7 +691,10 @@ namespace Hlsl2Numpy
             var parent = Parent;
             if (null != parent) {
                 int ix = parent.FindChildIndex(this, out var six);
-                //这里不需要判断是否子块的一个分支，多个分支的其它分支里的赋值不会影响当前分支，所以只需要处理当前子块的前导结点即可
+                //There is no need to determine whether it is a branch of a sub-block.
+                //The assignments in other branches of multiple branches will not affect
+                //the current branch, so only the leading node of the current sub-block
+                //needs to be processed.
                 if (parent.TryGetVarConstInBlockScope(ix, -1, -1, name, queryBlock, out val)) {
                     ret = true;
                 }
@@ -707,7 +710,7 @@ namespace Hlsl2Numpy
         internal bool TryGetVarConstInBasicBlock(int basicBlockIndex, int basicBlockStatementIndex, int basicBlockStatementUsingVarIndex, string name, out string val)
         {
             if (!IsFuncBlockInfoConstructed()) {
-                //数据流分析的数据结构未构建完成前不能决定变量是否具有常量值
+                //It cannot be determined whether a variable has a constant value before the data structure of data flow analysis is completed.
                 val = string.Empty;
                 return false;
             }
@@ -767,7 +770,7 @@ namespace Hlsl2Numpy
                 ret = true;
             }
             else {
-                //查找子语句块与基本块（交替进行）
+                //Find substatement blocks and basic blocks (alternating)
                 for (int ix = endBasicBlockIndex - 1; ix >= 0; --ix) {
                     var cblockInfo = ChildBlocks[ix];
                     Debug.Assert(null != cblockInfo);
@@ -798,7 +801,10 @@ namespace Hlsl2Numpy
             var parent = Parent;
             if (null != parent) {
                 int ix = parent.FindChildIndex(this, out var six);
-                //这里不需要判断是否子块的一个分支，多个分支的其它分支里的变量不会影响当前分支，所以只需要处理当前子块的前导结点即可
+                //There is no need to determine whether it is a branch of a sub-block.
+                //The assignments in other branches of multiple branches will not affect
+                //the current branch, so only the leading node of the current sub-block
+                //needs to be processed.
                 if (parent.FindVarInfoInBlockScope(ix, -1, -1, name, queryBlock, out blockInfo, out basicBlockInfo, out basicBlockStmInfo, out vinfo)) {
                     ret = true;
                 }
@@ -1156,7 +1162,8 @@ namespace Hlsl2Numpy
             var parent = Parent;
             if (null != parent) {
                 int ix = parent.FindChildIndex(this, out var six);
-                //不需要考虑子块的其它分支（只有循环时需要考虑，在下面调用里已经处理）
+                //There is no need to consider other branches of the sub-block (only the loop
+                //needs to be considered, which has been processed in the following call)
                 if (parent.ExistsGetVarInBlockScope(ix + 1, 0, 0, name, false, queryBlock)) {
                     ret = true;
                 }
@@ -1175,7 +1182,7 @@ namespace Hlsl2Numpy
             var parent = Parent;
             if (null != parent) {
                 int ix = parent.FindChildIndex(this, out var six);
-                //不需要考虑子块的其它分支（只有循环时需要考虑，在下面调用里已经处理）
+                //There is no need to consider other branches of the sub-block (only the loop needs to be considered, which has been processed in the following call)
                 if (parent.ExistsSetVarInBlockScope(ix + 1, 0, 0, name, false, queryBlock)) {
                     ret = true;
                 }
@@ -1194,7 +1201,7 @@ namespace Hlsl2Numpy
             var parent = Parent;
             if (null != parent) {
                 int ix = parent.FindChildIndex(this, out var six);
-                //不需要考虑子块的其它分支（只有循环时需要考虑，在下面调用里已经处理）
+                //There is no need to consider other branches of the sub-block (only the loop needs to be considered, which has been processed in the following call)
                 if (parent.ExistsSetObjInBlockScope(ix + 1, 0, 0, name, false, queryBlock)) {
                     ret = true;
                 }

@@ -24,7 +24,7 @@ namespace Hlsl2Numpy
     {
         internal static int RunProcess(string fileName, string args, ProcessStartOption option, Stream? istream, Stream? ostream, IList<string>? input, StringBuilder? output, StringBuilder? error, bool redirectOutputToConsole, bool redirectErrorToConsole, Encoding encoding)
         {
-            //考虑到跨平台兼容性，不使用特定进程环境变量
+            //For cross-platform compatibility, process-specific environment variables are not used
             try {
                 Process p = new Process();
                 var psi = p.StartInfo;

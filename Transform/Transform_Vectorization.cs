@@ -44,22 +44,23 @@ namespace Hlsl2Numpy
                     VectorizeFunc(funcInfo, argTypes, s_DeducingVecFuncQueue);
                 }
             }
-            //根据向量化入口函数的参数信息推导函数内需要向量化的变量与全局变量
+            //According to the parameter information of the vectorized entry function, the variables and global variables
+            //that need to be vectorized in the function are deduced
             while (s_DeducingVecFuncQueue.Count > 0) {
                 var vecInfo = s_DeducingVecFuncQueue.Dequeue();
                 vecInfo.ModifyFuncInfo();
                 Debug.Assert(null != vecInfo.VecFuncInfo);
                 DeduceVecFunc(vecInfo.VecFuncInfo);
             }
-            //将向量化的全局变量的影响扩散到整个程序的相关变量
+            //Spread the influence of vectorized global variables to related variables throughout the program
             DeduceGlobalVecVar();
-            //重置函数向量化信息，但保留向量化变量的信息
+            //Reset function vectorization information but retain information about vectorized variables
             foreach (var pair in s_FuncInfos) {
                 var funcInfo = pair.Value;
                 funcInfo.Vectorizations.Clear();
                 funcInfo.ResetScalarFuncInfo();
             }
-            //重新向量化入口函数
+            //Revectorize entry function
             foreach (var pair in s_EntryFuncs) {
                 var entryFunc = pair.Key;
                 if (s_FuncInfos.TryGetValue(entryFunc, out var funcInfo)) {
@@ -70,7 +71,8 @@ namespace Hlsl2Numpy
                     VectorizeFunc(funcInfo, argTypes);
                 }
             }
-            //进行向量化推导并生成向量化函数代码（此时应该所有变量都已经完整向量化）
+            //Perform vectorized derivation and generate vectorized function code
+            //(all variables should be fully vectorized at this point)
             while (s_CalledVecFuncQueue.Count > 0) {
                 var vecInfo = s_CalledVecFuncQueue.Dequeue();
                 if (s_AllFuncDsls.TryGetValue(vecInfo.FuncSignature, out var stmData)) {
@@ -79,7 +81,7 @@ namespace Hlsl2Numpy
                 }
             }
             s_IsVectorizing = false;
-            //重新生成向量化全局变量影响的非向量化函数代码
+            //Regenerate non-vectorized function code affected by vectorized global variables
             foreach (var pair in s_FuncInfos) {
                 var funcInfo = pair.Value;
                 if (funcInfo.Vectorizations.Count <= 0) {
@@ -99,7 +101,7 @@ namespace Hlsl2Numpy
                     }
                 }
             }
-            //输出代码
+            //Output source code
             foreach (var sig in s_AllFuncSigs) {
                 if (s_CalledScalarFuncs.Contains(sig)) {
                     if (s_AllFuncCodes.TryGetValue(sig, out var fsb)) {
@@ -808,7 +810,7 @@ namespace Hlsl2Numpy
                         bool isInOut = p.IsInOut;
                         bool isOut = p.IsOut;
                         if (isInOut || isOut) {
-                            //inout与out参数因为总是向量化，不作为判断依据
+                            //Since inout and out parameters are always vectorized, they are not used as a basis for judgment.
                             continue;
                         }
                         if (t1 != t2) {
@@ -837,7 +839,7 @@ namespace Hlsl2Numpy
                         realTypeIsVec = true;
                     }
                     if (isInOut || isOut) {
-                        //inout与out参数总是向量化
+                        //inout and out parameters are always vectorized
                         p.Type = GetTypeVec(p.Type);
                     }
                     else {
@@ -876,10 +878,17 @@ namespace Hlsl2Numpy
         }
         private static bool VectorizeVar(Dsl.ISyntaxComponent info, out string broadcastVarName, out bool needBroadcastObj)
         {
-            //数组向量化是对数组元素的向量化，结构的向量化是对结构字段的向量化
-            //struct向量化时所有字段一起向量化，这样与普通变量保持一致（数组也是所有元素一块向量化，当然不然就不是数组了），这样在处理上会简单很多
-            //（用作函数参数时，函数的向量化版本会特别多;如果同时还用作函数返回值，返回值也只能全部向量化，否则函数向量化时没法在函数体推导完成前得
-            //到函数向量化的签名;局部向量化的各版本间的转换也会很麻烦;而且结构体还可能存在嵌套的情形，嵌套很可能需要在实际使用中避免）
+            //Array vectorization is the vectorization of array elements, and the vectorization
+            //of structures is the vectorization of structure fields.
+            //When struct is vectorized, all fields are vectorized together, which is consistent
+            //with ordinary variables (arrays are also vectorized with all elements in one piece,
+            //otherwise it would not be an array), which will make the processing much simpler.
+            //(When used as a function parameter, there will be many vectorized versions of the
+            //function; if it is also used as a function return value, the return value can only
+            //be vectorized. Otherwise, when the function is vectorized, the signature of function
+            //vectorization cannot be obtained before the function body derivation is completed.
+            //Conversion between versions of partial vectorization will also be troublesome; and
+            //the structure may also be nested, and nesting may need to be avoided in actual use)
             bool ret = false;
             needBroadcastObj = false;
             broadcastVarName = string.Empty;
@@ -905,7 +914,7 @@ namespace Hlsl2Numpy
                 var func = info as Dsl.FunctionData;
                 if (null != func) {
                     if (func.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD) {
-                        //对象向量化
+                        //object vectorization
                         needBroadcastObj = true;
                         if (func.IsHighOrder) {
                             ret = VectorizeVar(func.LowerOrderFunction, out broadcastVarName, out var _);
@@ -915,7 +924,7 @@ namespace Hlsl2Numpy
                         }
                     }
                     else if (func.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET) {
-                        //数组向量化
+                        //Array vectorization
                         needBroadcastObj = true;
                         if (func.IsHighOrder) {
                             ret = VectorizeVar(func.LowerOrderFunction, out broadcastVarName, out var _);
