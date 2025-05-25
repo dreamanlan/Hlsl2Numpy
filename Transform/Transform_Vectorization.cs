@@ -408,7 +408,7 @@ namespace Hlsl2Numpy
                         }
                         var ifFunc = new Dsl.FunctionData();
                         ifFunc.Name = new Dsl.ValueData("if");
-                        ifFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                        ifFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESES);
                         if (forConds.GetParamNum() == 1) {
                             ifFunc.AddParam(forConds.GetParam(0));
                         }
@@ -720,7 +720,7 @@ namespace Hlsl2Numpy
                         whileFunc.Name.SetId("if");
                         var ifFunc = new Dsl.FunctionData();
                         ifFunc.Name = new Dsl.ValueData("if");
-                        ifFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+                        ifFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESES);
                         ifFunc.AddParam(new Dsl.ValueData("true", Dsl.ValueData.ID_TOKEN));
                         var tmplBody = Dsl.Utility.CloneDsl(doBody) as Dsl.FunctionData;
                         Debug.Assert(null != tmplBody);

@@ -1290,7 +1290,7 @@ namespace Hlsl2Numpy
                 //There is only one parameter in the brackets, so there is no need to output brackets
                 //(the operators are translated into function calls or assignment expressions, and brackets
                 //are already added when the assignment expression is output)
-                if (!func.HaveId() && func.GetParamNum() == 1 && func.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS) {
+                if (!func.HaveId() && func.GetParamNum() == 1 && func.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESES) {
                     var pp = func.GetParam(0);
                     var innerCall = pp as Dsl.FunctionData;
                     if (null != innerCall) {
@@ -1558,7 +1558,7 @@ namespace Hlsl2Numpy
                 if (func.IsHighOrder) {
                     TransformCall(func, sb, contextInfo, indent, ref semanticInfo);
                 }
-                else if (func.GetParamClassUnmasked() != (int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS) {
+                else if (func.GetParamClassUnmasked() != (int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESES) {
                     TransformCall(func, sb, contextInfo, indent, ref semanticInfo);
                 }
                 else {
