@@ -30,7 +30,7 @@ namespace Hlsl2Numpy
             }
             else if (null != typeInfoFunc) {
                 var pf = typeInfoFunc;
-                if (null != pf && pf.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_ANGLE_BRACKET_COLON) {
+                if (null != pf && pf.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_ANGLE_BRACKET_COLON) {
                     oriType = BuildTypeWithTypeArgs(pf);
                 }
             }
@@ -46,7 +46,7 @@ namespace Hlsl2Numpy
                     }
                     else {
                         var pf = p as Dsl.FunctionData;
-                        if (null != pf && pf.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_ANGLE_BRACKET_COLON) {
+                        if (null != pf && pf.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_ANGLE_BRACKET_COLON) {
                             oriType = BuildTypeWithTypeArgs(pf);
                         }
                     }
@@ -108,7 +108,7 @@ namespace Hlsl2Numpy
                 }
                 else if (null != typeInfoFunc) {
                     var pf = typeInfoFunc;
-                    if (null != pf && pf.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_ANGLE_BRACKET_COLON) {
+                    if (null != pf && pf.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_ANGLE_BRACKET_COLON) {
                         varInfo.Type = BuildTypeWithTypeArgs(pf) + arrTag;
                     }
                 }
@@ -124,7 +124,7 @@ namespace Hlsl2Numpy
                         }
                         else {
                             var pf = p as Dsl.FunctionData;
-                            if (null != pf && pf.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_ANGLE_BRACKET_COLON) {
+                            if (null != pf && pf.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_ANGLE_BRACKET_COLON) {
                                 varInfo.Type = BuildTypeWithTypeArgs(pf) + arrTag;
                             }
                         }

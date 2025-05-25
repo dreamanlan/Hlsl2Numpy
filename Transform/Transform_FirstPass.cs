@@ -709,7 +709,7 @@ namespace Hlsl2Numpy
                         p.Params.Insert(index, assignFunc);
 
                         retFunc.Name.SetId("=");
-                        retFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+                        retFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
                         retFunc.Params.Insert(0, new Dsl.ValueData(funcBlockInfo.RetValVar));
 
                         ++index;
@@ -745,7 +745,7 @@ namespace Hlsl2Numpy
                     p.Params.Insert(index, assignFunc);
 
                     retFunc.Name.SetId("=");
-                    retFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+                    retFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
                     retFunc.SetParam(0, new Dsl.ValueData(funcBlockInfo.RetValVar));
 
                     ++index;
@@ -909,11 +909,11 @@ namespace Hlsl2Numpy
             var ifHead = new Dsl.FunctionData();
 
             ifHead.Name = new Dsl.ValueData("if");
-            ifHead.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+            ifHead.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
 
             ifHead.AddParam(cond);
             ifFunc.LowerOrderFunction = ifHead;
-            ifFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_STATEMENT);
+            ifFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_STATEMENT);
 
             ifFunc.SetSeparator(Dsl.AbstractSyntaxComponent.SEPARATOR_NOTHING);
 
@@ -971,9 +971,9 @@ namespace Hlsl2Numpy
             vType.SetSeparator(Dsl.AbstractSyntaxComponent.SEPARATOR_COMMA);
 
             varFunc.Name = new Dsl.ValueData("var");
-            varFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+            varFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
             vSpec.Name = new Dsl.ValueData("spec");
-            vSpec.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET);
+            vSpec.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_BRACKET);
             vSpec.AddParam("nothing");
             varFunc.AddParam(vSpec);
             varFunc.AddParam(vType);
@@ -987,7 +987,7 @@ namespace Hlsl2Numpy
                 var newVarDef = new Dsl.FunctionData();
                 var iVal = new Dsl.ValueData(initVal);
                 newVarDef.Name = new Dsl.ValueData("=", Dsl.ValueData.ID_TOKEN);
-                newVarDef.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+                newVarDef.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
                 newVarDef.AddParam(varFunc);
                 newVarDef.AddParam(iVal);
 
@@ -1006,12 +1006,12 @@ namespace Hlsl2Numpy
             var ifHead = new Dsl.FunctionData();
 
             ifHead.Name = new Dsl.ValueData(ifId);
-            ifHead.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+            ifHead.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
 
             var andNotExp = BuildAndNotExpression(boolVarNames);
             ifHead.AddParam(andNotExp);
             newIf.LowerOrderFunction = ifHead;
-            newIf.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_STATEMENT);
+            newIf.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_STATEMENT);
 
             newIf.SetSeparator(sep);
             return newIf;
@@ -1027,12 +1027,12 @@ namespace Hlsl2Numpy
             var ifHead = new Dsl.FunctionData();
 
             ifHead.Name = new Dsl.ValueData(ifId);
-            ifHead.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
+            ifHead.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS);
 
             var orExp = BuildOrExpression(boolVarNames);
             ifHead.AddParam(orExp);
             newIf.LowerOrderFunction = ifHead;
-            newIf.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_STATEMENT);
+            newIf.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_STATEMENT);
 
             newIf.SetSeparator(sep);
             return newIf;
@@ -1041,7 +1041,7 @@ namespace Hlsl2Numpy
         {
             var newIf = new Dsl.FunctionData();
             newIf.Name = new Dsl.ValueData(elseId);
-            newIf.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_STATEMENT);
+            newIf.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_STATEMENT);
 
             newIf.SetSeparator(Dsl.AbstractSyntaxComponent.SEPARATOR_SEMICOLON);
             return newIf;
@@ -1052,7 +1052,7 @@ namespace Hlsl2Numpy
             var assignFunc = new Dsl.FunctionData();
             var varV = new Dsl.ValueData(varName);
             assignFunc.Name = new Dsl.ValueData("=", Dsl.ValueData.ID_TOKEN);
-            assignFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+            assignFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
             assignFunc.AddParam(varV);
             assignFunc.AddParam(valSyntax);
 
@@ -1065,7 +1065,7 @@ namespace Hlsl2Numpy
             var varV = new Dsl.ValueData(varName);
             var valV = new Dsl.ValueData(val);
             assignFunc.Name = new Dsl.ValueData("=", Dsl.ValueData.ID_TOKEN);
-            assignFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+            assignFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
             assignFunc.AddParam(varV);
             assignFunc.AddParam(valV);
 
@@ -1078,7 +1078,7 @@ namespace Hlsl2Numpy
             var retKey = new Dsl.ValueData("return");
             var retVal = new Dsl.ValueData(varName);
             retFunc.Name = new Dsl.ValueData("<-", Dsl.ValueData.ID_TOKEN);
-            retFunc.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+            retFunc.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
             retFunc.AddParam(retKey);
             retFunc.AddParam(retVal);
 
@@ -1093,7 +1093,7 @@ namespace Hlsl2Numpy
             foreach (var boolVarName in boolVarNames) {
                 var notExp = new Dsl.FunctionData();
                 notExp.Name = new Dsl.ValueData("!", Dsl.ValueData.ID_TOKEN);
-                notExp.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+                notExp.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
                 notExp.AddParam(boolVarName);
                 notExps.Add(notExp);
             }
@@ -1102,7 +1102,7 @@ namespace Hlsl2Numpy
             if (boolVarNames.Count > 1) {
                 var andExp = new Dsl.FunctionData();
                 andExp.Name = new Dsl.ValueData("&&", Dsl.ValueData.ID_TOKEN);
-                andExp.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+                andExp.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
 
                 andExp.AddParam(notExps[0]);
                 for (int i = 1; i < notExps.Count; ++i) {
@@ -1111,7 +1111,7 @@ namespace Hlsl2Numpy
                     if (i < notExps.Count - 1) {
                         var newAndExp = new Dsl.FunctionData();
                         newAndExp.Name = new Dsl.ValueData("&&", Dsl.ValueData.ID_TOKEN);
-                        newAndExp.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+                        newAndExp.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
                         newAndExp.AddParam(andExp);
 
                         andExp = newAndExp;
@@ -1130,7 +1130,7 @@ namespace Hlsl2Numpy
             if (boolVarNames.Count > 1) {
                 var orExp = new Dsl.FunctionData();
                 orExp.Name = new Dsl.ValueData("||", Dsl.ValueData.ID_TOKEN);
-                orExp.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+                orExp.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
 
                 orExp.AddParam(boolVarNames[0]);
                 for (int i = 1; i < boolVarNames.Count; ++i) {
@@ -1139,7 +1139,7 @@ namespace Hlsl2Numpy
                     if (i < boolVarNames.Count - 1) {
                         var newOrExp = new Dsl.FunctionData();
                         newOrExp.Name = new Dsl.ValueData("||", Dsl.ValueData.ID_TOKEN);
-                        newOrExp.SetParamClass((int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR);
+                        newOrExp.SetParamClass((int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR);
                         newOrExp.AddParam(orExp);
 
                         orExp = newOrExp;

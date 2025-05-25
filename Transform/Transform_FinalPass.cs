@@ -1260,7 +1260,7 @@ namespace Hlsl2Numpy
             if (func.IsHighOrder) {
                 var objSi = new SemanticInfo(semanticInfo.NeedComputeGraph);
                 var compoundFunc = func.LowerOrderFunction;
-                Debug.Assert(compoundFunc.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD);
+                Debug.Assert(compoundFunc.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_PERIOD);
                 if (compoundFunc.IsHighOrder)
                     TransformSyntax(compoundFunc.LowerOrderFunction, objBuilder, 0, ref objSi);
                 else
@@ -1290,7 +1290,7 @@ namespace Hlsl2Numpy
                 //There is only one parameter in the brackets, so there is no need to output brackets
                 //(the operators are translated into function calls or assignment expressions, and brackets
                 //are already added when the assignment expression is output)
-                if (!func.HaveId() && func.GetParamNum() == 1 && func.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS) {
+                if (!func.HaveId() && func.GetParamNum() == 1 && func.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS) {
                     var pp = func.GetParam(0);
                     var innerCall = pp as Dsl.FunctionData;
                     if (null != innerCall) {
@@ -1418,16 +1418,16 @@ namespace Hlsl2Numpy
         private static void TransformCall(Dsl.FunctionData func, StringBuilder sb, in ParseContextInfo contextInfo, int indent, ref SemanticInfo semanticInfo)
         {
             switch (func.GetParamClass()) {
-                case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_OPERATOR:
+                case (int)Dsl.ParamClassEnum.PARAM_CLASS_OPERATOR:
                     TransformOperator(func, sb, contextInfo, indent, ref semanticInfo);
                     break;
-                case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD:
+                case (int)Dsl.ParamClassEnum.PARAM_CLASS_PERIOD:
                     TransformMemberGet(func, sb, contextInfo, indent, ref semanticInfo);
                     break;
-                case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET:
+                case (int)Dsl.ParamClassEnum.PARAM_CLASS_BRACKET:
                     TransformElementGet(func, sb, contextInfo, indent, ref semanticInfo);
                     break;
-                case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_STATEMENT:
+                case (int)Dsl.ParamClassEnum.PARAM_CLASS_STATEMENT:
                     TransformInitList(func, sb, contextInfo, indent, ref semanticInfo);
                     semanticInfo.IsVarValRef = false;
                     break;
@@ -1558,7 +1558,7 @@ namespace Hlsl2Numpy
                 if (func.IsHighOrder) {
                     TransformCall(func, sb, contextInfo, indent, ref semanticInfo);
                 }
-                else if (func.GetParamClassUnmasked() != (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PARENTHESIS) {
+                else if (func.GetParamClassUnmasked() != (int)Dsl.ParamClassEnum.PARAM_CLASS_PARENTHESIS) {
                     TransformCall(func, sb, contextInfo, indent, ref semanticInfo);
                 }
                 else {

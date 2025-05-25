@@ -555,7 +555,7 @@ namespace Hlsl2Numpy
         {
             bool ret = false;
             funcData = func as Dsl.FunctionData;
-            if (null != funcData && funcData.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD) {
+            if (null != funcData && funcData.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_PERIOD) {
                 ret = true;
             }
             return ret;
@@ -564,7 +564,7 @@ namespace Hlsl2Numpy
         {
             bool ret = false;
             funcData = func as Dsl.FunctionData;
-            if (null != funcData && funcData.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET) {
+            if (null != funcData && funcData.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_BRACKET) {
                 ret = true;
             }
             return ret;
@@ -862,7 +862,7 @@ namespace Hlsl2Numpy
         }
         internal static string GetNamespaceName(Dsl.FunctionData func)
         {
-            if (func.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD) {
+            if (func.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_PERIOD) {
                 string m = func.GetParamId(0);
                 if (func.IsHighOrder) {
                     return GetNamespaceName(func.LowerOrderFunction) + "." + m;
@@ -900,7 +900,7 @@ namespace Hlsl2Numpy
         internal static string BuildTypeWithTypeArgs(Dsl.FunctionData func)
         {
             var sb = new StringBuilder();
-            if (func.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET) {
+            if (func.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_BRACKET) {
                 var arrTags = new List<string>();
                 string baseType = BuildTypeWithArrTags(func, arrTags);
                 sb.Append(baseType);
@@ -928,7 +928,7 @@ namespace Hlsl2Numpy
         internal static string BuildTypeWithArrTags(Dsl.FunctionData func, List<string> arrTags)
         {
             string ret = string.Empty;
-            if (func.GetParamClassUnmasked() == (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET) {
+            if (func.GetParamClassUnmasked() == (int)Dsl.ParamClassEnum.PARAM_CLASS_BRACKET) {
                 if (func.IsHighOrder) {
                     ret = BuildTypeWithArrTags(func.LowerOrderFunction, arrTags);
                 }
@@ -962,10 +962,10 @@ namespace Hlsl2Numpy
                         sb.Append(funcData.GetId());
                     }
                     switch (funcData.GetParamClassUnmasked()) {
-                        case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_PERIOD:
+                        case (int)Dsl.ParamClassEnum.PARAM_CLASS_PERIOD:
                             sb.Append(".");
                             break;
-                        case (int)Dsl.FunctionData.ParamClassEnum.PARAM_CLASS_BRACKET:
+                        case (int)Dsl.ParamClassEnum.PARAM_CLASS_BRACKET:
                             sb.Append("_x");
                             break;
                         default:
