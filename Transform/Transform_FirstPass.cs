@@ -375,7 +375,7 @@ namespace Hlsl2Numpy
             }
         }
 
-        private static void ParseAndPruneBlock(ref Dsl.FunctionData func, Stack<SyntaxStackInfo> syntaxStack, RetBlockInfo retBlockInfo, BreakBlockInfo? brBlockInfo, ContinueBlockInfo? contBlockInfo, out FlowBreakInfo breakInfo, out bool needCheckRetFlag, out bool needCheckBrFlag, out bool needCheckContFlag)
+        private static void ParseAndPruneBlock(scoped ref Dsl.FunctionData func, Stack<SyntaxStackInfo> syntaxStack, RetBlockInfo retBlockInfo, BreakBlockInfo? brBlockInfo, ContinueBlockInfo? contBlockInfo, out FlowBreakInfo breakInfo, out bool needCheckRetFlag, out bool needCheckBrFlag, out bool needCheckContFlag)
         {
             breakInfo = new FlowBreakInfo();
             needCheckRetFlag = false;
