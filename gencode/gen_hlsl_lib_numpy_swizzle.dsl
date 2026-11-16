@@ -67,7 +67,7 @@ script(buildmindex)args($m1, $m2, $m3, $m4)
     $prestr = "";
     $ms = [$m1, $m2, $m3, $m4];
     appendformat($sb, "{0}", "[");
-    looplist($ms){
+    loop_list($ms){
         $ix = tag2index($$);
         if($ix>=0){
             appendformat($sb, "{0}{1}", $prestr, $ix);
@@ -82,7 +82,7 @@ script(buildmlist)args($v, $m1, $m2, $m3, $m4)
     $sb = newstringbuilder();
     $prestr = "";
     $ms = [$m1, $m2, $m3, $m4];
-    looplist($ms){
+    loop_list($ms){
         $ix = tag2index($$);
         if($ix>=0){
             appendformat($sb, "{0}{1}[{2}]", $prestr, $v, $ix);
@@ -96,7 +96,7 @@ script(buildamlist)args($v, $m1, $m2, $m3, $m4)
     $sb = newstringbuilder();
     $prestr = "";
     $ms = [$m1, $m2, $m3, $m4];
-    looplist($ms){
+    loop_list($ms){
         $ix = tag2index($$);
         if($ix>=0){
             appendformat($sb, "{0}{1}[..., {2}]", $prestr, $v, $ix);
@@ -108,19 +108,19 @@ script(buildamlist)args($v, $m1, $m2, $m3, $m4)
 script(writeGet1)args($x)
 {
     $handled = {};
-    looplist($x){
+    loop_list($x){
         $1 = $$;
-    looplist($x){
+    loop_list($x){
         $2 = $$;
-    looplist($x){
+    loop_list($x){
         $3 = $$;
-    looplist($x){
+    loop_list($x){
         $4 = $$;
 
         $tag = $1+$2+$3+$4;
         $len = $tag.Length;
-        $find = hashtableget($handled, $tag, false);
-        hashtableset($handled, $tag, true);
+        $find = hashtable_get($handled, $tag, false);
+        hashtable_set($handled, $tag, true);
         if(!$find && $len>0){
             if($len==1){
                 writeblock
@@ -156,19 +156,19 @@ def swizzle_set_n_x(v, val):
 script(writeGet234)args($n, $xyzw)
 {
     $handled = {};
-    looplist($xyzw){
+    loop_list($xyzw){
         $1 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $2 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $3 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $4 = $$;
 
         $tag = $1+$2+$3+$4;
         $len = $tag.Length;
-        $find = hashtableget($handled, $tag, false);
-        hashtableset($handled, $tag, true);
+        $find = hashtable_get($handled, $tag, false);
+        hashtable_set($handled, $tag, true);
         if(!$find && $len>0){
             /*
             if($len==1){
@@ -213,29 +213,29 @@ def swizzle_n{% $n %}_{% $tag %}(v):
 script(writeSet234)args($n, $xyzw)
 {
     $handled = {};
-    looplist($xyzw){
+    loop_list($xyzw){
         $1 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $2 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $3 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $4 = $$;
         
         $counts = {};
-        hashtableset($counts, $1, hashtableget($counts, $1, 0) + 1);
-        hashtableset($counts, $2, hashtableget($counts, $2, 0) + 1);
-        hashtableset($counts, $3, hashtableget($counts, $3, 0) + 1);
-        hashtableset($counts, $4, hashtableget($counts, $4, 0) + 1);
-        $ctx = hashtableget($counts, "x", 0);
-        $cty = hashtableget($counts, "y", 0);
-        $ctz = hashtableget($counts, "z", 0);
-        $ctw = hashtableget($counts, "w", 0);
+        hashtable_set($counts, $1, hashtable_get($counts, $1, 0) + 1);
+        hashtable_set($counts, $2, hashtable_get($counts, $2, 0) + 1);
+        hashtable_set($counts, $3, hashtable_get($counts, $3, 0) + 1);
+        hashtable_set($counts, $4, hashtable_get($counts, $4, 0) + 1);
+        $ctx = hashtable_get($counts, "x", 0);
+        $cty = hashtable_get($counts, "y", 0);
+        $ctz = hashtable_get($counts, "z", 0);
+        $ctw = hashtable_get($counts, "w", 0);
         if($ctx<=1 && $cty<=1 && $ctz<=1 && $ctw<=1){
             $tag = $1+$2+$3+$4;
             $len = $tag.Length;
-            $find = hashtableget($handled, $tag, false);
-            hashtableset($handled, $tag, true);
+            $find = hashtable_get($handled, $tag, false);
+            hashtable_set($handled, $tag, true);
             if(!$find && $len>0){
                 writeblock
                 {:
@@ -244,7 +244,7 @@ def swizzle_set_n{% $n %}_{% $tag %}(v, val):
                 :};
                 $ms = [$1, $2, $3, $4];
                 $six = 0;
-                looplist($ms){
+                loop_list($ms){
                     $ix = tag2index($$);
                     if($ix>=0){
                         if($len==1){
@@ -267,19 +267,19 @@ def swizzle_set_n{% $n %}_{% $tag %}(v, val):
 script(writeArrGet1)args($x)
 {
     $handled = {};
-    looplist($x){
+    loop_list($x){
         $1 = $$;
-    looplist($x){
+    loop_list($x){
         $2 = $$;
-    looplist($x){
+    loop_list($x){
         $3 = $$;
-    looplist($x){
+    loop_list($x){
         $4 = $$;
 
         $tag = $1+$2+$3+$4;
         $len = $tag.Length;
-        $find = hashtableget($handled, $tag, false);
-        hashtableset($handled, $tag, true);
+        $find = hashtable_get($handled, $tag, false);
+        hashtable_set($handled, $tag, true);
         if(!$find && $len>0){
             if($len==1){
                 writeblock
@@ -324,19 +324,19 @@ def swizzle_set_t_n_x(v, val):
 script(writeArrGet234)args($n, $xyzw)
 {
     $handled = {};
-    looplist($xyzw){
+    loop_list($xyzw){
         $1 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $2 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $3 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $4 = $$;
 
         $tag = $1+$2+$3+$4;
         $len = $tag.Length;
-        $find = hashtableget($handled, $tag, false);
-        hashtableset($handled, $tag, true);
+        $find = hashtable_get($handled, $tag, false);
+        hashtable_set($handled, $tag, true);
         if(!$find && $len>0){
             if($len==1){
                 writeblock
@@ -371,29 +371,29 @@ def swizzle_t_n{% $n %}_{% $tag %}(v):
 script(writeArrSet234)args($n, $xyzw)
 {
     $handled = {};
-    looplist($xyzw){
+    loop_list($xyzw){
         $1 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $2 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $3 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $4 = $$;
         
         $counts = {};
-        hashtableset($counts, $1, hashtableget($counts, $1, 0) + 1);
-        hashtableset($counts, $2, hashtableget($counts, $2, 0) + 1);
-        hashtableset($counts, $3, hashtableget($counts, $3, 0) + 1);
-        hashtableset($counts, $4, hashtableget($counts, $4, 0) + 1);
-        $ctx = hashtableget($counts, "x", 0);
-        $cty = hashtableget($counts, "y", 0);
-        $ctz = hashtableget($counts, "z", 0);
-        $ctw = hashtableget($counts, "w", 0);
+        hashtable_set($counts, $1, hashtable_get($counts, $1, 0) + 1);
+        hashtable_set($counts, $2, hashtable_get($counts, $2, 0) + 1);
+        hashtable_set($counts, $3, hashtable_get($counts, $3, 0) + 1);
+        hashtable_set($counts, $4, hashtable_get($counts, $4, 0) + 1);
+        $ctx = hashtable_get($counts, "x", 0);
+        $cty = hashtable_get($counts, "y", 0);
+        $ctz = hashtable_get($counts, "z", 0);
+        $ctw = hashtable_get($counts, "w", 0);
         if($ctx<=1 && $cty<=1 && $ctz<=1 && $ctw<=1){
             $tag = $1+$2+$3+$4;
             $len = $tag.Length;
-            $find = hashtableget($handled, $tag, false);
-            hashtableset($handled, $tag, true);
+            $find = hashtable_get($handled, $tag, false);
+            hashtable_set($handled, $tag, true);
             if(!$find && $len>0){
                 writeblock
                 {:
@@ -402,7 +402,7 @@ def swizzle_set_t_n{% $n %}_{% $tag %}(v, val):
                 :};
                 $ms = [$1, $2, $3, $4];
                 $six = 0;
-                looplist($ms){
+                loop_list($ms){
                     $ix = tag2index($$);
                     if($ix>=0){
                         if($len==1){
@@ -435,29 +435,29 @@ def swizzle_set_and_broadcast_n_x(v, val):
 script(writeBroadcastSet234)args($n, $xyzw)
 {
     $handled = {};
-    looplist($xyzw){
+    loop_list($xyzw){
         $1 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $2 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $3 = $$;
-    looplist($xyzw){
+    loop_list($xyzw){
         $4 = $$;
         
         $counts = {};
-        hashtableset($counts, $1, hashtableget($counts, $1, 0) + 1);
-        hashtableset($counts, $2, hashtableget($counts, $2, 0) + 1);
-        hashtableset($counts, $3, hashtableget($counts, $3, 0) + 1);
-        hashtableset($counts, $4, hashtableget($counts, $4, 0) + 1);
-        $ctx = hashtableget($counts, "x", 0);
-        $cty = hashtableget($counts, "y", 0);
-        $ctz = hashtableget($counts, "z", 0);
-        $ctw = hashtableget($counts, "w", 0);
+        hashtable_set($counts, $1, hashtable_get($counts, $1, 0) + 1);
+        hashtable_set($counts, $2, hashtable_get($counts, $2, 0) + 1);
+        hashtable_set($counts, $3, hashtable_get($counts, $3, 0) + 1);
+        hashtable_set($counts, $4, hashtable_get($counts, $4, 0) + 1);
+        $ctx = hashtable_get($counts, "x", 0);
+        $cty = hashtable_get($counts, "y", 0);
+        $ctz = hashtable_get($counts, "z", 0);
+        $ctw = hashtable_get($counts, "w", 0);
         if($ctx<=1 && $cty<=1 && $ctz<=1 && $ctw<=1){
             $tag = $1+$2+$3+$4;
             $len = $tag.Length;
-            $find = hashtableget($handled, $tag, false);
-            hashtableset($handled, $tag, true);
+            $find = hashtable_get($handled, $tag, false);
+            hashtable_set($handled, $tag, true);
             if(!$find && $len>0){
                 writeblock
                 {:
