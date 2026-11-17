@@ -4,7 +4,7 @@ set workdir=%~dp0
 cd %workdir%
 cd ..
 
-Hlsl2Numpy -gendsl -gl -torch %workdir%hlsl_test.hlsl
+Hlsl2Numpy -gen-dsl -gl -torch %workdir%hlsl_test.hlsl
 
 cd %workdir%
 

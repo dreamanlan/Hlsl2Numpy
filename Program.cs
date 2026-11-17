@@ -39,7 +39,9 @@ namespace Hlsl2Numpy
                 string argFilePath = string.Empty;
                 int maxLoop = -1;
                 for (int i = 0; i < args.Length; ++i) {
-                    if (0 == string.Compare(args[i], "-out", true)) {
+                    string opt = NormalizeCommandLineOption(args[i]);
+                    bool isOption = !string.IsNullOrEmpty(args[i]) && args[i][0] == '-';
+                    if (0 == string.Compare(opt, "out", true)) {
                         if (i < args.Length - 1) {
                             string arg = args[i + 1];
                             if (!arg.StartsWith("-")) {
@@ -48,7 +50,7 @@ namespace Hlsl2Numpy
                             }
                         }
                     }
-                    else if (0 == string.Compare(args[i], "-src", true)) {
+                    else if (0 == string.Compare(opt, "src", true)) {
                         if (i < args.Length - 1) {
                             string arg = args[i + 1];
                             if (!arg.StartsWith("-")) {
@@ -60,7 +62,7 @@ namespace Hlsl2Numpy
                             }
                         }
                     }
-                    else if (0 == string.Compare(args[i], "-args", true)) {
+                    else if (0 == string.Compare(opt, "args", true)) {
                         if (i < args.Length - 1) {
                             string arg = args[i + 1];
                             if (!arg.StartsWith("-")) {
@@ -72,107 +74,107 @@ namespace Hlsl2Numpy
                             }
                         }
                     }
-                    else if (0 == string.Compare(args[i], "-shadertoy", true)) {
+                    else if (0 == string.Compare(opt, "shadertoy", true)) {
                         isGlsl = true;
                         fromShaderToy = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notshadertoy", true)) {
+                    else if (0 == string.Compare(opt, "not-shadertoy", true)) {
                         isGlsl = false;
                         fromShaderToy = false;
                     }
-                    else if (0 == string.Compare(args[i], "-gl", true)) {
+                    else if (0 == string.Compare(opt, "gl", true)) {
                         opengl = true;
                     }
-                    else if (0 == string.Compare(args[i], "-ngl", true)) {
+                    else if (0 == string.Compare(opt, "ngl", true)) {
                         opengl = false;
                     }
-                    else if (0 == string.Compare(args[i], "-profiling", true)) {
+                    else if (0 == string.Compare(opt, "profiling", true)) {
                         profiling = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notprofiling", true)) {
+                    else if (0 == string.Compare(opt, "not-profiling", true)) {
                         profiling = false;
                     }
-                    else if (0 == string.Compare(args[i], "-torch", true)) {
+                    else if (0 == string.Compare(opt, "torch", true)) {
                         ProgramTransform.s_IsTorch = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notorch", true)) {
+                    else if (0 == string.Compare(opt, "no-torch", true)) {
                         ProgramTransform.s_IsTorch = false;
                     }
-                    else if (0 == string.Compare(args[i], "-autodiff", true)) {
+                    else if (0 == string.Compare(opt, "auto-diff", true)) {
                         autodiff = true;
                     }
-                    else if (0 == string.Compare(args[i], "-noautodiff", true)) {
+                    else if (0 == string.Compare(opt, "no-auto-diff", true)) {
                         autodiff = false;
                     }
-                    else if (0 == string.Compare(args[i], "-gendsl", true)) {
+                    else if (0 == string.Compare(opt, "gen-dsl", true)) {
                         genDsl = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notgendsl", true)) {
+                    else if (0 == string.Compare(opt, "not-gen-dsl", true)) {
                         genDsl = false;
                     }
-                    else if (0 == string.Compare(args[i], "-rewritedsl", true)) {
+                    else if (0 == string.Compare(opt, "rewrite-dsl", true)) {
                         rewriteDsl = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notrewritedsl", true)) {
+                    else if (0 == string.Compare(opt, "not-rewrite-dsl", true)) {
                         rewriteDsl = false;
                     }
-                    else if (0 == string.Compare(args[i], "-printblocks", true)) {
+                    else if (0 == string.Compare(opt, "print-blocks", true)) {
                         printBlocks = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notprintblocks", true)) {
+                    else if (0 == string.Compare(opt, "not-print-blocks", true)) {
                         printBlocks = false;
                     }
-                    else if (0 == string.Compare(args[i], "-printfinalblocks", true)) {
+                    else if (0 == string.Compare(opt, "print-final-blocks", true)) {
                         printFinalBlocks = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notprintfinalblocks", true)) {
+                    else if (0 == string.Compare(opt, "not-print-final-blocks", true)) {
                         printFinalBlocks = false;
                     }
-                    else if (0 == string.Compare(args[i], "-printgraph", true)) {
+                    else if (0 == string.Compare(opt, "print-graph", true)) {
                         printGraph = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notprintgraph", true)) {
+                    else if (0 == string.Compare(opt, "not-print-graph", true)) {
                         printGraph = false;
                     }
-                    else if (0 == string.Compare(args[i], "-printfinalgraph", true)) {
+                    else if (0 == string.Compare(opt, "print-final-graph", true)) {
                         printFinalGraph = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notprintfinalgraph", true)) {
+                    else if (0 == string.Compare(opt, "not-print-final-graph", true)) {
                         printFinalGraph = false;
                     }
-                    else if (0 == string.Compare(args[i], "-printvecvars", true)) {
+                    else if (0 == string.Compare(opt, "print-vec-vars", true)) {
                         ProgramTransform.s_PrintVectorizedVars = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notprintvecvars", true)) {
+                    else if (0 == string.Compare(opt, "not-print-vec-vars", true)) {
                         ProgramTransform.s_PrintVectorizedVars = false;
                     }
-                    else if (0 == string.Compare(args[i], "-unroll", true)) {
+                    else if (0 == string.Compare(opt, "unroll", true)) {
                         ProgramTransform.s_AutoUnrollLoops = true;
                     }
-                    else if (0 == string.Compare(args[i], "-notunroll", true)) {
+                    else if (0 == string.Compare(opt, "not-unroll", true)) {
                         ProgramTransform.s_AutoUnrollLoops = false;
                     }
-                    else if (0 == string.Compare(args[i], "-vectorization", true)) {
+                    else if (0 == string.Compare(opt, "vectorization", true)) {
                         ProgramTransform.s_EnableVectorization = true;
                     }
-                    else if (0 == string.Compare(args[i], "-novectorization", true)) {
+                    else if (0 == string.Compare(opt, "no-vectorization", true)) {
                         ProgramTransform.s_EnableVectorization = false;
                     }
-                    else if (0 == string.Compare(args[i], "-const", true)) {
+                    else if (0 == string.Compare(opt, "const", true)) {
                         ProgramTransform.s_EnableConstPropagation = true;
                     }
-                    else if (0 == string.Compare(args[i], "-noconst", true)) {
+                    else if (0 == string.Compare(opt, "no-const", true)) {
                         ProgramTransform.s_EnableConstPropagation = false;
                     }
-                    else if (0 == string.Compare(args[i], "-single", true)) {
+                    else if (0 == string.Compare(opt, "single", true)) {
                         multiple = false;
                     }
-                    else if (0 == string.Compare(args[i], "-multiple", true)) {
+                    else if (0 == string.Compare(opt, "multiple", true)) {
                         multiple = true;
                     }
-                    else if (0 == string.Compare(args[i], "-maxloop", true)) {
+                    else if (0 == string.Compare(opt, "max-loop", true)) {
                         if (i < args.Length - 1) {
-                            string key = args[i].Substring(1);
+                            string key = opt.Replace("-", "");
                             string arg = args[i + 1];
                             if (!arg.StartsWith("-")) {
                                 int.TryParse(arg, out maxLoop);
@@ -180,21 +182,25 @@ namespace Hlsl2Numpy
                             }
                         }
                     }
-                    else if (0 == string.Compare(args[i], "-hlsl2018", true)) {
+                    else if (0 == string.Compare(opt, "hlsl-2018", true)) {
                         ProgramTransform.s_UseHlsl2018 = true;
                     }
-                    else if (0 == string.Compare(args[i], "-hlsl2021", true)) {
+                    else if (0 == string.Compare(opt, "hlsl-2021", true)) {
                         ProgramTransform.s_UseHlsl2018 = false;
                     }
-                    else if (0 == string.Compare(args[i], "-debug", true)) {
+                    else if (0 == string.Compare(opt, "debug", true)) {
                         ProgramTransform.s_IsDebugMode = true;
                         ProgramTransform.s_StringBuilderPool.IsDebugMode = true;
                     }
-                    else if (0 == string.Compare(args[i], "-h", true)) {
+                    else if (0 == string.Compare(opt, "h", true)) {
                         PrintHelp();
+                        return;
                     }
-                    else if (args[i][0] == '-') {
-                        Console.WriteLine("unknown command option ! {0}", args[i]);
+                    else if (isOption) {
+                        Console.Error.WriteLine("unknown command option ! {0}", args[i]);
+                        PrintHelp();
+                        Environment.ExitCode = 2;
+                        return;
                     }
                     else {
                         srcFilePath = args[i];
@@ -947,30 +953,46 @@ namespace Hlsl2Numpy
                 }
             }
         }
+        // Canonical option names are hyphen-separated; both -name and --name
+        // are accepted. Underscore-joined spellings are intentionally rejected.
+        private static string NormalizeCommandLineOption(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+                return string.Empty;
+            int start = 0;
+            if (token[start] == '-') {
+                ++start;
+                if (start < token.Length && token[start] == '-')
+                    ++start;
+            }
+            if (start >= token.Length)
+                return string.Empty;
+            return token.Substring(start).ToLowerInvariant();
+        }
         static void PrintHelp()
         {
-            Console.WriteLine("Usage:Hlsl2Numpy [-out outfile] [-args arg_dsl_file] [-notshadertoy] [-gl] [-profiling] [-torch] [-autodiff] [-gendsl] [-rewritedsl] [-printblocks] [-printfinalblocks] [-printgraph] [-printfinalgraph] [-printvecvars] [-unroll] [-novecterization] [-noconst] [-multiple] [-maxloop max_loop] [-hlsl2018] [-hlsl2021] [-debug] [-src ] hlsl_file");
+            Console.WriteLine("Usage:Hlsl2Numpy [-out outfile] [-args arg_dsl_file] [-not-shadertoy] [-gl] [-profiling] [-torch] [-auto-diff] [-gen-dsl] [-rewrite-dsl] [-print-blocks] [-print-final-blocks] [-print-graph] [-print-final-graph] [-print-vec-vars] [-unroll] [-no-vectorization] [-no-const] [-multiple] [-max-loop max_loop] [-hlsl-2018] [-hlsl-2021] [-debug] [-src ] hlsl_file");
             Console.WriteLine(" [-out outfile] output file path and name");
             Console.WriteLine(" [-args arg_dsl_file] config file path and name, default is [hlsl_file_name]_args.dsl");
-            Console.WriteLine(" [-notshadertoy] not shadertoy mode [-shadertoy] shadertoy mode (default)");
+            Console.WriteLine(" [-not-shadertoy] not shadertoy mode [-shadertoy] shadertoy mode (default)");
             Console.WriteLine(" [-gl] render with opengl [-ngl] render with matplotlib (default)");
-            Console.WriteLine(" [-profiling] profiling mode [-notprofiling] normal mode (default)");
-            Console.WriteLine(" [-torch] use pytorch lib [-notorch] dont use pytorch lib (default)");
-            Console.WriteLine(" [-autodiff] autodiff mode, only valid with torch mode [-noautodiff] normal mode (default)");
-            Console.WriteLine(" [-gendsl] generate prune dsl and final dsl [-notgendsl] dont generate prune dsl and final dsl (default)");
-            Console.WriteLine(" [-rewritedsl] rewrite [hlsl_file_name].dsl to [hlsl_file_name].txt [-notrewritedsl] dont rewrite dsl (default)");
-            Console.WriteLine(" [-printblocks] output dataflow structure built in scalar phase [-notprintblocks] dont output (default)");
-            Console.WriteLine(" [-printfinalblocks] output dataflow structure built in vectorizing phase [-notprintfinalblocks] dont output (default)");
-            Console.WriteLine(" [-printgraph] output compute graph built in scalar phase [-notprintgraph] dont output (default)");
-            Console.WriteLine(" [-printfinalgraph] output compute graph built in vectorizing phase [-notprintfinalgraph] dont output (default)");
-            Console.WriteLine(" [-printvecvars] output vectorized var by compute graph [-notprintvecvars] dont output (default)");
-            Console.WriteLine(" [-unroll] unroll loop [-notunroll] dont unroll loop (default)");
-            Console.WriteLine(" [-novecterization] dont do vectorization [-vecterization] do vectorization (default)");
-            Console.WriteLine(" [-noconst] dont do const propagation [-const] do const propagation (default)");
+            Console.WriteLine(" [-profiling] profiling mode [-not-profiling] normal mode (default)");
+            Console.WriteLine(" [-torch] use pytorch lib [-no-torch] dont use pytorch lib (default)");
+            Console.WriteLine(" [-auto-diff] autodiff mode, only valid with torch mode [-no-auto-diff] normal mode (default)");
+            Console.WriteLine(" [-gen-dsl] generate prune dsl and final dsl [-not-gen-dsl] dont generate prune dsl and final dsl (default)");
+            Console.WriteLine(" [-rewrite-dsl] rewrite [hlsl_file_name].dsl to [hlsl_file_name].txt [-not-rewrite-dsl] dont rewrite dsl (default)");
+            Console.WriteLine(" [-print-blocks] output dataflow structure built in scalar phase [-not-print-blocks] dont output (default)");
+            Console.WriteLine(" [-print-final-blocks] output dataflow structure built in vectorizing phase [-not-print-final-blocks] dont output (default)");
+            Console.WriteLine(" [-print-graph] output compute graph built in scalar phase [-not-print-graph] dont output (default)");
+            Console.WriteLine(" [-print-final-graph] output compute graph built in vectorizing phase [-not-print-final-graph] dont output (default)");
+            Console.WriteLine(" [-print-vec-vars] output vectorized var by compute graph [-not-print-vec-vars] dont output (default)");
+            Console.WriteLine(" [-unroll] unroll loop [-not-unroll] dont unroll loop (default)");
+            Console.WriteLine(" [-no-vectorization] dont do vectorization [-vectorization] do vectorization (default)");
+            Console.WriteLine(" [-no-const] dont do const propagation [-const] do const propagation (default)");
             Console.WriteLine(" [-multiple] output standalone python lib files [-single] output one python file including lib contents (default)");
-            Console.WriteLine(" [-maxloop max_loop] max loop count while unroll loops, -1 default, means dont unroll an uncounted loops");
-            Console.WriteLine(" [-hlsl2018] use hlsl 2018, default");
-            Console.WriteLine(" [-hlsl2021] use hlsl 2021 or later");
+            Console.WriteLine(" [-max-loop max_loop] max loop count while unroll loops, -1 default, means dont unroll an uncounted loops");
+            Console.WriteLine(" [-hlsl-2018] use hlsl 2018, default");
+            Console.WriteLine(" [-hlsl-2021] use hlsl 2021 or later");
             Console.WriteLine(" [-debug] debug mode");
             Console.WriteLine(" [-src ] hlsl_file source hlsl/glsl file, -src can be omitted when file is the last argument");
         }

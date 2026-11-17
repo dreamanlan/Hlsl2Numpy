@@ -2,26 +2,26 @@
  translate shadertoy shader to python
 
 ## 命令行
-	Usage:Hlsl2Numpy [-out outfile] [-args arg_dsl_file] [-notshadertoy] [-gl] [-profiling] [-torch] [-autodiff] [-gendsl] [-rewritedsl] [-printblocks] [-printfinalblocks] [-printgraph] [-printfinalgraph] [-printvecvars] [-unroll] [-novecterization] [-noconst] [-multiple] [-maxloop max_loop] [-debug] [-src ] hlsl_file
+	Usage:Hlsl2Numpy [-out outfile] [-args arg_dsl_file] [-not-shadertoy] [-gl] [-profiling] [-torch] [-auto-diff] [-gen-dsl] [-rewrite-dsl] [-print-blocks] [-print-final-blocks] [-print-graph] [-print-final-graph] [-print-vec-vars] [-unroll] [-no-vectorization] [-no-const] [-multiple] [-max-loop max_loop] [-debug] [-src ] hlsl_file
 	 [-out outfile] output file path and name
 	 [-args arg_dsl_file] config file path and name, default is [hlsl_file_name]_args.dsl
-	 [-notshadertoy] not shadertoy mode [-shadertoy] shadertoy mode (default)
+	 [-not-shadertoy] not shadertoy mode [-shadertoy] shadertoy mode (default)
 	 [-gl] render with opengl [-ngl] render with matplotlib (default)
-	 [-profiling] profiling mode [-notprofiling] normal mode (default)
-	 [-torch] use pytorch lib [-notorch] dont use pytorch lib (default)
-	 [-autodiff] autodiff mode, only valid with torch mode [-noautodiff] normal mode (default)
-	 [-gendsl] generate prune dsl and final dsl [-notgendsl] dont generate prune dsl and final dsl (default)
-	 [-rewritedsl] rewrite [hlsl_file_name].dsl to [hlsl_file_name].txt [-notrewritedsl] dont rewrite dsl (default)
-	 [-printblocks] output dataflow structure built in scalar phase [-notprintblocks] dont output (default)
-	 [-printfinalblocks] output dataflow structure built in vectorizing phase [-notprintfinalblocks] dont output (default)
-	 [-printgraph] output compute graph built in scalar phase [-notprintgraph] dont output (default)
-	 [-printfinalgraph] output compute graph built in vectorizing phase [-notprintfinalgraph] dont output (default)
-	 [-printvecvars] output vectorized var by compute graph [-notprintvecvars] dont output (default)
-	 [-unroll] unroll loop [-notunroll] dont unroll loop (default)
-	 [-novecterization] dont do vectorization [-vecterization] do vectorization (default)
-	 [-noconst] dont do const propagation [-const] do const propagation (default)
+	 [-profiling] profiling mode [-not-profiling] normal mode (default)
+	 [-torch] use pytorch lib [-no-torch] dont use pytorch lib (default)
+	 [-auto-diff] autodiff mode, only valid with torch mode [-no-auto-diff] normal mode (default)
+	 [-gen-dsl] generate prune dsl and final dsl [-not-gen-dsl] dont generate prune dsl and final dsl (default)
+	 [-rewrite-dsl] rewrite [hlsl_file_name].dsl to [hlsl_file_name].txt [-not-rewrite-dsl] dont rewrite dsl (default)
+	 [-print-blocks] output dataflow structure built in scalar phase [-not-print-blocks] dont output (default)
+	 [-print-final-blocks] output dataflow structure built in vectorizing phase [-not-print-final-blocks] dont output (default)
+	 [-print-graph] output compute graph built in scalar phase [-not-print-graph] dont output (default)
+	 [-print-final-graph] output compute graph built in vectorizing phase [-not-print-final-graph] dont output (default)
+	 [-print-vec-vars] output vectorized var by compute graph [-not-print-vec-vars] dont output (default)
+	 [-unroll] unroll loop [-not-unroll] dont unroll loop (default)
+	 [-no-vectorization] dont do vectorization [-vectorization] do vectorization (default)
+	 [-no-const] dont do const propagation [-const] do const propagation (default)
 	 [-multiple] output standalone python lib files [-single] output one python file including lib contents (default)
-	 [-maxloop max_loop] max loop count while unroll loops, -1 default, means dont unroll an uncounted loops
+	 [-max-loop max_loop] max loop count while unroll loops, -1 default, means dont unroll an uncounted loops
 	 [-debug] debug mode
 	 [-src ] hlsl_file source hlsl/glsl file, -src can be omitted when file is the last argument
 	
@@ -31,7 +31,7 @@
 	- 需要将全局变量修改为mainImage函数局部变量与其它使用变量的函数的inout参数
 	- 修改相关函数调用加上对应全局变量的局部变量或参数变量
 2. 打开循环展开开关翻译时提示某个循环无法展开
-	- 可以添加 -maxloop 64这样的命令行参数指定循环的最大次数
+	- 可以添加 -max-loop 64这样的命令行参数指定循环的最大次数
 	- 可以修改循环为for(int i=0;i<64;++i)这样有明确次数的循环，原来的循环条件则变成一个if语句
 	- 可以不理会，hlsl2numpy会按不展开的循环翻译运行
 3. 运行时提示有h_开头的函数未定义
